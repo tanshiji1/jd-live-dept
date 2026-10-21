@@ -8,209 +8,215 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --jd-red: #E1251B;
-      --black: #0a0a0a;
-      --gray-900: #111111;
-      --gray-700: #374151;
-      --gray-500: #6b7280;
-      --gray-300: #d1d5db;
-      --gray-200: #e5e7eb;
-      --gray-100: #f4f4f5;
-      --gray-50: #fafafa;
-      --white: #ffffff;
+      --jd-red: #E6212A;
+      --bg: #0F1116;
+      --bg-2: #141820;
+      --bg-3: #1A1E27;
+      --title: #E8E9EB;
+      --subtitle: #C6C8CC;
+      --body: #989CA4;
+      --muted: #6A6F7A;
+      --mountain: #222833;
+      --mist: #343B48;
+      --border: rgba(255,255,255,0.06);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-      background: var(--white); color: var(--gray-900); line-height: 1.8;
-      -webkit-font-smoothing: antialiased; font-weight: 400;
+      background: var(--bg); color: var(--body); line-height: 1.8;
+      -webkit-font-smoothing: antialiased; font-weight: 400; overflow-x: hidden;
     }
+
+    /* ===== 视差背景层 ===== */
+    .bg-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .bg-mountain { z-index: 1; opacity: 0.5; }
+    .bg-mist { z-index: 2; }
+    .bg-particles { z-index: 3; }
+
+    .mountain-svg { position: absolute; bottom: 0; left: 0; width: 100%; height: 60vh; }
+    .mountain-svg path { fill: var(--mountain); }
+    .mountain-far { opacity: 0.3; }
+    .mountain-mid { opacity: 0.5; }
+
+    .mist {
+      position: absolute; border-radius: 50%; filter: blur(60px);
+      background: radial-gradient(circle, rgba(52,59,72,0.12), transparent 70%);
+      will-change: transform, opacity;
+    }
+    .mist-1 { width: 600px; height: 400px; top: 10%; left: -10%; }
+    .mist-2 { width: 500px; height: 350px; top: 40%; right: -10%; }
+    .mist-3 { width: 700px; height: 450px; top: 70%; left: 20%; }
+
+    .particle { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: rgba(255,255,255,0.06); }
 
     /* ===== 导航 ===== */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      height: 56px; display: flex; align-items: center;
-      padding: 0 2rem; background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(12px); border-bottom: 1px solid var(--gray-200);
+      height: 52px; display: flex; align-items: center;
+      padding: 0 2rem; background: rgba(15,17,22,0.8);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
       overflow-x: auto; scrollbar-width: none;
     }
     nav::-webkit-scrollbar { display: none; }
-    nav .logo { font-weight: 800; font-size: 0.95rem; white-space: nowrap; margin-right: 1.5rem; flex-shrink: 0; display: flex; align-items: center; gap: 0.4rem; color: var(--black); }
-    nav .logo img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+    nav .logo { font-weight: 700; font-size: 0.85rem; white-space: nowrap; margin-right: 1.5rem; flex-shrink: 0; display: flex; align-items: center; gap: 0.4rem; color: var(--title); letter-spacing: 0.5px; }
+    nav .logo img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
     nav .logo .red { color: var(--jd-red); }
     nav .tabs { display: flex; gap: 0; flex-shrink: 0; }
-    nav .tab {
-      color: var(--gray-500); background: none; border: none;
-      padding: 0.35rem 0.8rem; font-size: 0.8rem; cursor: pointer;
-      white-space: nowrap; transition: color 0.2s; font-family: inherit;
-      font-weight: 500; letter-spacing: 0.02em;
-    }
-    nav .tab:hover { color: var(--black); }
+    nav .tab { color: var(--muted); background: none; border: none; padding: 0.3rem 0.7rem; font-size: 0.76rem; cursor: pointer; white-space: nowrap; transition: color 0.2s; font-family: inherit; font-weight: 500; letter-spacing: 0.02em; }
+    nav .tab:hover { color: var(--subtitle); }
     nav .tab.active { color: var(--jd-red); font-weight: 600; }
 
-    .panel { display: none; }
-    .panel.active { display: block; animation: fade 0.3s ease; }
-    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+    .panel { display: none; position: relative; z-index: 10; }
+    .panel.active { display: block; }
+
+    /* ===== 入场动画 ===== */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal-stagger > * { opacity: 0; transform: translateY(25px); transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1); }
+    .reveal-stagger.in > * { opacity: 1; transform: translateY(0); }
+    .reveal-stagger.in > *:nth-child(1) { transition-delay: 0ms; }
+    .reveal-stagger.in > *:nth-child(2) { transition-delay: 80ms; }
+    .reveal-stagger.in > *:nth-child(3) { transition-delay: 160ms; }
+    .reveal-stagger.in > *:nth-child(4) { transition-delay: 240ms; }
+    .reveal-stagger.in > *:nth-child(5) { transition-delay: 320ms; }
+    .reveal-stagger.in > *:nth-child(6) { transition-delay: 400ms; }
+    .reveal-stagger.in > *:nth-child(7) { transition-delay: 480ms; }
+    .reveal-stagger.in > *:nth-child(8) { transition-delay: 560ms; }
 
     /* ===== Hero ===== */
-    .hero {
-      position: relative; min-height: 92vh; display: flex; flex-direction: column;
-      justify-content: center; align-items: center; text-align: center;
-      padding: 2rem; overflow: hidden;
-      background: var(--black);
-    }
-    .hero img.bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.35; filter: grayscale(100%) contrast(1.2); }
-    .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0.8) 100%); }
-    .hero > .hero-content { position: relative; z-index: 2; }
-    .hero .joy-logo { width: 72px; height: 72px; border-radius: 50%; margin-bottom: 1.5rem; filter: brightness(1.1); }
-    .hero .eyebrow { font-size: 0.7rem; letter-spacing: 0.3em; color: var(--jd-red); font-weight: 600; margin-bottom: 1rem; }
-    .hero h1 { font-size: clamp(2rem, 6vw, 4.5rem); font-weight: 900; color: var(--white); line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 1rem; }
-    .hero .slogan { font-size: clamp(0.85rem, 2vw, 1rem); color: rgba(255,255,255,0.5); max-width: 540px; line-height: 1.9; font-weight: 300; }
-    .hero .scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.25); font-size: 0.7rem; letter-spacing: 0.1em; }
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; position: relative; }
+    .hero .joy-logo { width: 64px; height: 64px; border-radius: 50%; margin-bottom: 1.5rem; filter: brightness(1.1) drop-shadow(0 0 20px rgba(230,33,42,0.15)); }
+    .hero .eyebrow { font-size: 0.68rem; letter-spacing: 0.3em; color: var(--jd-red); font-weight: 600; margin-bottom: 1rem; }
+    .hero h1 { font-size: clamp(2rem, 6vw, 4rem); font-weight: 800; color: var(--title); line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 1rem; }
+    .hero .slogan { font-size: clamp(0.82rem, 1.8vw, 0.95rem); color: var(--muted); max-width: 480px; line-height: 1.9; font-weight: 300; }
+    .hero .scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); color: var(--muted); font-size: 0.65rem; letter-spacing: 0.15em; opacity: 0.5; }
 
     /* ===== Section ===== */
-    .sec { padding: 6rem 2rem; }
-    .sec-white { background: var(--white); }
-    .sec-gray { background: var(--gray-50); }
-    .sec-dark { background: var(--black); color: var(--white); }
+    .sec { padding: 6rem 2rem; position: relative; }
     .sec-inner { max-width: 1100px; margin: 0 auto; }
+    .sec-num { font-size: 0.68rem; letter-spacing: 0.2em; font-weight: 600; color: var(--jd-red); margin-bottom: 0.8rem; text-transform: uppercase; }
+    .sec-num .dot { color: var(--muted); margin: 0 0.4rem; }
+    .sec-title { font-size: clamp(1.5rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 0.8rem; color: var(--title); }
+    .sec-desc { font-size: 0.88rem; color: var(--body); max-width: 540px; line-height: 1.9; margin-bottom: 3.5rem; font-weight: 400; }
 
-    /* 章节编号标题 - 杂志风核心 */
-    .sec-num {
-      font-size: 0.7rem; letter-spacing: 0.2em; font-weight: 600;
-      color: var(--jd-red); margin-bottom: 0.8rem; text-transform: uppercase;
-    }
-    .sec-num .dot { color: var(--gray-300); margin: 0 0.4rem; }
-    .sec-title {
-      font-size: clamp(1.6rem, 4vw, 2.6rem); font-weight: 800; line-height: 1.2;
-      letter-spacing: -0.02em; margin-bottom: 0.8rem; color: var(--black);
-    }
-    .sec-dark .sec-title { color: var(--white); }
-    .sec-desc {
-      font-size: 0.9rem; color: var(--gray-500); max-width: 560px;
-      line-height: 1.9; margin-bottom: 3.5rem; font-weight: 400;
-    }
-    .sec-dark .sec-desc { color: rgba(255,255,255,0.4); }
-
-    /* ===== 数据条 ===== */
-    .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 0; border-top: 1px solid var(--gray-200); }
-    .data-cell { padding: 2.5rem 1rem; text-align: left; border-bottom: 1px solid var(--gray-200); border-right: 1px solid var(--gray-200); }
+    /* ===== 数据网格 ===== */
+    .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 0; border-top: 1px solid var(--border); }
+    .data-cell { padding: 2.5rem 1rem; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
     .data-cell:last-child { border-right: none; }
-    .data-cell .v { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; color: var(--black); line-height: 1; letter-spacing: -0.03em; }
+    .data-cell .v { font-size: clamp(1.6rem, 4vw, 2.5rem); font-weight: 900; color: var(--title); line-height: 1; letter-spacing: -0.03em; }
     .data-cell .v .red { color: var(--jd-red); }
-    .data-cell .k { font-size: 0.75rem; color: var(--gray-500); margin-top: 0.6rem; letter-spacing: 0.02em; }
+    .data-cell .k { font-size: 0.72rem; color: var(--muted); margin-top: 0.5rem; letter-spacing: 0.02em; }
 
     /* ===== 业务板块 ===== */
     .biz-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 5rem; }
     .biz-row:last-child { margin-bottom: 0; }
     .biz-row.reverse { direction: rtl; }
     .biz-row.reverse > * { direction: ltr; }
-    .biz-text .label { font-size: 0.7rem; letter-spacing: 0.15em; font-weight: 600; color: var(--jd-red); margin-bottom: 0.6rem; text-transform: uppercase; }
-    .biz-text h3 { font-size: clamp(1.3rem, 3vw, 1.8rem); font-weight: 800; margin-bottom: 1rem; line-height: 1.3; color: var(--black); letter-spacing: -0.01em; }
-    .biz-text p { font-size: 0.9rem; color: var(--gray-500); line-height: 2; margin-bottom: 1.5rem; }
+    .biz-text .label { font-size: 0.65rem; letter-spacing: 0.15em; font-weight: 600; color: var(--jd-red); margin-bottom: 0.5rem; text-transform: uppercase; }
+    .biz-text h3 { font-size: clamp(1.2rem, 3vw, 1.6rem); font-weight: 700; margin-bottom: 0.8rem; line-height: 1.3; color: var(--title); letter-spacing: -0.01em; }
+    .biz-text p { font-size: 0.85rem; color: var(--body); line-height: 2; margin-bottom: 1.3rem; }
     .biz-stats { display: flex; gap: 2.5rem; flex-wrap: wrap; }
-    .biz-stats .item .v { font-size: 1.5rem; font-weight: 900; color: var(--black); letter-spacing: -0.02em; }
+    .biz-stats .item .v { font-size: 1.4rem; font-weight: 900; color: var(--title); letter-spacing: -0.02em; }
     .biz-stats .item .v.red { color: var(--jd-red); }
-    .biz-stats .item .k { font-size: 0.72rem; color: var(--gray-500); margin-top: 0.2rem; }
-    .biz-visual { aspect-ratio: 4/3; overflow: hidden; position: relative; background: var(--gray-100); }
-    .biz-visual .placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--gray-300); }
+    .biz-stats .item .k { font-size: 0.68rem; color: var(--muted); margin-top: 0.15rem; }
+    .biz-visual { aspect-ratio: 4/3; overflow: hidden; position: relative; background: var(--bg-3); border: 1px solid var(--border); }
+    .biz-visual .placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: var(--muted); opacity: 0.4; }
 
     /* ===== 时间线 ===== */
     .timeline { max-width: 720px; position: relative; padding-left: 1.8rem; }
-    .timeline::before { content: ''; position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: var(--gray-300); }
+    .timeline::before { content: ''; position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: var(--border); }
     .tl-item { position: relative; margin-bottom: 2rem; }
-    .tl-item::before { content: ''; position: absolute; left: -1.8rem; top: 7px; width: 11px; height: 11px; border-radius: 50%; background: var(--white); border: 2px solid var(--jd-red); }
-    .tl-item .tl-date { font-size: 0.72rem; font-weight: 700; color: var(--jd-red); letter-spacing: 0.05em; margin-bottom: 0.2rem; }
-    .tl-item h3 { font-size: 1rem; font-weight: 700; color: var(--black); margin-bottom: 0.3rem; }
-    .tl-item p { font-size: 0.85rem; color: var(--gray-500); line-height: 1.8; }
+    .tl-item::before { content: ''; position: absolute; left: -1.8rem; top: 7px; width: 11px; height: 11px; border-radius: 50%; background: var(--bg); border: 2px solid var(--jd-red); }
+    .tl-date { font-size: 0.68rem; font-weight: 700; color: var(--jd-red); letter-spacing: 0.05em; margin-bottom: 0.2rem; }
+    .tl-item h3 { font-size: 0.95rem; font-weight: 700; color: var(--title); margin-bottom: 0.3rem; }
+    .tl-item p { font-size: 0.82rem; color: var(--body); line-height: 1.8; }
 
-    /* ===== 卡片网格 ===== */
-    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 1.5rem; }
+    /* ===== 直播间卡片 ===== */
     .room-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1.5rem; }
+    .room-card { background: var(--bg-2); border: 1px solid var(--border); transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), border-color 0.3s; overflow: hidden; }
+    .room-card:hover { border-color: rgba(230,33,42,0.3); transform: translateY(-2px) scale(1.01); }
+    .room-card .cover { height: 110px; display: flex; align-items: center; justify-content: center; color: var(--title); font-size: 0.95rem; font-weight: 700; text-align: center; padding: 0 1rem; }
+    .room-card .body { padding: 1.1rem 1.2rem; }
+    .room-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--title); margin-bottom: 0.3rem; }
+    .room-card .tags { display: flex; flex-wrap: wrap; gap: 0.2rem; margin-bottom: 0.4rem; }
+    .room-card .tag { font-size: 0.65rem; padding: 0.08rem 0.35rem; background: rgba(255,255,255,0.05); color: var(--muted); }
+    .room-card .desc { font-size: 0.78rem; color: var(--body); line-height: 1.7; margin-bottom: 0.4rem; }
+    .room-card .meta { display: flex; gap: 1rem; padding-top: 0.4rem; border-top: 1px solid var(--border); }
+    .room-card .meta .v { font-size: 0.8rem; font-weight: 800; color: var(--jd-red); }
+    .room-card .meta .k { font-size: 0.62rem; color: var(--muted); }
 
-    /* 直播间卡片 - 硬朗少圆角 */
-    .room-card { background: var(--white); border: 1px solid var(--gray-200); transition: all 0.2s; overflow: hidden; }
-    .room-card:hover { border-color: var(--black); transform: translateY(-2px); }
-    .room-card .cover { height: 120px; display: flex; align-items: center; justify-content: center; color: var(--white); font-size: 1.05rem; font-weight: 700; text-align: center; padding: 0 1rem; }
-    .room-card .body { padding: 1.2rem; }
-    .room-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--black); margin-bottom: 0.3rem; }
-    .room-card .tags { display: flex; flex-wrap: wrap; gap: 0.2rem; margin-bottom: 0.5rem; }
-    .room-card .tag { font-size: 0.68rem; padding: 0.1rem 0.4rem; background: var(--gray-100); color: var(--gray-500); }
-    .room-card .desc { font-size: 0.8rem; color: var(--gray-500); line-height: 1.7; margin-bottom: 0.5rem; }
-    .room-card .meta { display: flex; gap: 1rem; padding-top: 0.5rem; border-top: 1px solid var(--gray-200); }
-    .room-card .meta .v { font-size: 0.85rem; font-weight: 800; color: var(--jd-red); }
-    .room-card .meta .k { font-size: 0.65rem; color: var(--gray-500); }
+    /* ===== 人物卡片 ===== */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 1.5rem; }
+    .member-card { background: var(--bg-2); border: 1px solid var(--border); transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), border-color 0.3s; overflow: hidden; }
+    .member-card:hover { border-color: rgba(230,33,42,0.3); transform: translateY(-2px); }
+    .member-card .avatar { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 900; color: var(--title); }
+    .member-card .info { padding: 1rem 1.1rem; text-align: center; }
+    .member-card h3 { font-size: 0.85rem; font-weight: 700; color: var(--title); }
+    .member-card .role { font-size: 0.7rem; color: var(--jd-red); font-weight: 500; margin: 0.1rem 0; }
+    .member-card .bio { font-size: 0.7rem; color: var(--muted); line-height: 1.6; }
 
-    /* 人物卡片 - 正方形无圆角 */
-    .member-card { background: var(--white); border: 1px solid var(--gray-200); transition: all 0.2s; overflow: hidden; }
-    .member-card:hover { border-color: var(--black); transform: translateY(-2px); }
-    .member-card .avatar { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 900; color: var(--white); }
-    .member-card .info { padding: 1rem 1.2rem; text-align: center; }
-    .member-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--black); }
-    .member-card .role { font-size: 0.72rem; color: var(--jd-red); font-weight: 500; margin: 0.15rem 0; }
-    .member-card .bio { font-size: 0.72rem; color: var(--gray-500); line-height: 1.6; }
+    .group-title { font-size: 0.8rem; font-weight: 700; color: var(--title); margin: 2.5rem 0 1.2rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; gap: 0.4rem; }
+    .group-title .count { font-size: 0.66rem; color: var(--muted); font-weight: 400; }
 
-    /* 分组标题 */
-    .group-title { font-size: 0.85rem; font-weight: 700; color: var(--black); margin: 2.5rem 0 1.2rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--gray-200); display: flex; align-items: baseline; gap: 0.5rem; }
-    .group-title .count { font-size: 0.7rem; color: var(--gray-500); font-weight: 400; }
+    /* ===== 星卡片 ===== */
+    .star-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 1.5rem; }
+    .star-card { background: var(--bg-2); border: 1px solid var(--border); padding: 1.4rem; transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), border-color 0.3s; }
+    .star-card:hover { border-color: rgba(230,33,42,0.3); transform: translateY(-2px); }
+    .star-card .badge { display: inline-block; font-size: 0.62rem; padding: 0.1rem 0.45rem; background: var(--jd-red); color: var(--title); font-weight: 600; margin-bottom: 0.6rem; }
+    .star-card .avatar { width: 40px; height: 40px; border-radius: 50%; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 800; color: var(--title); }
+    .star-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--title); }
+    .star-card .s-role { font-size: 0.7rem; color: var(--jd-red); font-weight: 500; display: inline-block; margin-top: 0.15rem; }
+    .star-card .s-bio { font-size: 0.76rem; color: var(--body); margin-top: 0.5rem; line-height: 1.8; }
+    .star-card .ach { font-size: 0.7rem; color: var(--title); font-weight: 600; margin-top: 0.6rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
 
-    /* 星卡片 */
-    .star-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap: 1.5rem; }
-    .star-card { background: var(--white); border: 1px solid var(--gray-200); padding: 1.5rem; transition: all 0.2s; }
-    .star-card:hover { border-color: var(--black); transform: translateY(-2px); }
-    .star-card .badge { display: inline-block; font-size: 0.65rem; padding: 0.12rem 0.5rem; background: var(--jd-red); color: var(--white); font-weight: 600; margin-bottom: 0.7rem; letter-spacing: 0.03em; }
-    .star-card .avatar { width: 44px; height: 44px; border-radius: 50%; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 800; color: var(--white); }
-    .star-card h3 { font-size: 0.95rem; font-weight: 700; color: var(--black); }
-    .star-card .s-role { font-size: 0.72rem; color: var(--jd-red); font-weight: 500; display: inline-block; margin-top: 0.2rem; }
-    .star-card .s-bio { font-size: 0.78rem; color: var(--gray-500); margin-top: 0.6rem; line-height: 1.8; }
-    .star-card .ach { font-size: 0.72rem; color: var(--black); font-weight: 600; margin-top: 0.7rem; padding-top: 0.6rem; border-top: 1px solid var(--gray-200); }
-
-    /* 视频 */
+    /* ===== 视频 ===== */
     .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 1.5rem; }
-    .video-card { background: var(--white); border: 1px solid var(--gray-200); overflow: hidden; transition: all 0.2s; }
-    .video-card:hover { border-color: var(--black); }
-    .video-card video { width: 100%; display: block; background: var(--black); aspect-ratio: 16/9; }
+    .video-card { background: var(--bg-2); border: 1px solid var(--border); overflow: hidden; transition: border-color 0.3s; }
+    .video-card:hover { border-color: rgba(230,33,42,0.3); }
+    .video-card video { width: 100%; display: block; background: var(--bg); aspect-ratio: 16/9; }
     .video-card .vinfo { padding: 1rem 1.2rem; }
-    .video-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--black); margin-bottom: 0.2rem; }
+    .video-card h3 { font-size: 0.85rem; font-weight: 700; color: var(--title); margin-bottom: 0.2rem; }
     .video-card .vmeta { display: flex; gap: 0.3rem; }
-    .video-card .vmeta span { font-size: 0.68rem; padding: 0.1rem 0.4rem; background: var(--gray-100); color: var(--gray-500); }
+    .video-card .vmeta span { font-size: 0.65rem; padding: 0.08rem 0.35rem; background: rgba(255,255,255,0.05); color: var(--muted); }
 
-    /* 轮播 */
-    .carousel { position: relative; overflow: hidden; }
-    .carousel-track { display: flex; gap: 1.5rem; transition: transform 0.35s ease; }
-    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: var(--white); border: 1px solid var(--gray-300); cursor: pointer; font-size: 1rem; color: var(--black); z-index: 5; display: flex; align-items: center; justify-content: center; line-height: 1; }
-    .carousel-btn:hover { background: var(--black); color: var(--white); border-color: var(--black); }
-    .carousel-btn.prev { left: -6px; }
-    .carousel-btn.next { right: -6px; }
-    .carousel-dots { display: flex; gap: 0.3rem; justify-content: center; margin-top: 1.2rem; }
-    .carousel-dots .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gray-300); cursor: pointer; transition: all 0.2s; border: none; padding: 0; }
-    .carousel-dots .dot.active { background: var(--jd-red); width: 20px; border-radius: 3px; }
+    /* ===== Footer ===== */
+    footer { padding: 3rem 2rem; text-align: center; border-top: 1px solid var(--border); position: relative; z-index: 10; }
+    footer img { width: 30px; height: 30px; border-radius: 50%; margin-bottom: 0.6rem; opacity: 0.8; }
+    footer p { font-size: 0.72rem; color: var(--muted); line-height: 1.8; }
+    footer .en { font-size: 0.6rem; color: var(--bg-3); letter-spacing: 0.15em; margin-top: 0.2rem; }
 
-    /* Footer */
-    footer { padding: 3rem 2rem; text-align: center; border-top: 1px solid var(--gray-200); background: var(--white); }
-    footer img { width: 32px; height: 32px; border-radius: 50%; margin-bottom: 0.8rem; }
-    footer p { font-size: 0.75rem; color: var(--gray-500); line-height: 1.8; }
-    footer .en { font-size: 0.65rem; color: var(--gray-300); letter-spacing: 0.1em; margin-top: 0.3rem; }
-
-    /* 装饰英文文本 */
-    .deco-en { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--gray-300); font-weight: 500; text-transform: uppercase; }
-
-    /* 移动端 */
     @media (max-width: 768px) {
       .sec { padding: 4rem 1.2rem; }
       .biz-row { grid-template-columns: 1fr; gap: 2rem; }
       .biz-row.reverse { direction: ltr; }
       .data-cell { min-width: 100px; padding: 1.5rem 0.8rem; }
+      .member-card .avatar { height: 150px; font-size: 1.8rem; }
+      .mist { display: none; }
+      .mist-1 { display: block; opacity: 0.5; }
       nav { padding: 0 0.8rem; }
-      nav .logo { margin-right: 0.6rem; font-size: 0.85rem; }
-      nav .tab { padding: 0.3rem 0.6rem; font-size: 0.72rem; }
-      .hero { min-height: 70vh; }
-      .member-card .avatar { height: 160px; font-size: 2rem; }
+      nav .logo { margin-right: 0.6rem; font-size: 0.78rem; }
+      nav .tab { padding: 0.25rem 0.55rem; font-size: 0.7rem; }
     }
   </style>
 </head>
 <body>
+
+<!-- 视差背景层 -->
+<div class="bg-layer bg-mountain">
+  <svg class="mountain-svg mountain-far" viewBox="0 0 1200 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,400 L0,280 L100,220 L200,250 L350,180 L450,210 L600,150 L750,190 L900,140 L1050,180 L1200,120 L1200,400 Z"/>
+  </svg>
+  <svg class="mountain-svg mountain-mid" viewBox="0 0 1200 350" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,350 L0,200 L120,160 L280,200 L400,120 L550,170 L700,100 L850,150 L1000,90 L1200,140 L1200,350 Z"/>
+  </svg>
+</div>
+<div class="bg-layer bg-mist">
+  <div class="mist mist-1"></div>
+  <div class="mist mist-2"></div>
+  <div class="mist mist-3"></div>
+</div>
+<div class="bg-layer bg-particles" id="particles"></div>
 
 <nav>
   <div class="logo"><img src="joy-logo.png" alt="JOY">京东客服<span class="red">直播</span></div>
@@ -225,46 +231,40 @@
 
 <!-- ========== 总览 ========== -->
 <div class="panel active" id="overview">
-  <!-- Hero: 全屏深色 -->
-  <section class="hero">
-    <img class="bg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Crect width='1200' height='800' fill='%230a0a0a'/%3E%3Cg opacity='0.3'%3E%3Ccircle cx='600' cy='300' r='200' fill='none' stroke='%23333' stroke-width='1'/%3E%3Ccircle cx='600' cy='300' r='150' fill='none' stroke='%23333' stroke-width='1'/%3E%3Crect x='400' y='400' width='400' height='200' fill='%23111'/%3E%3C/g%3E%3C/svg%3E" alt="">
-    <div class="hero-content">
-      <img src="joy-logo.png" class="joy-logo" alt="JOY">
-      <div class="eyebrow">JD CUSTOMER SERVICE LIVE</div>
-      <h1>京东客服直播基地</h1>
-      <p class="slogan">科技驱动 · 客服基因 · 可信直播<br>覆盖全品类全形态的矩阵式直播运营团队</p>
-    </div>
+  <section class="hero" id="hero-section">
+    <img src="joy-logo.png" class="joy-logo" alt="JOY">
+    <div class="eyebrow reveal">JD CUSTOMER SERVICE LIVE</div>
+    <h1 class="reveal">京东客服直播基地</h1>
+    <p class="slogan reveal">科技驱动 · 客服基因 · 可信直播<br>覆盖全品类全形态的矩阵式直播运营团队</p>
     <div class="scroll">SCROLL ↓</div>
   </section>
 
-  <!-- 01 · ABOUT -->
-  <section class="sec sec-white">
+  <section class="sec">
     <div class="sec-inner">
-      <div class="sec-num">01 <span class="dot">·</span> ABOUT <span class="dot">·</span> 团队总览</div>
-      <h2 class="sec-title">百人团队，各司其职，各显其能。</h2>
-      <p class="sec-desc">京东零售旗下的新型直播团队，依托京东客服体系，深度融合AI技术与专业直播人才。已在全国布局北京、成都、宿迁三大直播基地，自建标准化直播间29个，总场地面积突破3000㎡。</p>
+      <div class="sec-num reveal">01 <span class="dot">·</span> ABOUT <span class="dot">·</span> 团队总览</div>
+      <h2 class="sec-title reveal">百人团队，各司其职，各显其能。</h2>
+      <p class="sec-desc reveal">京东零售旗下的新型直播团队，依托京东客服体系，深度融合AI技术与专业直播人才。已在全国布局北京、成都、宿迁三大直播基地，自建标准化直播间29个，总场地面积突破3000㎡。</p>
 
-      <div class="data-grid">
-        <div class="data-cell"><div class="v">100<span class="red">亿+</span></div><div class="k">预估年度销售规模</div></div>
-        <div class="data-cell"><div class="v">40<span class="red">亿+</span></div><div class="k">26上半年销售规模</div></div>
-        <div class="data-cell"><div class="v">1<span class="red">亿+</span></div><div class="k">单日成交峰值</div></div>
-        <div class="data-cell"><div class="v">1100<span class="red">万+</span></div><div class="k">累计粉丝数</div></div>
-        <div class="data-cell"><div class="v">200<span class="red">万+</span></div><div class="k">单日浏览人次</div></div>
-        <div class="data-cell"><div class="v">29<span class="red">个</span></div><div class="k">标准化直播间</div></div>
-        <div class="data-cell"><div class="v">90<span class="red">+</span></div><div class="k">全职团队</div></div>
-        <div class="data-cell"><div class="v">40<span class="red">+</span></div><div class="k">直播运营项目</div></div>
+      <div class="data-grid reveal-stagger">
+        <div class="data-cell"><div class="v" data-count="100">0<span class="red">亿+</span></div><div class="k">预估年度销售规模</div></div>
+        <div class="data-cell"><div class="v" data-count="40">0<span class="red">亿+</span></div><div class="k">26上半年销售规模</div></div>
+        <div class="data-cell"><div class="v" data-count="1">0<span class="red">亿+</span></div><div class="k">单日成交峰值</div></div>
+        <div class="data-cell"><div class="v" data-count="1100">0<span class="red">万+</span></div><div class="k">累计粉丝数</div></div>
+        <div class="data-cell"><div class="v" data-count="200">0<span class="red">万+</span></div><div class="k">单日浏览人次</div></div>
+        <div class="data-cell"><div class="v" data-count="29">0<span class="red">个</span></div><div class="k">标准化直播间</div></div>
+        <div class="data-cell"><div class="v" data-count="90">0<span class="red">+</span></div><div class="k">全职团队</div></div>
+        <div class="data-cell"><div class="v" data-count="40">0<span class="red">+</span></div><div class="k">直播运营项目</div></div>
       </div>
     </div>
   </section>
 
-  <!-- 02 · BUSINESS -->
-  <section class="sec sec-gray">
+  <section class="sec">
     <div class="sec-inner">
-      <div class="sec-num">02 <span class="dot">·</span> BUSINESS <span class="dot">·</span> 业务版图</div>
-      <h2 class="sec-title">全品类全形态，构建直播运营闭环。</h2>
-      <p class="sec-desc">业务覆盖自建、店铺、频道、场播等全类型直播形态，可适配各类大、中、小规模的直播业务需求。</p>
+      <div class="sec-num reveal">02 <span class="dot">·</span> BUSINESS <span class="dot">·</span> 业务版图</div>
+      <h2 class="sec-title reveal">全品类全形态，构建直播运营闭环。</h2>
+      <p class="sec-desc reveal">业务覆盖自建、店铺、频道、场播等全类型直播形态，可适配各类大、中、小规模的直播业务需求。</p>
 
-      <div class="biz-row">
+      <div class="biz-row reveal">
         <div class="biz-text">
           <div class="label">LIVE COMMERCE</div>
           <h3>矩阵式直播运营</h3>
@@ -278,7 +278,7 @@
         <div class="biz-visual"><div class="placeholder">📺</div></div>
       </div>
 
-      <div class="biz-row reverse">
+      <div class="biz-row reverse reveal">
         <div class="biz-text">
           <div class="label">TOP LIVE ROOMS</div>
           <h3>百万粉丝 · 日均百万GMV</h3>
@@ -292,11 +292,11 @@
         <div class="biz-visual"><div class="placeholder">🔥</div></div>
       </div>
 
-      <div class="biz-row">
+      <div class="biz-row reveal">
         <div class="biz-text">
           <div class="label">AI + LIVE</div>
           <h3>真人 + 数字人双场景直播</h3>
-          <p>依托京东数字人直播技术，搭配黄金眼、商智数据分析工具，构建直播运营指标体系。以数据驱动选品、内容与转化，借助数字人实现7×24小时常态化直播。拥有成熟京东主站直播全链路运营经验，独立负责策划、货盘、引流、场控、转化、复盘全流程。</p>
+          <p>依托京东数字人直播技术，搭配黄金眼、商智数据分析工具，构建直播运营指标体系。以数据驱动选品、内容与转化，借助数字人实现7×24小时常态化直播。拥有成熟京东主站直播全链路运营经验。</p>
           <div class="biz-stats">
             <div class="item"><div class="v red">7×24h</div><div class="k">数字人直播</div></div>
             <div class="item"><div class="v">全链路</div><div class="k">运营SOP</div></div>
@@ -306,11 +306,11 @@
         <div class="biz-visual"><div class="placeholder">🤖</div></div>
       </div>
 
-      <div class="biz-row reverse">
+      <div class="biz-row reverse reveal">
         <div class="biz-text">
           <div class="label">TRUSTED LIVE</div>
           <h3>客服人才转型 · 官方背书可信</h3>
-          <p>京东客服员工自带服务基因，将客户服务经验转化为直播运营能力，破解主播专业度与信任度难题。京东平台官方认证身份出镜，自带平台与品牌双重背书。团队分为主播岗、运营岗、设计拍剪岗，全方位支撑直播业务落地运营。</p>
+          <p>京东客服员工自带服务基因，将客户服务经验转化为直播运营能力，破解主播专业度与信任度难题。京东平台官方认证身份出镜，自带平台与品牌双重背书。团队分为主播岗、运营岗、设计拍剪岗。</p>
           <div class="biz-stats">
             <div class="item"><div class="v red">90+</div><div class="k">全职团队</div></div>
             <div class="item"><div class="v">3大</div><div class="k">直播基地</div></div>
@@ -322,37 +322,36 @@
     </div>
   </section>
 
-  <!-- 03 · TIMELINE -->
-  <section class="sec sec-white">
+  <section class="sec">
     <div class="sec-inner">
-      <div class="sec-num">03 <span class="dot">·</span> TIMELINE <span class="dot">·</span> 发展历程</div>
-      <h2 class="sec-title">从成立到单日破亿，持续深耕直播赛道。</h2>
-      <p class="sec-desc">REC · LIVE COMMERCE SINCE 2022</p>
+      <div class="sec-num reveal">03 <span class="dot">·</span> TIMELINE <span class="dot">·</span> 发展历程</div>
+      <h2 class="sec-title reveal">从成立到单日破亿，持续深耕直播赛道。</h2>
+      <p class="sec-desc reveal">REC · LIVE COMMERCE SINCE 2022</p>
       <div class="timeline">
-        <div class="tl-item">
+        <div class="tl-item reveal">
           <div class="tl-date">2022.06</div>
           <h3>客服直播代运营业务起步</h3>
           <p>由客服团队自建直播基地，京东客服员工组建直播服务团队，启动直播电商业务。</p>
         </div>
-        <div class="tl-item">
+        <div class="tl-item reveal">
           <div class="tl-date">2023.03 — 2023.06</div>
           <h3>国补直播间开播 · 618峰值3200万</h3>
-          <p>国家补贴X百亿补贴直播间开播，国补政策直播宣导模式启动。618大促单日GMV峰值突破3200万。</p>
+          <p>国家补贴X百亿补贴直播间开播，618大促单日GMV峰值突破3200万。</p>
         </div>
-        <div class="tl-item">
+        <div class="tl-item reveal">
           <div class="tl-date">2024</div>
           <h3>直播间矩阵快速扩展</h3>
           <p>垂钓采销、京东超市茶叶、京东手机自营旗舰店、京东家电自营旗舰店相继开播，双12单场直播订单量突破50万。</p>
         </div>
-        <div class="tl-item">
+        <div class="tl-item reveal">
           <div class="tl-date">2025</div>
           <h3>单日成交破亿 · 基地落成</h3>
-          <p>您好京东、客服甄选、京东指数采销等直播间相继开播。5月宿迁客服直播家电直播基地落成，11月9日直播间单日成交金额突破1亿。入选江苏2025年数字消费创新场景"消费焕新"创新场景。</p>
+          <p>5月宿迁客服直播家电直播基地落成，11月9日直播间单日成交金额突破1亿。入选江苏2025年数字消费创新场景。</p>
         </div>
-        <div class="tl-item">
+        <div class="tl-item reveal">
           <div class="tl-date">2026</div>
           <h3>单场破亿 · 粉丝1100万 · 三基地布局</h3>
-          <p>华为手机、家电严选家、电器自营旗舰店、看球竞猜直播间相继开播。5月31日单场直播金额破1亿，7月超3000平新基地落成乔迁，8月与京东公益达成专项合作落地公益直播。10月累计粉丝数突破1100万，单日浏览人次超200万，26上半年销售规模突破40亿。</p>
+          <p>5月31日单场直播金额破1亿，7月超3000平新基地落成乔迁，10月累计粉丝数突破1100万，26上半年销售规模突破40亿。</p>
         </div>
       </div>
     </div>
@@ -361,66 +360,18 @@
 
 <!-- ========== 直播间 ========== -->
 <div class="panel" id="rooms">
-  <section class="sec sec-white">
+  <section class="sec">
     <div class="sec-inner">
-      <div class="sec-num">04 <span class="dot">·</span> STUDIO <span class="dot">·</span> 直播间矩阵</div>
-      <h2 class="sec-title">16个运营中直播间，覆盖十余种品类。</h2>
-      <p class="sec-desc">3个百万粉直播间，8个日均GMV百万+直播间，5个日均300W+，1个日均500W+。BROADCAST STUDIO 24/7</p>
-      <div class="room-grid">
-        <div class="room-card">
-          <div class="cover" style="background:var(--black)">您好京东<br>直播间</div>
-          <div class="body">
-            <h3>您好京东直播间</h3>
-            <div class="tags"><span class="tag">全品类</span><span class="tag">官方认证</span><span class="tag">特色账号</span></div>
-            <p class="desc">京东客服官方认证直播间，全品类常态化直播，客服基因打造可信直播。</p>
-            <div class="meta"><div><div class="v">全品类</div><div class="k">覆盖范围</div></div><div><div class="v">7×24h</div><div class="k">数字人</div></div></div>
-          </div>
-        </div>
-        <div class="room-card">
-          <div class="cover" style="background:var(--gray-900)">京东客服甄选<br>直播间</div>
-          <div class="body">
-            <h3>京东客服甄选直播间</h3>
-            <div class="tags"><span class="tag">精选好物</span><span class="tag">官方背书</span></div>
-            <p class="desc">依托客服选品能力，精选优质商品，官方背书降低用户信任成本。</p>
-            <div class="meta"><div><div class="v">甄选</div><div class="k">选品模式</div></div><div><div class="v">官方</div><div class="k">认证</div></div></div>
-          </div>
-        </div>
-        <div class="room-card">
-          <div class="cover" style="background:var(--jd-red)">国补政策<br>直播专场</div>
-          <div class="body">
-            <h3>国补政策直播宣导</h3>
-            <div class="tags"><span class="tag">国补政策</span><span class="tag">实时答疑</span></div>
-            <p class="desc">实时同步国补地补政策动态，一对一精准答疑，实现政策惠企与促单转化双赢。</p>
-            <div class="meta"><div><div class="v">实时</div><div class="k">政策同步</div></div><div><div class="v">1v1</div><div class="k">答疑</div></div></div>
-          </div>
-        </div>
-        <div class="room-card">
-          <div class="cover" style="background:var(--black)">数字人<br>直播间</div>
-          <div class="body">
-            <h3>数字人 7×24h 直播间</h3>
-            <div class="tags"><span class="tag">AI数字人</span><span class="tag">全天候</span></div>
-            <p class="desc">依托京东数字人直播技术，补足非黄金时段直播供给，降低人力运营成本。</p>
-            <div class="meta"><div><div class="v">24h</div><div class="k">不间断</div></div><div><div class="v">AI</div><div class="k">驱动</div></div></div>
-          </div>
-        </div>
-        <div class="room-card">
-          <div class="cover" style="background:var(--gray-700)">场景化互动<br>答疑直播间</div>
-          <div class="body">
-            <h3>场景化实时互动答疑</h3>
-            <div class="tags"><span class="tag">互动答疑</span><span class="tag">场景化</span></div>
-            <p class="desc">打造场景化实时互动答疑特色模式，将客服服务能力融入直播体验。</p>
-            <div class="meta"><div><div class="v">实时</div><div class="k">互动</div></div><div><div class="v">场景化</div><div class="k">体验</div></div></div>
-          </div>
-        </div>
-        <div class="room-card">
-          <div class="cover" style="background:var(--jd-red)">活动讲解<br>直播间</div>
-          <div class="body">
-            <h3>活动讲解直播</h3>
-            <div class="tags"><span class="tag">大促活动</span><span class="tag">专题专场</span></div>
-            <p class="desc">大促及专题专场活动讲解直播，年专题专场活动直播20场以上。</p>
-            <div class="meta"><div><div class="v">20+</div><div class="k">年专场</div></div><div><div class="v">600+</div><div class="k">年常态化</div></div></div>
-          </div>
-        </div>
+      <div class="sec-num reveal">04 <span class="dot">·</span> STUDIO <span class="dot">·</span> 直播间矩阵</div>
+      <h2 class="sec-title reveal">16个运营中直播间，覆盖十余种品类。</h2>
+      <p class="sec-desc reveal">3个百万粉直播间，8个日均GMV百万+直播间。BROADCAST STUDIO 24/7</p>
+      <div class="room-grid reveal-stagger">
+        <div class="room-card"><div class="cover" style="background:var(--bg-3)">您好京东<br>直播间</div><div class="body"><h3>您好京东直播间</h3><div class="tags"><span class="tag">全品类</span><span class="tag">官方认证</span></div><p class="desc">京东客服官方认证直播间，全品类常态化直播。</p><div class="meta"><div><div class="v">全品类</div><div class="k">覆盖</div></div><div><div class="v">7×24h</div><div class="k">数字人</div></div></div></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--mountain)">京东客服甄选<br>直播间</div><div class="body"><h3>京东客服甄选直播间</h3><div class="tags"><span class="tag">精选</span><span class="tag">官方背书</span></div><p class="desc">依托客服选品能力，精选优质商品。</p><div class="meta"><div><div class="v">甄选</div><div class="k">选品</div></div><div><div class="v">官方</div><div class="k">认证</div></div></div></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--jd-red)">国补政策<br>直播专场</div><div class="body"><h3>国补政策直播宣导</h3><div class="tags"><span class="tag">国补</span><span class="tag">答疑</span></div><p class="desc">实时同步国补地补政策，一对一精准答疑。</p><div class="meta"><div><div class="v">实时</div><div class="k">同步</div></div><div><div class="v">1v1</div><div class="k">答疑</div></div></div></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--bg-3)">数字人<br>直播间</div><div class="body"><h3>数字人 7×24h 直播间</h3><div class="tags"><span class="tag">AI</span><span class="tag">全天候</span></div><p class="desc">补足非黄金时段直播供给，降低人力成本。</p><div class="meta"><div><div class="v">24h</div><div class="k">不间断</div></div><div><div class="v">AI</div><div class="k">驱动</div></div></div></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--mountain)">场景化互动<br>答疑直播间</div><div class="body"><h3>场景化实时互动答疑</h3><div class="tags"><span class="tag">互动</span><span class="tag">场景化</span></div><p class="desc">将客服服务能力融入直播体验。</p><div class="meta"><div><div class="v">实时</div><div class="k">互动</div></div><div><div class="v">场景</div><div class="k">体验</div></div></div></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--jd-red)">活动讲解<br>直播间</div><div class="body"><h3>活动讲解直播</h3><div class="tags"><span class="tag">大促</span><span class="tag">专场</span></div><p class="desc">年专题专场活动直播20场以上。</p><div class="meta"><div><div class="v">20+</div><div class="k">年专场</div></div><div><div class="v">600+</div><div class="k">年常态化</div></div></div></div></div>
       </div>
     </div>
   </section>
@@ -428,11 +379,11 @@
 
 <!-- ========== 岗位 ========== -->
 <div class="panel" id="roles">
-  <section class="sec sec-white">
+  <section class="sec">
     <div class="sec-inner">
-      <div class="sec-num">05 <span class="dot">·</span> TEAM <span class="dot">·</span> 岗位介绍</div>
-      <h2 class="sec-title">46位主播，主播岗、运营岗、设计拍剪岗。</h2>
-      <p class="sec-desc">客服人才转型，自带服务基因。PROFESSIONAL LIVE TEAM</p>
+      <div class="sec-num reveal">05 <span class="dot">·</span> TEAM <span class="dot">·</span> 岗位介绍</div>
+      <h2 class="sec-title reveal">46位主播，主播岗、运营岗、设计拍剪岗。</h2>
+      <p class="sec-desc reveal">客服人才转型，自带服务基因。PROFESSIONAL LIVE TEAM</p>
       <div id="roles-container"></div>
     </div>
   </section>
@@ -440,51 +391,23 @@
 
 <!-- ========== 人才培育 ========== -->
 <div class="panel" id="stars">
-  <section class="sec sec-white">
+  <section class="sec">
     <div class="sec-inner">
-      <div class="sec-num">06 <span class="dot">·</span> TALENT <span class="dot">·</span> 人才培育</div>
-      <h2 class="sec-title">客服人才转型，打造未来将星。</h2>
-      <p class="sec-desc">依托京东自建客服中心人才优势，推动客服人才转型主播，建立专职主播、运营、拍摄剪辑人才梯队。RISING STARS PROGRAM</p>
-      <div style="display:flex;flex-wrap:wrap;gap:2rem;margin-bottom:3rem;">
-        <div><div style="font-size:1.8rem;font-weight:900;color:var(--jd-red);">90+</div><div style="font-size:0.75rem;color:var(--gray-500);">全职团队</div></div>
-        <div><div style="font-size:1.8rem;font-weight:900;color:var(--black);">46位</div><div style="font-size:0.75rem;color:var(--gray-500);">在册主播</div></div>
-        <div><div style="font-size:1.8rem;font-weight:900;color:var(--jd-red);">3大</div><div style="font-size:0.75rem;color:var(--gray-500);">直播基地</div></div>
-        <div><div style="font-size:1.8rem;font-weight:900;color:var(--black);">3岗</div><div style="font-size:0.75rem;color:var(--gray-500);">主播/运营/拍剪</div></div>
+      <div class="sec-num reveal">06 <span class="dot">·</span> TALENT <span class="dot">·</span> 人才培育</div>
+      <h2 class="sec-title reveal">客服人才转型，打造未来将星。</h2>
+      <p class="sec-desc reveal">RISING STARS PROGRAM</p>
+      <div class="reveal" style="display:flex;flex-wrap:wrap;gap:2rem;margin-bottom:3rem;">
+        <div><div style="font-size:1.6rem;font-weight:900;color:var(--jd-red);">90+</div><div style="font-size:0.7rem;color:var(--muted);">全职团队</div></div>
+        <div><div style="font-size:1.6rem;font-weight:900;color:var(--title);">46位</div><div style="font-size:0.7rem;color:var(--muted);">在册主播</div></div>
+        <div><div style="font-size:1.6rem;font-weight:900;color:var(--jd-red);">3大</div><div style="font-size:0.7rem;color:var(--muted);">直播基地</div></div>
+        <div><div style="font-size:1.6rem;font-weight:900;color:var(--title);">3岗</div><div style="font-size:0.7rem;color:var(--muted);">主播/运营/拍剪</div></div>
       </div>
-      <h3 style="font-size:1rem;font-weight:700;margin-bottom:1.5rem;">客服人才转型故事</h3>
-      <div class="star-grid">
-        <div class="star-card">
-          <div class="badge">客服转型 · 主播</div>
-          <div class="avatar" style="background:var(--black)">转</div>
-          <h3>客服 → 全品类主播</h3>
-          <span class="s-role">客服专员 → 全品类主播</span>
-          <p class="s-bio">从京东客服一线转型直播主播，自带服务基因，将客户服务经验转化为直播控场能力，擅长国补政策讲解与互动答疑。</p>
-          <div class="ach">服务基因转化典范</div>
-        </div>
-        <div class="star-card">
-          <div class="badge">客服转型 · 运营</div>
-          <div class="avatar" style="background:var(--gray-900)">运</div>
-          <h3>客服 → 直播运营</h3>
-          <span class="s-role">客服组长 → 直播运营</span>
-          <p class="s-bio">从客服管理岗转型直播运营，将客户体验洞察融入直播策划，主导"您好京东直播间"日常运营，年直播场次600场以上。</p>
-          <div class="ach">体验运营赋能直播</div>
-        </div>
-        <div class="star-card">
-          <div class="badge">客服转型 · 数据</div>
-          <div class="avatar" style="background:var(--jd-red)">数</div>
-          <h3>客服 → 数据运营</h3>
-          <span class="s-role">数据科学 → 直播数据</span>
-          <p class="s-bio">依托客服数据科学团队背景，运用黄金眼、商智等工具，构建直播运营指标体系与线上看板，数据驱动选品与转化。</p>
-          <div class="ach">数据驱动增长</div>
-        </div>
-        <div class="star-card">
-          <div class="badge">客服转型 · 内容</div>
-          <div class="avatar" style="background:var(--gray-700)">内</div>
-          <h3>客服 → 内容策划</h3>
-          <span class="s-role">舆情热点 → 内容策划</span>
-          <p class="s-bio">从客服舆情热点团队转型直播内容策划，敏锐捕捉热点趋势，打造场景化互动答疑直播模式，提升用户粘性。</p>
-          <div class="ach">热点驱动内容</div>
-        </div>
+      <h3 class="reveal" style="font-size:0.95rem;font-weight:700;color:var(--title);margin-bottom:1.5rem;">客服人才转型故事</h3>
+      <div class="star-grid reveal-stagger">
+        <div class="star-card"><div class="badge">客服转型 · 主播</div><div class="avatar" style="background:var(--mountain)">转</div><h3>客服 → 全品类主播</h3><span class="s-role">客服专员 → 全品类主播</span><p class="s-bio">从京东客服一线转型直播主播，自带服务基因，擅长国补政策讲解与互动答疑。</p><div class="ach">服务基因转化典范</div></div>
+        <div class="star-card"><div class="badge">客服转型 · 运营</div><div class="avatar" style="background:var(--bg-3)">运</div><h3>客服 → 直播运营</h3><span class="s-role">客服组长 → 直播运营</span><p class="s-bio">从客服管理岗转型直播运营，主导"您好京东直播间"日常运营，年直播场次600场以上。</p><div class="ach">体验运营赋能直播</div></div>
+        <div class="star-card"><div class="badge">客服转型 · 数据</div><div class="avatar" style="background:var(--jd-red)">数</div><h3>客服 → 数据运营</h3><span class="s-role">数据科学 → 直播数据</span><p class="s-bio">运用黄金眼、商智等工具，构建直播运营指标体系，数据驱动选品与转化。</p><div class="ach">数据驱动增长</div></div>
+        <div class="star-card"><div class="badge">客服转型 · 内容</div><div class="avatar" style="background:var(--mountain)">内</div><h3>客服 → 内容策划</h3><span class="s-role">舆情热点 → 内容策划</span><p class="s-bio">从客服舆情热点团队转型，打造场景化互动答疑直播模式，提升用户粘性。</p><div class="ach">热点驱动内容</div></div>
       </div>
     </div>
   </section>
@@ -492,40 +415,19 @@
 
 <!-- ========== 花絮视频 ========== -->
 <div class="panel" id="videos">
-  <section class="sec sec-white">
+  <section class="sec">
     <div class="sec-inner">
-      <div class="sec-num">07 <span class="dot">·</span> SCENE <span class="dot">·</span> 工作花絮</div>
-      <h2 class="sec-title">台前幕后的精彩瞬间。</h2>
-      <p class="sec-desc">BEHIND THE SCENES · LIVE COMMERCE 24/7</p>
-      <div class="video-grid">
-        <div class="video-card">
-          <video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%230a0a0a'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23666' font-size='20' font-family='sans-serif'%3E🎬 大促花絮混剪%3C/text%3E%3C/svg%3E">
-            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-          </video>
-          <div class="vinfo"><h3>大促直播花絮混剪</h3><div class="vmeta"><span>混剪</span><span>大促</span><span>2:30</span></div></div>
-        </div>
-        <div class="video-card">
-          <video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23111'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23666' font-size='20' font-family='sans-serif'%3E🎙️ 直播高光%3C/text%3E%3C/svg%3E">
-            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4">
-          </video>
-          <div class="vinfo"><h3>您好京东直播间高光</h3><div class="vmeta"><span>直播切片</span><span>高光</span><span>1:15</span></div></div>
-        </div>
-        <div class="video-card">
-          <video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%230a0a0a'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23666' font-size='20' font-family='sans-serif'%3E🤖 数字人直播%3C/text%3E%3C/svg%3E">
-            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
-          </video>
-          <div class="vinfo"><h3>数字人直播演示</h3><div class="vmeta"><span>数字人</span><span>AI</span><span>0:15</span></div></div>
-        </div>
-        <div class="video-card">
-          <video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23111'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23666' font-size='20' font-family='sans-serif'%3E⭐ 人才培训%3C/text%3E%3C/svg%3E">
-            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" type="video/mp4">
-          </video>
-          <div class="vinfo"><h3>客服人才转型培训记录</h3><div class="vmeta"><span>人才培育</span><span>培训</span><span>0:15</span></div></div>
-        </div>
+      <div class="sec-num reveal">07 <span class="dot">·</span> SCENE <span class="dot">·</span> 工作花絮</div>
+      <h2 class="sec-title reveal">台前幕后的精彩瞬间。</h2>
+      <p class="sec-desc reveal">BEHIND THE SCENES · LIVE COMMERCE 24/7</p>
+      <div class="video-grid reveal-stagger">
+        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%230F1116'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%236A6F7A' font-size='18' font-family='sans-serif'%3E🎬 大促花絮混剪%3C/text%3E%3C/svg%3E"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"></video><div class="vinfo"><h3>大促直播花絮混剪</h3><div class="vmeta"><span>混剪</span><span>大促</span><span>2:30</span></div></div></div>
+        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23141820'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%236A6F7A' font-size='18' font-family='sans-serif'%3E🎙️ 直播高光%3C/text%3E%3C/svg%3E"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4"></video><div class="vinfo"><h3>您好京东直播间高光</h3><div class="vmeta"><span>直播切片</span><span>高光</span><span>1:15</span></div></div></div>
+        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%230F1116'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%236A6F7A' font-size='18' font-family='sans-serif'%3E🤖 数字人直播%3C/text%3E%3C/svg%3E"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4"></video><div class="vinfo"><h3>数字人直播演示</h3><div class="vmeta"><span>数字人</span><span>AI</span><span>0:15</span></div></div></div>
+        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23141820'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%236A6F7A' font-size='18' font-family='sans-serif'%3E⭐ 人才培训%3C/text%3E%3C/svg%3E"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" type="video/mp4"></video><div class="vinfo"><h3>客服人才转型培训记录</h3><div class="vmeta"><span>人才培育</span><span>培训</span><span>0:15</span></div></div></div>
       </div>
     </div>
   </section>
-
   <footer>
     <img src="joy-logo.png" alt="JOY">
     <p>© 2026 京东客服直播基地 · 北京 · 成都 · 宿迁三大基地</p>
@@ -534,6 +436,79 @@
 </div>
 
 <script>
+  // 主播数据
+  const HOSTS = [
+    {name:'李浩菁',art:'栗子',room:'您好京东',cat:'家电/珠宝/美妆',info:'双子座·ENFP',bio:'性格开朗，镜头表现力佳，擅长直播控场与观众互动。'},
+    {name:'董啸啸',art:'笑笑',room:'您好京东',cat:'全品类',info:'水瓶座·ESTJ',bio:'全品类直播，覆盖食品、家电、护肤品多个品类。'},
+    {name:'周子豪',art:'周周',room:'您好京东',cat:'3C数码/家电',info:'天秤座',bio:'热爱生活，积极向上，喜欢运动健身与游戏。'},
+    {name:'王铭',art:'天铭',room:'您好京东',cat:'3C数码/家电',info:'天秤座·INTP',bio:'20余年游戏经验，MOBA、RPG多项全能。'},
+    {name:'马智杰',art:'小马哥',room:'您好京东',cat:'全品类',info:'白羊座',bio:'5年专业主播经验，普通话一级甲等。'},
+    {name:'杨俊',art:'念念',room:'您好京东',cat:'家电/宠物',info:'巨蟹座·INFP',bio:'深耕家电与宠物品类直播，亲和力强。'},
+    {name:'曹秀秀',art:'优米',room:'京东空调',cat:'家电家居',info:'天秤座·ENFJ',bio:'1年半带货经验，表达能力强，叙事流畅。'},
+    {name:'魏婧焰',art:'魏魏',room:'京东空调',cat:'家电/3C',info:'摩羯座·INFP',bio:'学习能力强，态度严谨，适应能力强。'},
+    {name:'高乐山',art:'小鹿',room:'京东空调',cat:'家电/服饰',info:'双子座',bio:'性格开朗，工作严谨认真负责。'},
+    {name:'彭双',art:'双双',room:'京东华为手机',cat:'3C/家电',info:'金牛座·ENTJ',bio:'开朗活泼，深耕3C数码和家电。'},
+    {name:'李燕',art:'木子',room:'京东华为手机',cat:'3C/食品/家电',info:'射手座·ENFP',bio:'4年直播经验，亲和感强。'},
+    {name:'李思奇',art:'小奇',room:'京东华为手机',cat:'3C/家电/食品',info:'ISFP',bio:'3年直播，风格多变，抗压能力强。'},
+    {name:'贺寸容',art:'春娇',room:'京东礼品卡',cat:'家电/3C/服饰',info:'处女座·ENTP',bio:'直播状态饱满，有感染力，逼单强。'},
+    {name:'张冰爽',art:'依依',room:'京东礼品卡',cat:'轻奢/汽车/个护',info:'双子座·ENFP',bio:'表达清晰流畅，思维敏捷。'},
+    {name:'韩娇',art:'娇娇',room:'京东家电严选家',cat:'家电/服装',info:'水瓶座',bio:'一年多经验，抗压能力强，从容大方。'},
+    {name:'司琪',art:'七七',room:'京东家电严选家',cat:'家电/食品',info:'天秤座·INFJ',bio:'性格开朗，合群好相处。'},
+    {name:'丁佳文',art:'江江',room:'京东家电严选家',cat:'家电/3C',info:'狮子座·INTJ',bio:'善于学习与总结，风格多样。'},
+    {name:'张天一',art:'天天',room:'京东家电自营旗舰店',cat:'家电/3C',info:'狮子座·ENTJ',bio:'擅长家电直播讲解与控场，专业沉稳。'},
+    {name:'张佳欣',art:'多米',room:'京东家电自营旗舰店',cat:'家电/3C',info:'处女座',bio:'从日常场景出发，挖掘产品真实价值。'},
+    {name:'王严慧',art:'慧慧',room:'京东家电自营旗舰店',cat:'家电/美妆',info:'双子座·ISFP',bio:'风格亲和，善于与观众互动。'},
+    {name:'何雨尧',art:'糖糖',room:'京东家电自营旗舰店',cat:'家电/美妆/茶叶',info:'巨蟹座',bio:'可盐可甜，从教师转新媒体主播。'},
+    {name:'陈露',art:'天酒',room:'指数交易采销',cat:'家电/服装/食品',info:'金牛座·ISFP',bio:'3C、家电均有经验，工作严谨负责。'},
+    {name:'柳雪',art:'飘飘',room:'JD便宜包邮',cat:'家居/食品/美妆',info:'',bio:'开朗阳光，从事过一线客服。'},
+    {name:'朱禧燕',art:'欧阳',room:'JD便宜包邮',cat:'全品类',info:'白羊座·ESTJ',bio:'3年带货经验，播过抖音淘宝快手。'},
+    {name:'王智辰',art:'智胜',room:'京东客服甄选',cat:'家电/3C',info:'处女座·ENFP',bio:'风格多样，具有表现力。'},
+    {name:'王欣',art:'丸子',room:'京东客服甄选',cat:'服装/母婴/美妆',info:'白羊座·ESFP',bio:'风格多变，可甜可咸，情绪饱满。'},
+    {name:'刘惠',art:'惠惠',room:'京东客服甄选',cat:'美妆/家电/服装',info:'摩羯座·INFP',bio:'多品类经验，熟悉室内与户外直播。'},
+    {name:'熊宏丽',art:'小熊',room:'京东客服甄选',cat:'美妆/茶叶/汽车',info:'水瓶座·INFP',bio:'品类多，状态饱满，擅长平播。'},
+    {name:'赵天燃',art:'赵赵',room:'京东客服甄选',cat:'家电/3C/茶叶',info:'处女座·INFJ',bio:'专业沉稳，直播节奏稳定。'},
+    {name:'胡佳惠',art:'佳佳',room:'京东客服甄选',cat:'家电',info:'处女座',bio:'从客服转型，熟产品懂用户。'},
+    {name:'成丽珍',art:'珍珍',room:'国家补贴X百亿补贴',cat:'食品/美妆/家居',info:'ISTP',bio:'风格活泼，从事过一线客服。'},
+    {name:'刘冉',art:'冉冉',room:'国家补贴X百亿补贴',cat:'家电/3C',info:'摩羯座·ESFJ',bio:'一年多经验，活泼有趣开朗。'},
+    {name:'胡佳艺',art:'芙芙',room:'国家补贴X百亿补贴',cat:'3C/家电',info:'双子座·ESFJ',bio:'性格温和沉稳，耐心细致。'},
+    {name:'陈嘉妮',art:'妮妮',room:'国家补贴X百亿补贴',cat:'3C/家电',info:'处女座·ISFJ',bio:'从客服转主播，一年直播经验。'},
+    {name:'李飞燕',art:'菲菲',room:'国家补贴X百亿补贴',cat:'家电/3C/宠物',info:'狮子座',bio:'深耕宠物直播两年，懂选品懂需求。'},
+    {name:'王巧儿',art:'企鹅',room:'京东指数采销',cat:'生活用品/美妆',info:'双子座·ENFP',bio:'3年直播，美妆家电各品类都播过。'},
+    {name:'崔雨婷',art:'小婷',room:'京东指数采销',cat:'食品/日用品/家电',info:'天秤座·ISTP',bio:'真诚分享，保持踏实沟通风格。'},
+    {name:'陈羽婕',art:'花花',room:'京东空调自营',cat:'家电/美妆',info:'巨蟹座',bio:'性格活泼，应对能力挺好。'},
+    {name:'姜子怡',art:'姜姜',room:'京东垂钓采销',cat:'户外/美妆',info:'金牛座·ISFJ',bio:'户外与美妆品类，风格亲和。'},
+    {name:'袁怡',art:'圆圆',room:'京东手机自营',cat:'3C数码',info:'巨蟹座·ISFJ',bio:'待人真诚，做事有耐心。'},
+    {name:'袁欣琦',art:'琦琦',room:'名酒博物馆',cat:'全品类',info:'双子座',bio:'名酒博物馆直播间主播。'},
+    {name:'蔡芳',art:'蔡蔡',room:'五星电器',cat:'电器/电动车',info:'天蝎座',bio:'5年经验，懂产品懂用户。'},
+    {name:'唐敏',art:'柚子',room:'京东电器自营',cat:'家电',info:'天秤座·INTP',bio:'3年多经验，深耕家电赛道。'},
+    {name:'刘紫云',art:'',room:'京东空调自营',cat:'全品类',info:'',bio:'京东空调自营直播间主播。'},
+    {name:'叶锦舟',art:'',room:'京东空调自营',cat:'全品类',info:'',bio:'京东空调自营直播间主播。'},
+  ];
+
+  function renderRoles() {
+    const container = document.getElementById('roles-container');
+    const groups = {};
+    HOSTS.forEach(h => { const r = h.room||'其他'; if(!groups[r])groups[r]=[]; groups[r].push(h); });
+    const colors = ['var(--mountain)','var(--bg-3)','var(--bg-2)','#1a1e27','var(--jd-red)','#222833'];
+    let html='', ci=0;
+    Object.keys(groups).forEach(room => {
+      const members = groups[room];
+      html += `<div class="group-title reveal">${room} <span class="count">${members.length}人</span></div>`;
+      html += '<div class="card-grid reveal-stagger" style="margin-bottom:0;">';
+      members.forEach(h => {
+        const display = h.art || h.name;
+        const fc = display[0]||'?';
+        const color = colors[ci % colors.length]; ci++;
+        const bioShort = h.bio.length>35 ? h.bio.substring(0,35)+'...' : h.bio;
+        html += `<div class="member-card"><div class="avatar" style="background:${color}">${fc}</div><div class="info"><h3>${display}</h3><div class="role">${h.name}${h.info?' · '+h.info:''}</div><div class="bio">${bioShort}</div></div></div>`;
+      });
+      html += '</div>';
+    });
+    container.innerHTML = html;
+    // Re-init observers for new content
+    initRevealObservers();
+  }
+
   // Tab 切换
   document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -541,96 +516,89 @@
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
       tab.classList.add('active');
       document.getElementById(tab.dataset.panel).classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({top:0, behavior:'smooth'});
+      setTimeout(() => { initRevealObservers(); renderRolesIfNeeded(); }, 100);
     });
   });
 
-  // 主播数据
-  const HOSTS = [
-    {name:'李浩菁',art:'栗子',room:'您好京东',cat:'家电/珠宝/美妆',info:'双子座·ENFP·身高161cm',bio:'性格开朗，镜头表现力佳，擅长直播控场与观众互动，善于营造轻松直播间氛围。'},
-    {name:'董啸啸',art:'笑笑',room:'您好京东',cat:'全品类 食品 家电',info:'水瓶座·ESTJ',bio:'全品类直播，覆盖食品、家电、护肤品多个品类。'},
-    {name:'周子豪',art:'周周',room:'您好京东',cat:'3c数码/家电',info:'天秤座·身高185cm',bio:'热爱生活，积极向上，喜欢运动健身，足球，游戏大手子。'},
-    {name:'王铭',art:'天铭',room:'您好京东',cat:'3C数码/家电',info:'天秤座·INTP·身高178cm',bio:'20余年游戏经验，MOBA、RPG多项全能，LOL、OW常驻高分玩家。'},
-    {name:'马智杰',art:'小马哥',room:'您好京东',cat:'全品类',info:'白羊座·身高189cm',bio:'5年专业全职主播经验，普通话一级甲等，语言逻辑清晰、表达感染力强。'},
-    {name:'杨俊',art:'念念',room:'您好京东',cat:'家电/宠物品类',info:'巨蟹座·INFP',bio:'深耕家电与宠物品类直播，亲和力强，善于与观众建立情感连接。'},
-    {name:'曹秀秀',art:'优米',room:'京东空调',cat:'家电家居/旅游/美发',info:'天秤座·ENFJ',bio:'1年半带货主播经验，播过抖音快手平台，表达能力强，叙事流畅有感染力。'},
-    {name:'魏婧焰',art:'魏魏',room:'京东空调',cat:'家电/3C数码',info:'摩羯座·INFP',bio:'学习能力强，有想法，态度严谨，工作认真，适应能力强。'},
-    {name:'高乐山',art:'小鹿',room:'京东空调',cat:'家电/服饰',info:'双子座',bio:'性格开朗，工作严谨认真负责，学习能力强。'},
-    {name:'彭双',art:'双双',room:'京东华为手机',cat:'3C数码/家电',info:'金牛座·ENTJ',bio:'开朗活泼，自信大方，深耕3C数码和家电两大核心品类，直播控场能力强。'},
-    {name:'李燕',art:'木子',room:'京东华为手机',cat:'3C数码/食品/家电',info:'射手座·ENFP',bio:'4年直播经验，性格开朗健谈，亲和感强，擅于把控直播节奏。'},
-    {name:'李思奇',art:'小奇',room:'京东华为手机',cat:'3C数码/家电/食品',info:'ISFP',bio:'3年直播工作，抗压能力强，风格多变，能适应多种品牌风格。'},
-    {name:'贺寸容',art:'春娇',room:'京东礼品卡',cat:'家电/3C数码/服饰',info:'处女座·ENTP',bio:'直播状态饱满，配合度高，有感染力，逼单强，情绪感染力强。'},
-    {name:'张冰爽',art:'依依',room:'京东礼品卡',cat:'轻奢品/汽车/个护',info:'双子座·ENFP',bio:'表达清晰流畅，思维敏捷，擅长轻奢品与个护品类直播。'},
-    {name:'韩娇',art:'娇娇',room:'京东家电严选家',cat:'家电/服装',info:'水瓶座',bio:'一年多直播经验，抗压能力强，面对镜头状态从容大方，工作态度积极。'},
-    {name:'司琪',art:'七七',room:'京东家电严选家',cat:'家电/食品',info:'天秤座·INFJ',bio:'性格开朗，合群好相处，擅长家电与食品品类直播。'},
-    {name:'丁佳文',art:'江江',room:'京东家电严选家',cat:'家电/3C',info:'狮子座·INTJ',bio:'性格开朗，善于学习与总结，风格多样，大胆尝试不同直播风格。'},
-    {name:'张天一',art:'天天',room:'京东家电自营旗舰店',cat:'家电/3C数码',info:'狮子座·ENTJ',bio:'擅长家电直播讲解、话术塑造与直播间控场，专业沉稳、共情力强。'},
-    {name:'张佳欣',art:'多米',room:'京东家电自营旗舰店',cat:'家电/3C数码',info:'处女座',bio:'擅长从日常居家场景出发，挖掘产品真实价值，结合生活痛点拆解产品。'},
-    {name:'王严慧',art:'慧慧',room:'京东家电自营旗舰店',cat:'家电/美妆',info:'双子座·ISFP',bio:'家电与美妆品类直播，风格亲和，善于与观众互动。'},
-    {name:'何雨尧',art:'糖糖',room:'京东家电自营旗舰店',cat:'家电/美妆/茶叶',info:'巨蟹座',bio:'可盐可甜，从教师转新媒体主播，主持过快乐阳光大赛，播过抖音美妆。'},
-    {name:'陈露',art:'天酒',room:'指数交易采销',cat:'家电/服装/食品',info:'金牛座·ISFP',bio:'入职京东1年，3C、家电均有经验，有过女装直播经验，工作严谨负责。'},
-    {name:'柳雪',art:'飘飘',room:'JD便宜包邮',cat:'家居/食品/美妆',info:'',bio:'开朗阳光，从事过一线客服，主播工作有热情，积极乐观。'},
-    {name:'朱禧燕',art:'欧阳',room:'JD便宜包邮',cat:'全品类',info:'白羊座·ESTJ',bio:'3年带货主播经验，播过抖音淘宝快手视频号，直播风格偏种草型。'},
-    {name:'王智辰',art:'智胜',room:'京东客服甄选',cat:'家电/3C',info:'处女座·ENFP',bio:'风格多样，具有表现力，适合多线作战，灵活适配不同品类。'},
-    {name:'王欣',art:'丸子',room:'京东客服甄选',cat:'服装/母婴/美妆',info:'白羊座·ESFP',bio:'性格开朗，风格可多种变化，可甜可咸，直播情绪饱满，可塑性强。'},
-    {name:'刘惠',art:'惠惠',room:'京东客服甄选',cat:'美妆/家电/服装',info:'摩羯座·INFP',bio:'沟通亲和力强，拥有多品类直播经验，熟悉室内专场与户外实景直播。'},
-    {name:'熊宏丽',art:'小熊',room:'京东客服甄选',cat:'美妆/茶叶/汽车配件',info:'水瓶座·INFP',bio:'播过的品类较多，直播状态饱满，配合度高，擅长平播，话术循环。'},
-    {name:'赵天燃',art:'赵赵',room:'京东客服甄选',cat:'家电/3C数码/茶叶',info:'处女座·INFJ',bio:'专业沉稳，擅长家电与3C数码品类，直播节奏稳定。'},
-    {name:'胡佳惠',art:'佳佳',room:'京东客服甄选',cat:'家电',info:'处女座',bio:'从客服转型主播，熟产品懂用户，能实时回应直播间各类咨询。'},
-    {name:'成丽珍',art:'珍珍',room:'国家补贴X百亿补贴',cat:'食品/美妆/家居',info:'ISTP',bio:'风格活泼开朗，从事过一线客服，学习能力强，快速适应直播。'},
-    {name:'刘冉',art:'冉冉',room:'国家补贴X百亿补贴',cat:'家电/3C数码',info:'摩羯座·ESFJ',bio:'一年多直播经验，活泼有趣开朗，在工作中持续学习和努力。'},
-    {name:'胡佳艺',art:'芙芙',room:'国家补贴X百亿补贴',cat:'3C数码/家电家具',info:'双子座·ESFJ',bio:'拥有一线客服经验，性格温和沉稳，待人耐心细致，认真倾听。'},
-    {name:'陈嘉妮',art:'妮妮',room:'国家补贴X百亿补贴',cat:'3C数码/家电家具',info:'处女座·ISFJ',bio:'性格温和有亲和力，从一线客服转主播岗位，一年直播经验。'},
-    {name:'李飞燕',art:'菲菲',room:'国家补贴X百亿补贴',cat:'家电/3C数码/宠物',info:'狮子座',bio:'深耕宠物用品直播两年，全品类带货一年。懂选品、懂搭配、懂需求。'},
-    {name:'王巧儿',art:'企鹅',room:'京东指数采销',cat:'生活用品/护肤美妆',info:'双子座·ENFP',bio:'3年直播经验，美妆、家电各个品类都播过，经验丰富。'},
-    {name:'崔雨婷',art:'小婷',room:'京东指数采销',cat:'食品/日用品/家电',info:'天秤座·ISTP',bio:'真诚分享，真实表达。保持踏实、直白的沟通风格，打造轻松自然氛围。'},
-    {name:'陈羽婕',art:'花花',room:'京东空调自营',cat:'家电/美妆',info:'巨蟹座',bio:'性格活泼，应对能力挺好，擅长家电与美妆品类直播。'},
-    {name:'姜子怡',art:'姜姜',room:'京东垂钓采销',cat:'户外/美妆',info:'金牛座·ISFJ',bio:'户外与美妆品类直播，风格亲和，善于与垂钓爱好者互动。'},
-    {name:'袁怡',art:'圆圆',room:'京东手机自营',cat:'3C数码',info:'巨蟹座·ISFJ',bio:'待人真诚，做事有耐心，擅长好物分享，注重品质与用户体验。'},
-    {name:'袁欣琦',art:'琦琦',room:'名酒博物馆',cat:'全品类',info:'双子座',bio:'名酒博物馆直播间主播，风格大方得体，善于品酒文化讲解。'},
-    {name:'蔡芳',art:'蔡蔡',room:'五星电器',cat:'电器/电动车',info:'天蝎座',bio:'5年直播行业经验，擅长好物讲解，懂产品、懂用户，持续输出真实有价值的内容。'},
-    {name:'唐敏',art:'柚子',room:'京东电器自营',cat:'家电',info:'天秤座·INTP',bio:'3年多带货直播经验，深耕家电赛道，同时具备护肤品、家居清洁类产品直播经历。'},
-    {name:'刘紫云',art:'',room:'京东空调自营',cat:'全品类',info:'',bio:'京东空调自营直播间主播，全品类覆盖。'},
-    {name:'叶锦舟',art:'',room:'京东空调自营',cat:'全品类',info:'',bio:'京东空调自营直播间主播，全品类覆盖。'},
-  ];
-
-  // 渲染岗位板块
-  function renderRoles() {
-    const container = document.getElementById('roles-container');
-    const groups = {};
-    HOSTS.forEach(h => {
-      const room = h.room || '其他';
-      if (!groups[room]) groups[room] = [];
-      groups[room].push(h);
-    });
-
-    const colors = ['#0a0a0a','#1a1a1a','#374151','#E1251B','#111111','#4b5563'];
-    let html = '';
-    let ci = 0;
-    Object.keys(groups).forEach(room => {
-      const members = groups[room];
-      html += `<div class="group-title">${room} <span class="count">${members.length}人</span></div>`;
-      html += '<div class="card-grid" style="margin-bottom:0;">';
-      members.forEach(h => {
-        const display = h.art || h.name;
-        const firstChar = display[0] || '?';
-        const color = colors[ci % colors.length];
-        ci++;
-        const bioShort = h.bio.length > 40 ? h.bio.substring(0, 40) + '...' : h.bio;
-        html += `<div class="member-card">
-          <div class="avatar" style="background:${color}">${firstChar}</div>
-          <div class="info">
-            <h3>${display}</h3>
-            <div class="role">${h.name}${h.info ? ' · ' + h.info : ''}</div>
-            <div class="bio">${bioShort}</div>
-          </div>
-        </div>`;
-      });
-      html += '</div>';
-    });
-    container.innerHTML = html;
+  function renderRolesIfNeeded() {
+    const rolesPanel = document.getElementById('roles');
+    if (rolesPanel.classList.contains('active') && !document.getElementById('roles-container').innerHTML) {
+      renderRoles();
+    }
   }
-  renderRoles();
+
+  // Intersection Observer 入场动画
+  function initRevealObservers() {
+    const reveals = document.querySelectorAll('.reveal:not(.in), .reveal-stagger:not(.in)');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          // 数字计数动画
+          if (entry.target.classList.contains('reveal-stagger')) {
+            entry.target.querySelectorAll('[data-count]').forEach(el => {
+              const target = parseInt(el.dataset.count);
+              const suffix = el.querySelector('.red') ? el.querySelector('.red').outerHTML : '';
+              let current = 0;
+              const duration = 1200;
+              const start = performance.now();
+              function tick(now) {
+                const progress = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                current = Math.round(target * eased);
+                el.innerHTML = current + suffix;
+                if (progress < 1) requestAnimationFrame(tick);
+              }
+              requestAnimationFrame(tick);
+            });
+          }
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+    reveals.forEach(el => observer.observe(el));
+  }
+
+  // 视差滚动
+  let scrollY = 0, ticking = false;
+  function updateParallax() {
+    const mountains = document.querySelectorAll('.mountain-svg');
+    const mists = document.querySelectorAll('.mist');
+    mountains.forEach((m, i) => {
+      const speed = i === 0 ? 0.03 : 0.06;
+      m.style.transform = `translateY(${scrollY * speed}px)`;
+    });
+    mists.forEach((m, i) => {
+      const speeds = [0.08, 0.05, 0.06];
+      const offsets = [0, 30, -20];
+      m.style.transform = `translateY(${scrollY * speeds[i] + offsets[i]}px) rotate(${scrollY * 0.005 * (i+1)}deg)`;
+    });
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    scrollY = window.scrollY;
+    if (!ticking) { requestAnimationFrame(updateParallax); ticking = true; }
+  }, { passive: true });
+
+  // 粒子层
+  function createParticles() {
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.top = Math.random() * 100 + '%';
+      p.style.opacity = Math.random() * 0.06;
+      container.appendChild(p);
+    }
+  }
+
+  // 初始化
+  window.addEventListener('load', () => {
+    createParticles();
+    initRevealObservers();
+  });
 </script>
 
 </body>
