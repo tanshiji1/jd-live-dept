@@ -85,7 +85,9 @@
     .reveal-stagger.in > *:nth-child(8) { transition-delay: 560ms; }
 
     /* ===== Hero ===== */
-    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; position: relative; }
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; position: relative; overflow: hidden; }
+    .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; will-change: transform; }
+    .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,17,22,0.5) 0%, rgba(15,17,22,0.7) 60%, rgba(15,17,22,0.95) 100%); z-index: 1; }
     .hero .joy-logo { width: 64px; height: 64px; border-radius: 50%; margin-bottom: 1.5rem; filter: brightness(1.1) drop-shadow(0 0 20px rgba(230,33,42,0.15)); }
     .hero .eyebrow { font-size: 0.68rem; letter-spacing: 0.3em; color: var(--jd-red); font-weight: 600; margin-bottom: 1rem; }
     .hero h1 { font-size: clamp(2rem, 6vw, 4rem); font-weight: 800; color: var(--title); line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 1rem; }
@@ -232,11 +234,12 @@
 <!-- ========== 总览 ========== -->
 <div class="panel active" id="overview">
   <section class="hero" id="hero-section">
-    <img src="joy-logo.png" class="joy-logo" alt="JOY">
-    <div class="eyebrow reveal">JD CUSTOMER SERVICE LIVE</div>
-    <h1 class="reveal">京东客服直播基地</h1>
-    <p class="slogan reveal">科技驱动 · 客服基因 · 可信直播<br>覆盖全品类全形态的矩阵式直播运营团队</p>
-    <div class="scroll">SCROLL ↓</div>
+    <video class="hero-video" autoplay muted loop playsinline><source src="hero-bg.mp4" type="video/mp4"></video>
+    <img src="joy-logo.png" class="joy-logo" alt="JOY" style="z-index:2;position:relative;">
+    <div class="eyebrow reveal" style="z-index:2;position:relative;">JD CUSTOMER SERVICE LIVE</div>
+    <h1 class="reveal" style="z-index:2;position:relative;">京东客服直播基地</h1>
+    <p class="slogan reveal" style="z-index:2;position:relative;">科技驱动 · 客服基因 · 可信直播<br>覆盖全品类全形态的矩阵式直播运营团队</p>
+    <div class="scroll" style="z-index:2;">SCROLL ↓</div>
   </section>
 
   <section class="sec">
@@ -563,6 +566,14 @@
   // 视差滚动
   let scrollY = 0, ticking = false;
   function updateParallax() {
+    // Hero视频随滚动向下拉（核心效果：滚动时视频内容向下滑动）
+    const heroVideo = document.querySelector('.hero-video');
+    if (heroVideo) {
+      const heroHeight = window.innerHeight;
+      const heroProgress = Math.min(scrollY / heroHeight, 1);
+      heroVideo.style.transform = `translateY(${heroProgress * 150}px) scale(${1 + heroProgress * 0.05})`;
+      heroVideo.style.opacity = 1 - heroProgress * 0.6;
+    }
     const mountains = document.querySelectorAll('.mountain-svg');
     const mists = document.querySelectorAll('.mist');
     mountains.forEach((m, i) => {
