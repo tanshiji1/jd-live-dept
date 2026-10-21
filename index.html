@@ -135,18 +135,14 @@
     .tl-item p { font-size: 0.82rem; color: var(--body); line-height: 1.8; }
 
     /* ===== 直播间卡片 ===== */
-    .room-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1.5rem; }
+    .room-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px,1fr)); gap: 1.5rem; }
     .room-card { background: var(--bg-2); border: 1px solid var(--border); transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), border-color 0.3s; overflow: hidden; }
     .room-card:hover { border-color: rgba(230,33,42,0.3); transform: translateY(-2px) scale(1.01); }
-    .room-card .cover { height: 110px; display: flex; align-items: center; justify-content: center; color: var(--title); font-size: 0.95rem; font-weight: 700; text-align: center; padding: 0 1rem; }
-    .room-card .body { padding: 1.1rem 1.2rem; }
-    .room-card h3 { font-size: 0.9rem; font-weight: 700; color: var(--title); margin-bottom: 0.3rem; }
-    .room-card .tags { display: flex; flex-wrap: wrap; gap: 0.2rem; margin-bottom: 0.4rem; }
-    .room-card .tag { font-size: 0.65rem; padding: 0.08rem 0.35rem; background: rgba(255,255,255,0.05); color: var(--muted); }
-    .room-card .desc { font-size: 0.78rem; color: var(--body); line-height: 1.7; margin-bottom: 0.4rem; }
-    .room-card .meta { display: flex; gap: 1rem; padding-top: 0.4rem; border-top: 1px solid var(--border); }
-    .room-card .meta .v { font-size: 0.8rem; font-weight: 800; color: var(--jd-red); }
-    .room-card .meta .k { font-size: 0.62rem; color: var(--muted); }
+    .room-card .cover { height: 90px; display: flex; align-items: center; justify-content: center; color: var(--title); font-size: 0.9rem; font-weight: 700; text-align: center; padding: 0 1rem; }
+    .room-card .body { padding: 1.2rem 1.3rem; }
+    .room-card h3 { font-size: 0.92rem; font-weight: 700; color: var(--title); margin-bottom: 0.3rem; }
+    .room-card .position { font-size: 0.68rem; color: var(--jd-red); font-weight: 600; margin-bottom: 0.5rem; line-height: 1.6; }
+    .room-card .desc { font-size: 0.76rem; color: var(--body); line-height: 1.8; margin-bottom: 0.4rem; }
 
     /* ===== 人物卡片 ===== */
     .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 1.5rem; }
@@ -369,12 +365,16 @@
       <h2 class="sec-title reveal">16个运营中直播间，覆盖十余种品类。</h2>
       <p class="sec-desc reveal">3个百万粉直播间，8个日均GMV百万+直播间。BROADCAST STUDIO 24/7</p>
       <div class="room-grid reveal-stagger">
-        <div class="room-card"><div class="cover" style="background:var(--bg-3)">您好京东<br>直播间</div><div class="body"><h3>您好京东直播间</h3><div class="tags"><span class="tag">全品类</span><span class="tag">官方认证</span></div><p class="desc">京东客服官方认证直播间，全品类常态化直播。</p><div class="meta"><div><div class="v">全品类</div><div class="k">覆盖</div></div><div><div class="v">7×24h</div><div class="k">数字人</div></div></div></div></div>
-        <div class="room-card"><div class="cover" style="background:var(--mountain)">京东客服甄选<br>直播间</div><div class="body"><h3>京东客服甄选直播间</h3><div class="tags"><span class="tag">精选</span><span class="tag">官方背书</span></div><p class="desc">依托客服选品能力，精选优质商品。</p><div class="meta"><div><div class="v">甄选</div><div class="k">选品</div></div><div><div class="v">官方</div><div class="k">认证</div></div></div></div></div>
-        <div class="room-card"><div class="cover" style="background:var(--jd-red)">国补政策<br>直播专场</div><div class="body"><h3>国补政策直播宣导</h3><div class="tags"><span class="tag">国补</span><span class="tag">答疑</span></div><p class="desc">实时同步国补地补政策，一对一精准答疑。</p><div class="meta"><div><div class="v">实时</div><div class="k">同步</div></div><div><div class="v">1v1</div><div class="k">答疑</div></div></div></div></div>
-        <div class="room-card"><div class="cover" style="background:var(--bg-3)">数字人<br>直播间</div><div class="body"><h3>数字人 7×24h 直播间</h3><div class="tags"><span class="tag">AI</span><span class="tag">全天候</span></div><p class="desc">补足非黄金时段直播供给，降低人力成本。</p><div class="meta"><div><div class="v">24h</div><div class="k">不间断</div></div><div><div class="v">AI</div><div class="k">驱动</div></div></div></div></div>
-        <div class="room-card"><div class="cover" style="background:var(--mountain)">场景化互动<br>答疑直播间</div><div class="body"><h3>场景化实时互动答疑</h3><div class="tags"><span class="tag">互动</span><span class="tag">场景化</span></div><p class="desc">将客服服务能力融入直播体验。</p><div class="meta"><div><div class="v">实时</div><div class="k">互动</div></div><div><div class="v">场景</div><div class="k">体验</div></div></div></div></div>
-        <div class="room-card"><div class="cover" style="background:var(--jd-red)">活动讲解<br>直播间</div><div class="body"><h3>活动讲解直播</h3><div class="tags"><span class="tag">大促</span><span class="tag">专场</span></div><p class="desc">年专题专场活动直播20场以上。</p><div class="meta"><div><div class="v">20+</div><div class="k">年专场</div></div><div><div class="v">600+</div><div class="k">年常态化</div></div></div></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--bg-3)">京东家电<br>自营旗舰店</div><div class="body"><h3>京东家电自营旗舰店</h3><div class="position">京东家电自营业务的官方直播窗口</div><p class="desc">主营冰箱、洗衣机、电视、厨卫等全品类家电。依托京东家电自营供应链，由品牌厂商与京东采销联合开播，提供正品保障、全国联保与一站式售后。积极承接国家家电以旧换新补贴政策，助力绿色智能家电下乡与城镇消费升级。</p></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--mountain)">您好京东<br>直播间</div><div class="body"><h3>您好京东直播间</h3><div class="position">京东平台级官方直播间</div><p class="desc">展示京东整体品牌形象与优质商品。汇聚3C数码、家电、日用品等多品类精选好物，由专业主播与采销团队联合呈现。在618、年货节等重要消费节点开展主题直播活动，代表京东直播的官方水准。</p></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--bg-3)">京东客服甄选<br>直播间</div><div class="body"><h3>京东客服甄选直播间</h3><div class="position">服务型直播创新项目</div><p class="desc">由京东客服团队打造，依托专业服务能力，在推荐商品的同时为消费者提供在线咨询、选购指导与售后答疑，实现"边看直播、边享服务"的融合体验。探索"服务+消费"新模式，提升消费者信任度与购物体验。</p></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--jd-red)">京东电器<br>直播间</div><div class="body"><h3>京东电器直播间</h3><div class="position">京东五星电器旗下官方直播间</div><p class="desc">京东线下门店与线上直播融合的代表。京东五星电器是京东集团全资控股企业，在全国20个省份运营京东MALL、京东电器城市旗舰店、五星电器等各类门店超1100家。</p></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--bg-3)">京东指数<br>采销</div><div class="body"><h3>京东指数采销</h3><div class="position">数据能力赋能采销直播</div><p class="desc">以京东指数数据能力赋能采销直播的创新直播间。依托京东指数对市场趋势与消费需求的洞察，由采销人员结合行业数据讲解商品趋势与选购知识，实现"数据驱动选品、专业内容带货"。</p></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--mountain)">京东空调</div><div class="body"><h3>京东空调</h3><div class="position">空调垂类官方直播间</div><p class="desc">专注空调品类，围绕空调产品的性能讲解、安装服务与选购指导展开，联合主流空调品牌厂商开播，提供送装一体、拆旧焕新等一体化服务。深度参与国家家电以旧换新行动，推动高能效、绿色节能空调普及。</p></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--bg-3)">京东家电<br>严选家</div><div class="body"><h3>京东家电严选家</h3><div class="position">京东家电严选频道官方直播间</div><p class="desc">主打"严选品质"家电。聚焦经京东严格筛选的品质家电与趋势新品，为消费者提供省心的一站式选购体验，同时为新兴家电品牌与创新产品提供展示与成长平台，助力家电行业供给侧升级。</p></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--jd-red)">名酒<br>博物馆</div><div class="body"><h3>名酒博物馆</h3><div class="position">京东酒类业务旗下文化型直播项目</div><p class="desc">以"博物馆式"的场景呈现中国酒文化，邀请名酒品牌、品酒师讲解酒类品鉴知识与文化历史，在推动酒类正品流通的同时弘扬中华传统酒文化。坚持正品溯源、合规经营，是"文化+消费"融合直播的代表性实践。</p></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--bg-3)">礼品卡<br>直播间</div><div class="body"><h3>礼品卡直播间</h3><div class="position">京东礼品卡业务官方直播间</div><p class="desc">京东礼品卡是京东平台发行的预付凭证，可用于兑换指定范围内的商品与服务。直播间面向个人与企业用户介绍礼品卡的产品形态与使用场景，服务节日馈赠、员工福利、企业采购等需求，助力企业福利采购数字化升级。</p></div></div>
+        <div class="room-card"><div class="cover" style="background:var(--mountain)">京东垂钓<br>采销</div><div class="body"><h3>京东垂钓采销</h3><div class="position">京东垂钓运动品类采销直播间</div><p class="desc">由京东垂钓品类采销团队运营，联合钓具品牌与专业钓手开展装备测评、垂钓技巧等内容直播，服务广大垂钓运动爱好者。垂钓产业连接休闲渔业与户外体育消费，对带动钓具产业带发展具有积极作用。</p></div></div>
       </div>
     </div>
   </section>
