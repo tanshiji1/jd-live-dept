@@ -148,7 +148,7 @@
     .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 1.5rem; }
     .member-card { background: var(--bg-2); border: 1px solid var(--border); transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), border-color 0.3s; overflow: hidden; }
     .member-card:hover { border-color: rgba(230,33,42,0.3); transform: translateY(-2px); }
-    .member-card .avatar { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 900; color: var(--title); }
+    .member-card .avatar { height: 280px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 900; color: var(--title); overflow: hidden; }
     .member-card .info { padding: 1rem 1.1rem; text-align: center; }
     .member-card h3 { font-size: 0.85rem; font-weight: 700; color: var(--title); }
     .member-card .role { font-size: 0.7rem; color: var(--jd-red); font-weight: 500; margin: 0.1rem 0; }
@@ -568,7 +568,7 @@
         const color = roleColors[s.role] || 'var(--bg-3)';
         const bioShort = s.bio ? (s.bio.length>35 ? s.bio.substring(0,35)+'...' : s.bio) : '';
         const infoText = s.info || '';
-        const avatarHtml = s.photo ? `<img src="${s.photo}" style="width:100%;height:100%;object-fit:cover;object-position:center top;">` : fc;
+        const avatarHtml = s.photo ? `<img src="${s.photo}" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;">` : fc;
         html += `<div class="member-card"><div class="avatar" style="background:${color};${s.photo?'padding:0;':''}">${avatarHtml}</div><div class="info"><h3>${display}</h3><div class="role">${s.role}${infoText?' · '+infoText:''}</div><div class="bio">${bioShort}</div></div></div>`;
       });
       html += '</div>';
