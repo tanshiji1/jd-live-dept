@@ -511,6 +511,37 @@
     // 京东垂钓采销
     {name:'姜子怡',art:'姜姜',role:'主播',room:'京东垂钓采销',info:'金牛座·ISFJ',bio:'户外与美妆品类，风格亲和。'},
     {name:'张永连',role:'运营',room:'京东垂钓采销'},
+    // JD便宜包邮
+    {name:'柳雪',art:'飘飘',role:'主播',room:'JD便宜包邮',info:'',bio:'开朗阳光，从事过一线客服，主播工作有热情，积极乐观。'},
+    {name:'左婷',role:'运营',room:'JD便宜包邮'},
+    {name:'于嘉越',role:'运营',room:'JD便宜包邮'},
+    {name:'宣宇梁',role:'运营',room:'JD便宜包邮'},
+    // 国家补贴X百亿补贴
+    {name:'刘冉',art:'冉冉',role:'主播',room:'国家补贴X百亿补贴',info:'摩羯座·ESFJ',bio:'一年多经验，活泼有趣开朗。'},
+    {name:'李飞燕',art:'菲菲',role:'主播',room:'国家补贴X百亿补贴',info:'狮子座',bio:'深耕宠物直播两年，懂选品懂需求。'},
+    {name:'成丽珍',art:'珍珍',role:'主播',room:'国家补贴X百亿补贴',info:'ISTP',bio:'风格活泼，从事过一线客服。'},
+    {name:'胡佳艺',art:'芙芙',role:'主播',room:'国家补贴X百亿补贴',info:'双子座·ESFJ',bio:'性格温和沉稳，耐心细致。'},
+    {name:'陈嘉妮',art:'妮妮',role:'主播',room:'国家补贴X百亿补贴',info:'处女座·ISFJ',bio:'从客服转主播，一年直播经验。'},
+    {name:'朱禧燕',art:'欧阳',role:'主播',room:'国家补贴X百亿补贴',info:'白羊座·ESTJ',bio:'3年带货经验，播过抖音淘宝快手。'},
+    {name:'刘力维',role:'运营',room:'国家补贴X百亿补贴'},
+    {name:'夏旭东',role:'运营',room:'国家补贴X百亿补贴'},
+    {name:'杜青芮',role:'运营',room:'国家补贴X百亿补贴'},
+    // 京东华为手机直播间
+    {name:'李思奇',art:'小奇',role:'主播',room:'京东华为手机直播间',info:'ISFP',bio:'3年直播，风格多变，抗压能力强。'},
+    {name:'彭双',art:'双双',role:'主播',room:'京东华为手机直播间',info:'金牛座·ENTJ',bio:'开朗活泼，深耕3C数码和家电。'},
+    {name:'李燕',art:'木子',role:'主播',room:'京东华为手机直播间',info:'射手座·ENFP',bio:'4年直播经验，亲和感强。'},
+    {name:'宋雯',role:'运营',room:'京东华为手机直播间'},
+    {name:'彭俊涵',role:'运营',room:'京东华为手机直播间'},
+    {name:'杨静',role:'运营',room:'京东华为手机直播间'},
+    // 京东手机自营旗舰店
+    {name:'袁怡',art:'圆圆',role:'主播',room:'京东手机自营旗舰店',info:'巨蟹座·ISFJ',bio:'待人真诚，做事有耐心。'},
+    {name:'李应坤',role:'运营',room:'京东手机自营旗舰店'},
+    {name:'何嘉豪',role:'运营',room:'京东手机自营旗舰店'},
+    // 成都
+    {name:'李佳忆',role:'社群跟播',room:'成都'},
+    {name:'李鑫',role:'设计&拍剪',room:'成都'},
+    {name:'姜祥云',role:'设计&拍剪',room:'成都'},
+    {name:'甘露',role:'设计&拍剪',room:'成都'},
     // 宿迁 设计&拍剪
     {name:'宋姗姗',role:'设计&拍剪',room:'宿迁'},
     {name:'汪蕊',role:'设计&拍剪',room:'宿迁'},
@@ -522,7 +553,7 @@
     const container = document.getElementById('roles-container');
     const groups = {};
     STAFF.forEach(s => { const r = s.room||'其他'; if(!groups[r])groups[r]=[]; groups[r].push(s); });
-    const roleColors = {'主播':'var(--mountain)','运营':'var(--bg-3)','弹幕解答':'#2a2f3a','设计&拍剪':'var(--jd-red)'};
+    const roleColors = {'主播':'var(--mountain)','运营':'var(--bg-3)','弹幕解答':'#2a2f3a','设计&拍剪':'var(--jd-red)','社群跟播':'#3a3f4a'};
     let html='', ci=0;
     Object.keys(groups).forEach(room => {
       const members = groups[room];
