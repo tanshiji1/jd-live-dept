@@ -508,7 +508,7 @@
     {name:'李俊杰',role:'运营',room:'名酒博物馆'},
     // 京东电器直播间
     {name:'蔡芳',art:'蔡蔡',role:'主播',room:'京东电器直播间',info:'天蝎座',bio:'5年经验，懂产品懂用户。'},
-    {name:'唐敏',art:'柚子',role:'主播',room:'京东电器直播间',info:'天秤座·INTP',bio:'3年多经验，深耕家电赛道。'},
+    {name:'唐敏',art:'柚子',role:'主播',room:'京东电器直播间',info:'天秤座·INTP',bio:'3年多经验，深耕家电赛道。',photo:'photo-tangmin.png'},
     {name:'韩娇',art:'娇娇',role:'运营',room:'京东电器直播间',info:'水瓶座',bio:'一年多经验，抗压能力强，从容大方。'},
     {name:'朱娇娇',role:'运营',room:'京东电器直播间'},
     {name:'李小晴',role:'运营',room:'京东电器直播间'},
@@ -568,7 +568,8 @@
         const color = roleColors[s.role] || 'var(--bg-3)';
         const bioShort = s.bio ? (s.bio.length>35 ? s.bio.substring(0,35)+'...' : s.bio) : '';
         const infoText = s.info || '';
-        html += `<div class="member-card"><div class="avatar" style="background:${color}">${fc}</div><div class="info"><h3>${display}</h3><div class="role">${s.role}${infoText?' · '+infoText:''}</div><div class="bio">${bioShort}</div></div></div>`;
+        const avatarHtml = s.photo ? `<img src="${s.photo}" style="width:100%;height:100%;object-fit:cover;">` : fc;
+        html += `<div class="member-card"><div class="avatar" style="background:${color};${s.photo?'padding:0;':''}">${avatarHtml}</div><div class="info"><h3>${display}</h3><div class="role">${s.role}${infoText?' · '+infoText:''}</div><div class="bio">${bioShort}</div></div></div>`;
       });
       html += '</div>';
     });
