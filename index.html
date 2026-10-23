@@ -441,6 +441,10 @@
 <script>
   // 主播数据
   const STAFF = [
+    // 管理层
+    {name:'王蒙',role:'经理',room:'管理层'},
+    {name:'曹伟康',role:'主管',room:'管理层'},
+    {name:'李应坤',role:'主管',room:'管理层'},
     // 您好京东直播间
     {name:'马智杰',art:'小马哥',role:'主播',room:'您好京东直播间',info:'白羊座',bio:'5年专业主播经验，普通话一级甲等，语言逻辑清晰、表达感染力强。'},
     {name:'周子豪',art:'周周',role:'主播',room:'您好京东直播间',info:'天秤座',bio:'热爱生活，积极向上，喜欢运动健身与游戏。'},
@@ -535,7 +539,6 @@
     {name:'杨静',role:'运营',room:'京东华为手机直播间'},
     // 京东手机自营旗舰店
     {name:'袁怡',art:'圆圆',role:'主播',room:'京东手机自营旗舰店',info:'巨蟹座·ISFJ',bio:'待人真诚，做事有耐心。'},
-    {name:'李应坤',role:'运营',room:'京东手机自营旗舰店'},
     {name:'何嘉豪',role:'运营',room:'京东手机自营旗舰店'},
     // 成都
     {name:'李佳忆',role:'社群跟播',room:'成都'},
@@ -553,7 +556,7 @@
     const container = document.getElementById('roles-container');
     const groups = {};
     STAFF.forEach(s => { const r = s.room||'其他'; if(!groups[r])groups[r]=[]; groups[r].push(s); });
-    const roleColors = {'主播':'var(--mountain)','运营':'var(--bg-3)','弹幕解答':'#2a2f3a','设计&拍剪':'var(--jd-red)','社群跟播':'#3a3f4a'};
+    const roleColors = {'经理':'var(--jd-red)','主管':'#c41e3a','主播':'var(--mountain)','运营':'var(--bg-3)','弹幕解答':'#2a2f3a','设计&拍剪':'#3a3f4a','社群跟播':'#333845'};
     let html='', ci=0;
     Object.keys(groups).forEach(room => {
       const members = groups[room];
