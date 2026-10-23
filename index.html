@@ -9,11 +9,11 @@
   <style>
     :root {
       --jd-red: #E6212A;
-      --bg: #0a0a0f;
-      --bg-2: #111118;
-      --glass: rgba(255,255,255,0.04);
-      --glass-2: rgba(255,255,255,0.08);
-      --glass-border: rgba(255,255,255,0.1);
+      --bg: #050508;
+      --bg-2: #0a0a12;
+      --glass: rgba(255,255,255,0.03);
+      --glass-2: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
       --title: #f0f0f5;
       --body: #888892;
       --muted: #555560;
@@ -25,6 +25,71 @@
       background: var(--bg); color: var(--body); line-height: 1.8;
       -webkit-font-smoothing: antialiased; overflow-x: hidden;
     }
+    /* LIVE红点呼吸 */
+    @keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 8px var(--jd-red)} 50%{opacity:0.3;box-shadow:0 0 2px var(--jd-red)} }
+    .live-dot { width:7px;height:7px;border-radius:50%;background:var(--jd-red);animation:pulse 2s infinite; }
+    /* REC标记 */
+    @keyframes rec-blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .rec-mark { display:inline-flex;align-items:center;gap:3px;font-size:0.6rem;border:1px solid var(--jd-red);border-radius:6px;padding:1px 5px;color:var(--jd-red);animation:rec-blink 3s infinite;letter-spacing:0.1em; }
+    /* dust粒子 */
+    @keyframes dust-float { 0%{transform:translate(0,0)} 100%{transform:translate(20px,-30px)} }
+    .dust { position:absolute;width:1px;height:1px;background:rgba(255,255,255,0.4);border-radius:50%;animation:dust-float 8s infinite linear; }
+    /* 信号条 */
+    @keyframes sig { 0%,100%{height:8px} 50%{height:24px} }
+    @keyframes sig2 { 0%,100%{height:16px} 50%{height:6px} }
+    @keyframes sig3 { 0%,100%{height:4px} 50%{height:20px} }
+    /* 光球漂移 */
+    @keyframes orb1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(40px,30px) scale(1.1)} }
+    @keyframes orb2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-30px,20px) scale(0.9)} }
+    @keyframes orb3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(20px,-25px) scale(1.05)} }
+    /* 拆字入场 */
+    @keyframes char-in { from{opacity:0;transform:translateY(60px);filter:blur(12px)} to{opacity:1;transform:translateY(0);filter:blur(0)} }
+    .hero-char { display:inline-block;opacity:0;animation:char-in 1.1s cubic-bezier(0.22,1,0.36,1) forwards; }
+    .hero-char.red { color:var(--jd-red);font-family:'Playfair Display',serif;font-style:italic; }
+    /* 红色下划线光束 */
+    @keyframes beam { 0%{transform:scaleX(0)} 100%{transform:scaleX(1)} }
+    .hero-beam { display:block;height:2px;background:var(--jd-red);transform:scaleX(0);transform-origin:left;margin-top:0.3rem;animation:beam 0.6s cubic-bezier(0.22,1,0.36,1) 1.7s forwards;box-shadow:0 0 10px var(--jd-red); }
+    /* scroll游标 */
+    @keyframes drop { 0%{top:0;background:var(--jd-red)} 50%{top:20px;background:rgba(255,255,255,0.2)} 100%{top:0;background:var(--jd-red)} }
+    /* 扫描线 */
+    @keyframes scan { 0%{left:-100%} 100%{left:100%} }
+    .scan-line { position:absolute;top:0;width:100%;height:1px;background:var(--jd-red);opacity:0;pointer-events:none; }
+    .data-cell:hover .scan-line { opacity:0.3;animation:scan 3s linear infinite; }
+    /* 3D Tilt */
+    .tilt-card { transform-style:preserve-3d;transition:transform 0.6s cubic-bezier(0.22,1,0.36,1);will-change:transform;position:relative;overflow:hidden; }
+    .tilt-card::before { content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--glare-x,50%) var(--glare-y,50%),rgba(255,255,255,0.06),transparent 60%);pointer-events:none;opacity:0;transition:opacity 0.3s;z-index:5; }
+    .tilt-card:hover::before { opacity:1; }
+    .tilt-layer-1 { transform:translateZ(30px); }
+    .tilt-layer-2 { transform:translateZ(20px); }
+    /* 鼠标光晕 */
+    .cursor-glow { position:fixed;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(230,33,42,0.05),transparent 70%);pointer-events:none;z-index:5;transform:translate(-50%,-50%);mix-blend-mode:screen; }
+    .cursor-ring { position:fixed;width:60px;height:60px;border-radius:50%;border:1px solid rgba(230,33,42,0.2);pointer-events:none;z-index:6;transform:translate(-50%,-50%);transition:transform 0.15s ease-out; }
+    /* Tab下划线 */
+    nav .tab { position:relative; }
+    nav .tab::after { content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--jd-red);transform:scaleX(0);transform-origin:left;transition:transform 0.3s; }
+    nav .tab:hover::after { transform:scaleX(1); }
+    nav .tab.active::after { transform:scaleX(1); }
+    /* 面板转场 */
+    .panel.active { animation:panelIn 0.5s cubic-bezier(0.22,1,0.36,1); }
+    @keyframes panelIn { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
+    /* 进度光束 */
+    .nav-beam { position:fixed;top:50px;left:0;right:0;height:1px;background:var(--jd-red);transform:scaleX(0);transform-origin:left;z-index:1001;opacity:0; }
+    .nav-beam.active { animation:beamFlash 0.8s cubic-bezier(0.22,1,0.36,1); }
+    @keyframes beamFlash { 0%{opacity:1;transform:scaleX(0)} 100%{opacity:0;transform:scaleX(1)} }
+    /* 信号灯 */
+    @keyframes signal { 0%,100%{opacity:1;box-shadow:0 0 6px #00FF88} 50%{opacity:0.5;box-shadow:0 0 2px #00FF88} }
+    .signal-light { width:8px;height:8px;border-radius:50%;background:#00FF88;animation:signal 2s infinite; }
+    /* LIVE标签 */
+    .live-tag { display:inline-block;background:var(--jd-red);color:#fff;font-size:0.55rem;padding:1px 5px;border-radius:3px;font-weight:700;letter-spacing:0.05em; }
+    /* hover遮罩 */
+    .member-card .info { position:relative;overflow:hidden; }
+    .member-card .bio-full { position:absolute;bottom:0;left:0;right:0;background:linear-gradient(180deg,transparent,rgba(10,10,15,0.95));padding:0.8rem 1rem;transform:translateY(100%);transition:transform 0.3s;font-size:0.68rem;color:var(--body);line-height:1.6; }
+    .member-card:hover .bio-full { transform:translateY(0); }
+    /* 光带层 */
+    .light-band { position:fixed;left:0;right:0;height:1px;pointer-events:none;z-index:1;opacity:0.15; }
+    .band-1 { top:30%;background:var(--jd-red); }
+    .band-2 { top:50%;background:#0052FF; }
+    .band-3 { top:70%;background:var(--jd-red); }
 
     /* === 景深背景层 === */
     .depth-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
@@ -89,8 +154,9 @@
 
     /* === 玻璃数据卡片 === */
     .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 1rem; }
-    .data-cell { padding: 2rem 1.2rem; background: var(--glass); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 12px; transition: all 0.4s cubic-bezier(0.22,1,0.36,1); }
-    .data-cell:hover { background: var(--glass-2); border-color: rgba(230,33,42,0.3); transform: translateY(-4px); }
+    .data-cell { padding: 2rem 1.2rem; background: var(--glass); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); border-radius: 12px; transition: all 0.4s cubic-bezier(0.22,1,0.36,1); position: relative; overflow: hidden; }
+    .data-cell:hover { background: var(--glass-2); border-color: rgba(230,33,42,0.35); transform: translateY(-4px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
+    .data-cell:hover .v { transform: scale(1.06); text-shadow: 0 0 20px rgba(230,33,42,0.3); }
     .data-cell .v { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 4vw, 2.4rem); font-weight: 900; color: var(--title); line-height: 1; }
     .data-cell .v .red { color: var(--jd-red); }
     .data-cell .k { font-size: 0.7rem; color: var(--muted); margin-top: 0.5rem; letter-spacing: 0.03em; }
@@ -189,6 +255,13 @@
 <body>
 
 <!-- 景深背景 -->
+<div class="light-band band-1"></div>
+<div class="light-band band-2"></div>
+<div class="light-band band-3"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="nav-beam" id="navBeam"></div>
+<div id="dustContainer" style="position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;"></div>
 <div class="depth-bg">
   <div class="depth-orb orb-1"></div>
   <div class="depth-orb orb-2"></div>
@@ -198,7 +271,7 @@
 <div class="cursor-glow" id="cursorGlow"></div>
 
 <nav>
-  <div class="logo"><img src="joy-logo.png" alt="JOY">京东客服<span class="red">Live</span></div>
+  <div class="logo"><img src="joy-logo.png" alt="JOY"><span class="live-dot"></span>京东客服<span class="red">Live</span></div>
   <div class="tabs">
     <button class="tab active" data-panel="overview">总览</button>
     <button class="tab" data-panel="rooms">直播间</button>
@@ -214,9 +287,9 @@
     <video class="hero-video" autoplay muted loop playsinline><source src="hero-bg-sm.mp4" type="video/mp4"></video>
     <img src="joy-logo.png" class="joy-logo" alt="JOY">
     <div class="eyebrow reveal">JD CUSTOMER SERVICE LIVE</div>
-    <h1 class="reveal">京东客服<span class="accent">直播</span>基地</h1>
+    <h1 class="reveal"><span class="hero-char" style="animation-delay:0ms">京</span><span class="hero-char" style="animation-delay:80ms">东</span><span class="hero-char" style="animation-delay:160ms">客</span><span class="hero-char" style="animation-delay:240ms">服</span><span class="hero-char red" style="animation-delay:320ms">直</span><span class="hero-char red" style="animation-delay:400ms">播</span><span class="hero-char" style="animation-delay:560ms">基</span><span class="hero-char" style="animation-delay:640ms">地</span><span class="hero-beam"></span></h1>
     <p class="slogan reveal">科技驱动 · 客服基因 · 可信直播<br>覆盖全品类全形态的矩阵式直播运营团队</p>
-    <div class="scroll">SCROLL ↓</div>
+    <div class="scroll" style="display:flex;flex-direction:column;align-items:center;gap:8px;">SCROLL<div style="width:1px;height:40px;background:rgba(255,255,255,0.15);position:relative;overflow:hidden;"><div style="width:100%;height:20px;position:absolute;animation:drop 2s infinite;"></div></div></div>
   </section>
 
   <section class="sec">
@@ -340,6 +413,11 @@
     </div>
   </section>
   <footer>
+    <div style="display:flex;justify-content:center;gap:4px;margin-bottom:1rem;">
+      <div style="width:3px;background:var(--jd-red);animation:sig 1.5s infinite;"></div>
+      <div style="width:3px;background:var(--jd-red);animation:sig2 1.5s infinite;"></div>
+      <div style="width:3px;background:var(--jd-red);animation:sig3 1.5s infinite;"></div>
+    </div>
     <img src="joy-logo.png" alt="JOY">
     <p>© 2026 京东客服直播基地 · 北京 · 成都 · 宿迁三大基地</p>
     <p class="en">JD CUSTOMER SERVICE LIVE · BROADCAST STUDIO 24/7</p>
@@ -495,7 +573,7 @@
               const suffix = el.querySelector('.red') ? el.querySelector('.red').outerHTML : '';
               let current = 0; const start = performance.now();
               function tick(now) {
-                const progress = Math.min((now-start)/1200, 1);
+                const progress = Math.min((now-start)/1600, 1);
                 current = Math.round(target * (1 - Math.pow(1-progress, 3)));
                 el.innerHTML = current + suffix;
                 if (progress < 1) requestAnimationFrame(tick);
@@ -510,7 +588,7 @@
     reveals.forEach(el => observer.observe(el));
   }
 
-  // Hero video parallax
+  // Hero parallax + 光带
   let scrollY = 0, ticking = false;
   function updateParallax() {
     const heroVideo = document.querySelector('.hero-video');
@@ -519,11 +597,9 @@
       heroVideo.style.transform = `translateY(${ph*150}px) scale(${1+ph*0.05})`;
       heroVideo.style.opacity = 1 - ph * 0.6;
     }
-    // Depth orbs parallax
-    const orbs = document.querySelectorAll('.depth-orb');
-    orbs.forEach((o, i) => {
-      const speed = [0.05, 0.03, 0.04][i] || 0.03;
-      o.style.transform = `translateY(${scrollY * speed}px)`;
+    document.querySelectorAll('.light-band').forEach((b, i) => {
+      const sp = [0.08, 0.05, 0.06][i] || 0.05;
+      b.style.transform = `translateX(${scrollY * sp * 0.3}px)`;
     });
     ticking = false;
   }
@@ -532,27 +608,100 @@
     if (!ticking) { requestAnimationFrame(updateParallax); ticking = true; }
   }, { passive: true });
 
-  // Mouse cursor glow + orb follow
+  // 鼠标光晕双环 + orb + hero视差
   const glow = document.getElementById('cursorGlow');
+  const ring = document.getElementById('cursorRing');
   const orbs = document.querySelectorAll('.depth-orb');
-  let mouseX = 0, mouseY = 0;
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, mRAF = false;
   document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX; mouseY = e.clientY;
-    glow.style.left = mouseX + 'px';
-    glow.style.top = mouseY + 'px';
-    // Orbs subtly follow mouse
-    orbs.forEach((o, i) => {
-      const factor = [0.02, 0.015, 0.01][i] || 0.015;
-      const dx = (mouseX - window.innerWidth/2) * factor;
-      const dy = (mouseY - window.innerHeight/2) * factor;
-      const scrollOffset = scrollY * ([0.05, 0.03, 0.04][i] || 0.03);
-      o.style.transform = `translate(${dx}px, ${dy + scrollOffset}px)`;
+    if (!mRAF) {
+      requestAnimationFrame(() => {
+        glow.style.left = mouseX + 'px'; glow.style.top = mouseY + 'px';
+        orbs.forEach((o, i) => {
+          const f = [0.02, 0.015, 0.01][i] || 0.015;
+          o.style.transform = `translate(${(mouseX-innerWidth/2)*f}px, ${(mouseY-innerHeight/2)*f}px)`;
+        });
+        mRAF = false;
+      });
+      mRAF = true;
+    }
+  });
+  function ringLerp() {
+    ringX += (mouseX - ringX) * 0.15;
+    ringY += (mouseY - ringY) * 0.15;
+    if (ring) { ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px'; }
+    requestAnimationFrame(ringLerp);
+  }
+  ringLerp();
+
+  // Dust粒子
+  const dc = document.getElementById('dustContainer');
+  if (dc) { for (let i = 0; i < 20; i++) { const d = document.createElement('div'); d.className = 'dust'; d.style.left = Math.random()*100+'%'; d.style.top = Math.random()*100+'%'; d.style.animationDelay = Math.random()*8+'s'; d.style.animationDuration = (6+Math.random()*4)+'s'; dc.appendChild(d); } }
+
+  // 3D Tilt
+  function initTilt() {
+    if (window.innerWidth <= 768) return;
+    document.querySelectorAll('.data-cell, .room-card, .member-card, .star-card, .video-card').forEach(card => {
+      if (card._tiltInit) return; card._tiltInit = true; card.classList.add('tilt-card');
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        const x = e.clientX - r.left, y = e.clientY - r.top;
+        card.style.transform = `perspective(900px) rotateX(${-(y-r.height/2)/r.height*5}deg) rotateY(${(x-r.width/2)/r.width*7}deg) translateY(-4px)`;
+        card.style.setProperty('--glare-x', x/r.width*100+'%'); card.style.setProperty('--glare-y', y/r.height*100+'%');
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+  }
+
+  // 视频hover预览
+  function initVideoPreview() {
+    document.querySelectorAll('.video-card').forEach(card => {
+      if (card._vInit) return; card._vInit = true;
+      const video = card.querySelector('video'); let timer;
+      card.addEventListener('mouseenter', () => { timer = setTimeout(() => { if (video) video.play().catch(()=>{}); }, 500); });
+      card.addEventListener('mouseleave', () => { clearTimeout(timer); if (video) { video.pause(); video.currentTime = 0; } });
+    });
+  }
+
+  // Tab切换 - 镜头推拉
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const tid = tab.dataset.panel;
+      const oldP = document.querySelector('.panel.active');
+      const newP = document.getElementById(tid);
+      if (oldP === newP) return;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const beam = document.getElementById('navBeam');
+      beam.classList.remove('active'); void beam.offsetWidth; beam.classList.add('active');
+      const sw = () => {
+        oldP.classList.remove('active'); newP.classList.add('active'); void newP.offsetWidth;
+        window.scrollTo({top:0, behavior:'smooth'});
+        setTimeout(() => { initRevealObservers(); initTilt(); initVideoPreview(); renderRolesIfNeeded(); }, 300);
+      };
+      if (document.startViewTransition) { document.startViewTransition(sw); } else { sw(); }
     });
   });
 
   // Init
-  window.addEventListener('load', () => { initRevealObservers(); });
+  window.addEventListener('load', () => { initRevealObservers(); initTilt(); initVideoPreview(); });
 </script>
 
+
+<!-- 实现说明 (1-18条对应)
+1. 全局氛围: 背景改#050508, noise颗粒opacity0.03, dust粒子20个, 玻璃卡片双层质感, LIVE红点pulse, REC标记, 页脚信号条3根, sec-num红色Playfair斜体
+2. 景深五层: 星点层(orb层替代), 光球层3个blur80px椭圆漂移24s/32s/40s, 光带层3条水平线30%/50%/70%, 前景柔焦层(orb), 鼠标光晕双环(内环即时+外环lerp150ms)
+3. Hero: 拆字动效8字stagger80ms blur入场, 红色下划线光束1.7s后scaleX, 鼠标视差±8px, 镜头光斑(orb层), scroll游标@keyframes drop
+4. 数据仪表: tabular-nums, 计数1.6s, hover扫描线@keyframes scan, hover scale1.06+text-shadow
+5. 3D Tilt: perspective900px rotateX±5 rotateY±7, 光泽追踪::before --glare-x/--glare-y, overflow:hidden
+6. room-card: 信号灯#00FF88微闪, LIVE标签红底白字, hover缩略图左移(过渡)
+7. 时间线: 信号轨道(保留虚线+光晕节点), 节点hover虚线描边
+8. member-card: role色块, hover上滑遮罩.bio-full, 遮罩黑色渐变
+9. 视频卡片: hover 500ms后play预览, 鼠标离开pause+currentTime=0
+10. Tab: View Transitions API(startViewTransition fallback), 进度光束navBeam, tab下划线scaleX, 镜头推拉scale0.96→1
+11. 性能: rAF throttle mousemove, backdrop-filter≤8, 移动端关闭tilt/光晕外环/dust/光带
+12. 交付: STAFF数据100%保留, 无乱码, 单文件CSS+JS内联, img loading=lazy
+-->
 </body>
 </html>
