@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>京东客服直播基地 · JD Live</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Serif+SC:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Serif+SC:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Noto+Serif+SC:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet"></noscript>
   <style>
     :root {
       --jd-red: #E6212A;
@@ -25,6 +26,19 @@
       background: var(--bg); color: var(--body); line-height: 1.8;
       -webkit-font-smoothing: antialiased; overflow-x: hidden;
     }
+
+    @keyframes orbDrift1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(60px,-40px) scale(1.15)} 66%{transform:translate(-30px,50px) scale(0.95)} }
+    @keyframes orbDrift2 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-70px,60px) scale(0.9)} 66%{transform:translate(40px,-50px) scale(1.1)} }
+    @keyframes orbDrift3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(50px,-70px) scale(1.08)} }
+    /* 卡片持续微呼吸 */
+    @keyframes cardBreath { 0%,100%{box-shadow:0 0 0 rgba(230,33,42,0)} 50%{box-shadow:0 0 24px rgba(230,33,42,0.08)} }
+    .data-cell, .room-card, .star-card { animation: cardBreath 6s ease-in-out infinite; }
+    /* 信号灯常闪 */
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+    /* 时间线节点光晕呼吸 */
+    .tl-item::before { animation: nodeGlow 3s ease-in-out infinite; }
+    @keyframes nodeGlow { 0%,100%{box-shadow:0 0 12px rgba(230,33,42,0.4)} 50%{box-shadow:0 0 22px rgba(230,33,42,0.7)} }
+
     /* LIVE红点呼吸 */
     @keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 8px var(--jd-red)} 50%{opacity:0.3;box-shadow:0 0 2px var(--jd-red)} }
     .live-dot { width:7px;height:7px;border-radius:50%;background:var(--jd-red);animation:pulse 2s infinite; }
@@ -271,12 +285,12 @@
 <div class="cursor-glow" id="cursorGlow"></div>
 
 <nav>
-  <div class="logo"><img src="joy-logo.png" alt="JOY"><span class="live-dot"></span>京东客服<span class="red">Live</span></div>
+  <div class="logo"><img src="joy-logo-sm.jpg" alt="JOY"><span class="live-dot"></span>京东客服<span class="red">Live</span></div>
   <div class="tabs">
     <button class="tab active" data-panel="overview">总览</button>
-    <button class="tab" data-panel="rooms">直播间</button>
-    <button class="tab" data-panel="roles">岗位</button>
-    <button class="tab" data-panel="stars">人才培育</button>
+    <button class="tab" data-scroll="sec-rooms">直播间</button>
+    <button class="tab" data-scroll="sec-roles">岗位</button>
+    <button class="tab" data-scroll="sec-stars">人才培育</button>
     <button class="tab" data-panel="videos">花絮视频</button>
   </div>
 </nav>
@@ -285,7 +299,7 @@
 <div class="panel active" id="overview">
   <section class="hero" id="hero-section">
     <video class="hero-video" autoplay muted loop playsinline><source src="hero-bg-sm.mp4" type="video/mp4"></video>
-    <img src="joy-logo.png" class="joy-logo" alt="JOY">
+    <img src="joy-logo-sm.jpg" class="joy-logo" alt="JOY">
     <div class="eyebrow reveal">JD CUSTOMER SERVICE LIVE</div>
     <h1 class="reveal"><span class="hero-char" style="animation-delay:0ms">京</span><span class="hero-char" style="animation-delay:80ms">东</span><span class="hero-char" style="animation-delay:160ms">客</span><span class="hero-char" style="animation-delay:240ms">服</span><span class="hero-char red" style="animation-delay:320ms">直</span><span class="hero-char red" style="animation-delay:400ms">播</span><span class="hero-char" style="animation-delay:560ms">基</span><span class="hero-char" style="animation-delay:640ms">地</span><span class="hero-beam"></span></h1>
     <p class="slogan reveal">科技驱动 · 客服基因 · 可信直播<br>覆盖全品类全形态的矩阵式直播运营团队</p>
@@ -336,11 +350,9 @@
       </div>
     </div>
   </section>
-</div>
 
-<!-- ========== 直播间 ========== -->
-<div class="panel" id="rooms">
-  <section class="sec">
+<!-- ========== 直播间（首页滚动） ========== -->
+<section class="sec" id="sec-rooms">
     <div class="sec-inner">
       <div class="sec-num reveal">04 <span class="dot">·</span> STUDIO <span class="dot">·</span> 直播间矩阵</div>
       <h2 class="sec-title reveal">10个运营中直播间，覆盖十余种品类。</h2>
@@ -359,11 +371,9 @@
       </div>
     </div>
   </section>
-</div>
 
-<!-- ========== 岗位 ========== -->
-<div class="panel" id="roles">
-  <section class="sec">
+<!-- ========== 岗位（首页滚动） ========== -->
+<section class="sec" id="sec-roles">
     <div class="sec-inner">
       <div class="sec-num reveal">05 <span class="dot">·</span> TEAM <span class="dot">·</span> 岗位介绍</div>
       <h2 class="sec-title reveal">64人团队，主播、运营、弹幕解答、设计拍剪。</h2>
@@ -371,11 +381,9 @@
       <div id="roles-container"></div>
     </div>
   </section>
-</div>
 
-<!-- ========== 人才培育 ========== -->
-<div class="panel" id="stars">
-  <section class="sec">
+<!-- ========== 人才培育（首页滚动） ========== -->
+<section class="sec" id="sec-stars">
     <div class="sec-inner">
       <div class="sec-num reveal">06 <span class="dot">·</span> TALENT <span class="dot">·</span> 人才培育</div>
       <h2 class="sec-title reveal">客服人才转型，打造未来将星。</h2>
@@ -405,10 +413,10 @@
       <h2 class="sec-title reveal">台前幕后的精彩瞬间。</h2>
       <p class="sec-desc reveal">BEHIND THE SCENES · LIVE COMMERCE 24/7</p>
       <div class="video-grid reveal-stagger">
-        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%230a0a0f'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23555' font-size='18' font-family='serif'%3E🎬 大促花絮混剪%3C/text%3E%3C/svg%3E"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"></video><div class="vinfo"><h3>大促直播花絮混剪</h3><div class="vmeta"><span>混剪</span><span>大促</span><span>2:30</span></div></div></div>
-        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23111118'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23555' font-size='18' font-family='serif'%3E🎙️ 直播高光%3C/text%3E%3C/svg%3E"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4"></video><div class="vinfo"><h3>您好京东直播间高光</h3><div class="vmeta"><span>直播切片</span><span>高光</span><span>1:15</span></div></div></div>
-        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%230a0a0f'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23555' font-size='18' font-family='serif'%3E🤖 数字人直播%3C/text%3E%3C/svg%3E"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4"></video><div class="vinfo"><h3>数字人直播演示</h3><div class="vmeta"><span>数字人</span><span>AI</span><span>0:15</span></div></div></div>
-        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23111118'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23555' font-size='18' font-family='serif'%3E⭐ 人才培训%3C/text%3E%3C/svg%3E"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" type="video/mp4"></video><div class="vinfo"><h3>客服人才转型培训记录</h3><div class="vmeta"><span>人才培育</span><span>培训</span><span>0:15</span></div></div></div>
+        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%230a0a0f'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23555' font-size='18' font-family='serif'%3E🎬 大促花絮混剪%3C/text%3E%3C/svg%3E"><source src="hero-bg-sm.mp4" type="video/mp4"></video><div class="vinfo"><h3>大促直播花絮混剪</h3><div class="vmeta"><span>混剪</span><span>大促</span><span>2:30</span></div></div></div>
+        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23111118'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23555' font-size='18' font-family='serif'%3E🎙️ 直播高光%3C/text%3E%3C/svg%3E"><source src="hero-bg-sm.mp4" type="video/mp4"></video><div class="vinfo"><h3>您好京东直播间高光</h3><div class="vmeta"><span>直播切片</span><span>高光</span><span>1:15</span></div></div></div>
+        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%230a0a0f'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23555' font-size='18' font-family='serif'%3E🤖 数字人直播%3C/text%3E%3C/svg%3E"><source src="hero-bg-sm.mp4" type="video/mp4"></video><div class="vinfo"><h3>数字人直播演示</h3><div class="vmeta"><span>数字人</span><span>AI</span><span>0:15</span></div></div></div>
+        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23111118'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23555' font-size='18' font-family='serif'%3E⭐ 人才培训%3C/text%3E%3C/svg%3E"><source src="hero-bg-sm.mp4" type="video/mp4"></video><div class="vinfo"><h3>客服人才转型培训记录</h3><div class="vmeta"><span>人才培育</span><span>培训</span><span>0:15</span></div></div></div>
       </div>
     </div>
   </section>
@@ -418,7 +426,7 @@
       <div style="width:3px;background:var(--jd-red);animation:sig2 1.5s infinite;"></div>
       <div style="width:3px;background:var(--jd-red);animation:sig3 1.5s infinite;"></div>
     </div>
-    <img src="joy-logo.png" alt="JOY">
+    <img src="joy-logo-sm.jpg" alt="JOY">
     <p>© 2026 京东客服直播基地 · 北京 · 成都 · 宿迁三大基地</p>
     <p class="en">JD CUSTOMER SERVICE LIVE · BROADCAST STUDIO 24/7</p>
   </footer>
@@ -545,30 +553,20 @@
     initRevealObservers();
   }
 
-  // Tab
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById(tab.dataset.panel).classList.add('active');
-      window.scrollTo({top:0, behavior:'smooth'});
-      setTimeout(() => { initRevealObservers(); renderRolesIfNeeded(); }, 100);
-    });
-  });
   function renderRolesIfNeeded() {
-    if (document.getElementById('roles').classList.contains('active') && !document.getElementById('roles-container').innerHTML) renderRoles();
+    if (!document.getElementById('roles-container').innerHTML) renderRoles();
   }
 
   // Reveal observer
   function initRevealObservers() {
-    const reveals = document.querySelectorAll('.reveal:not(.in), .reveal-stagger:not(.in)');
+    const reveals = document.querySelectorAll('.reveal, .reveal-stagger');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('in');
           if (entry.target.classList.contains('reveal-stagger')) {
             entry.target.querySelectorAll('[data-count]').forEach(el => {
+              if (el._counted) return; el._counted = true;
               const target = parseInt(el.dataset.count);
               const suffix = el.querySelector('.red') ? el.querySelector('.red').outerHTML : '';
               let current = 0; const start = performance.now();
@@ -581,10 +579,18 @@
               requestAnimationFrame(tick);
             });
           }
-          observer.unobserve(entry.target);
+        } else if (entry.target.getBoundingClientRect().top > window.innerHeight) {
+          // 完全滚出视口下方时重置，下次滚入重新播放
+          entry.target.classList.remove('in');
+          entry.target.querySelectorAll('[data-count]').forEach(el => {
+            el._counted = false;
+            const target = parseInt(el.dataset.count);
+            const suffix = el.querySelector('.red') ? el.querySelector('.red').outerHTML : '';
+            el.innerHTML = '0' + suffix;
+          });
         }
       });
-    }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+    }, { threshold: 0.1, rootMargin: '0px 0px -5% 0px' });
     reveals.forEach(el => observer.observe(el));
   }
 
@@ -667,10 +673,22 @@
   // Tab切换 - 镜头推拉
   document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
+      // 锚点滚动类 tab
+      const scrollTarget = tab.dataset.scroll;
+      if (scrollTarget) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const beam = document.getElementById('navBeam');
+        beam.classList.remove('active'); void beam.offsetWidth; beam.classList.add('active');
+        const target = document.getElementById(scrollTarget);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      // panel 切换类 tab
       const tid = tab.dataset.panel;
       const oldP = document.querySelector('.panel.active');
       const newP = document.getElementById(tid);
-      if (oldP === newP) return;
+      if (!newP || oldP === newP) { if (tid === 'overview') window.scrollTo({top:0, behavior:'smooth'}); return; }
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       const beam = document.getElementById('navBeam');
@@ -684,8 +702,36 @@
     });
   });
 
+  // 滚动时高亮当前 section 对应的 tab
+  const scrollTabs = ['sec-rooms', 'sec-roles', 'sec-stars'];
+  let secObserver = null;
+  function initSectionHighlight() {
+    if (secObserver) secObserver.disconnect();
+    secObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          const tab = document.querySelector(`.tab[data-scroll="${id}"]`);
+          if (tab) tab.classList.add('active');
+        }
+      });
+    }, { threshold: 0.3 });
+    scrollTabs.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) secObserver.observe(el);
+    });
+  }
+  initSectionHighlight();
+
   // Init
-  window.addEventListener('load', () => { initRevealObservers(); initTilt(); initVideoPreview(); });
+  window.addEventListener('load', () => {
+    initRevealObservers();
+    renderRoles();
+    initTilt();
+    initVideoPreview();
+    initSectionHighlight();
+  });
 </script>
 
 
