@@ -439,7 +439,7 @@
   </section>
 </div>
 
-<!-- ========== 花絮视频 ==========
+<!-- ========== 花絮视频 ========== -->
 <div class="panel" id="videos">
   <section class="sec">
     <div class="sec-inner">
@@ -773,14 +773,31 @@
   initSectionHighlight();
 
   // Init
-  window.addEventListener('load', () => {
+  // 用 DOMContentLoaded 而非 load：不等外部字体/图片（fonts.googleapis 挂起时 load 可能几十秒不触发，导致页面空白）
+  function boot() {
     initRevealObservers();
     renderRoles();
     initTilt();
     initVideoPreview();
     initSectionHighlight();
     initMagnetic();
-  });
+    // 兜底：不支持 IntersectionObserver 的环境直接显示全部内容
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => el.classList.add('in'));
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+  // 双保险：极端情况下 3 秒后强制点亮首屏（仅首屏，不破坏下方滚动动画）
+  setTimeout(() => {
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight) el.classList.add('in');
+    });
+  }, 3000);
 </script>
 
 
