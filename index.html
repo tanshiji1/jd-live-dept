@@ -239,6 +239,10 @@
     .contact-info .c-name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--text); margin: .2rem 0 .4rem; }
     .contact-info .c-phone { display: inline-block; font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; color: var(--brand); text-decoration: none; letter-spacing: .04em; font-variant-numeric: tabular-nums; transition: opacity .3s var(--ease); }
     .contact-info .c-phone:hover { text-decoration: underline; opacity: .85; }
+    .c-row { display: flex; gap: 1.6rem; }
+    .c-person { min-width: 120px; }
+    .c-erp { font-family: var(--font-mono); font-size: .6rem; color: var(--muted); margin-top: .3rem; letter-spacing: .06em; }
+    .en-name { font-family: var(--font-mono); font-size: .58rem; color: var(--muted); font-weight: 400; letter-spacing: .05em; }
 
     /* === Footer === */
     footer { padding: 3rem 2rem; text-align: center; border-top: 1px solid var(--border); position: relative; z-index: 10; }
@@ -407,6 +411,20 @@
         <div class="star-card"><div class="badge">客服转型 · 数据</div><div class="avatar" style="background:rgba(230,33,42,0.15)">数</div><h3>客服 → 数据运营</h3><span class="s-role">数据科学 → 直播数据</span><p class="s-bio">运用黄金眼、商智等工具，构建直播运营指标体系，数据驱动选品与转化。</p><div class="ach">数据驱动增长</div></div>
         <div class="star-card"><div class="badge">客服转型 · 内容</div><div class="avatar" style="background:rgba(242,184,198,0.1)">内</div><h3>客服 → 内容策划</h3><span class="s-role">舆情热点 → 内容策划</span><p class="s-bio">从客服舆情热点团队转型，打造场景化互动答疑直播模式，提升用户粘性。</p><div class="ach">热点驱动内容</div></div>
       </div>
+
+      <h3 class="reveal" style="font-family:var(--font-display);font-size:0.95rem;font-weight:700;color:var(--title);margin:3rem 0 1.2rem;">京东「新锐之星」</h3>
+      <p class="reveal" style="font-size:0.8rem;color:var(--dim);margin-bottom:1.5rem;max-width:560px;line-height:1.9;">京东战略型人才项目，培养扎根基层、敢于担当的未来将星。团队多位成员入选：</p>
+      <div class="star-grid reveal-stagger">
+        <div class="star-card"><div class="badge">新锐之星</div><div class="avatar" style="background:rgba(230,33,42,0.12)">曹</div><h3>曹伟康</h3><span class="s-role">管理层 · 新锐之星出身</span><p class="s-bio">从客服团队主管成长为直播基地管理者，实战派将星。</p></div>
+        <div class="star-card"><div class="badge">新锐之星</div><div class="avatar" style="background:rgba(242,184,198,0.2)">李</div><h3>李小晴</h3><span class="s-role">运营 · 京东电器直播间</span><p class="s-bio">元气满满的效率担当，任务再多也安排得明明白白。</p></div>
+        <div class="star-card"><div class="badge">新锐之星</div><div class="avatar" style="background:rgba(230,33,42,0.12)">孙</div><h3>孙嘉 <span class="en-name">Mickey</span></h3><span class="s-role">运营 · 您好京东直播间</span><p class="s-bio">脑洞与执行力兼备，创意玩法层出不穷。</p></div>
+        <div class="star-card"><div class="badge">新锐之星</div><div class="avatar" style="background:rgba(242,184,198,0.2)">孙</div><h3>孙静怡 <span class="en-name">Gracie</span></h3><span class="s-role">运营 · 您好京东直播间</span><p class="s-bio">细致入微的执行者，从选品到脚本层层把关。</p></div>
+        <div class="star-card"><div class="badge">新锐之星</div><div class="avatar" style="background:rgba(230,33,42,0.12)">王</div><h3>王如意</h3><span class="s-role">运营 · 礼品卡直播间</span><p class="s-bio">策划执行双在线，业绩稳步攀升的推手。</p></div>
+        <div class="star-card"><div class="badge">新锐之星</div><div class="avatar" style="background:rgba(242,184,198,0.2)">吴</div><h3>吴旋</h3><span class="s-role">运营 · 名酒博物馆</span><p class="s-bio">流程把控严丝合缝，直播零失误的坚实后盾。</p></div>
+        <div class="star-card"><div class="badge">新锐之星</div><div class="avatar" style="background:rgba(230,33,42,0.12)">熊</div><h3>熊梓杉 <span class="en-name">Shine</span></h3><span class="s-role">运营 · 京东家电严选家</span><p class="s-bio">踏实细致的幕后功臣，流程执行滴水不漏。</p></div>
+        <div class="star-card"><div class="badge">新锐之星</div><div class="avatar" style="background:rgba(242,184,198,0.2)">朱</div><h3>朱娟 <span class="en-name">Willow</span></h3><span class="s-role">运营 · 京东指数采销</span><p class="s-bio">细腻靠谱，参与明星井陇618京东专场直播。</p></div>
+      </div>
+
     </div>
   </section>
 <!-- ========== 招商合作 ========== -->
@@ -430,9 +448,19 @@
           <p>无论是常态化店铺直播、大促活动场播，还是数字人直播合作，我们都能提供匹配的解决方案，期待与您共赢直播增量。</p>
         </div>
         <div class="contact-info">
-          <div class="c-label">招商联系人</div>
-          <div class="c-name">周先生</div>
-          <a class="c-phone" href="tel:18068228155">18068228155</a>
+          <div class="c-label">商务合作联系人</div>
+          <div class="c-row">
+            <div class="c-person">
+              <div class="c-name">曹先生</div>
+              <a class="c-phone" href="tel:18136018353">18136018353</a>
+              <div class="c-erp">ERP · caoweikang1</div>
+            </div>
+            <div class="c-person">
+              <div class="c-name">周先生</div>
+              <a class="c-phone" href="tel:18068228155">18068228155</a>
+              <div class="c-erp">ERP · zhoulian6</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -468,62 +496,62 @@
 
 <script>
   const STAFF = [
-    {name:'王蒙',role:'经理',room:'管理层'},
-    {name:'曹伟康',role:'主管',room:'管理层'},
-    {name:'李应坤',role:'主管',room:'管理层'},
-    {name:'马智杰',art:'小马哥',role:'主播',room:'您好京东直播间',info:'白羊座',bio:'教科书级的控场王者，5年经验、普通话一级甲等，任何场面都能稳稳接住。',photo:'photos/mazhijie.jpg'},
+    {name:'王蒙',role:'经理',room:'管理层',info:'客服团队C3负责人 · 京东客服直播间负责人',bio:'客服团队C3负责人、京东客服直播间负责人，从团队组建到单日破亿的掌舵人。'},
+    {name:'曹伟康',role:'主管',room:'管理层',info:'新锐之星出身',bio:'客服团队主管出身、京东「新锐之星」战略人才，实战派管理者。'},
+    {name:'李应坤',role:'主管',room:'管理层',info:'成都直播基地主管',bio:'成都客服直播基地主管，三大基地布局的关键开拓者。'},
+    {name:'马智杰',en:'Alex',art:'小马哥',role:'主播',room:'您好京东直播间',info:'白羊座',bio:'教科书级的控场王者，5年经验、普通话一级甲等，任何场面都能稳稳接住。',photo:'photos/mazhijie.jpg'},
     {name:'周子豪',art:'周周',role:'主播',room:'您好京东直播间',info:'天秤座',bio:'直播间里的阳光担当，笑容治愈、状态永远在线，观众缘极佳。',photo:'photos/zhouzihao.jpg'},
     {name:'王铭',art:'天铭',role:'主播',room:'您好京东直播间',info:'天秤座·INTP',bio:'行走的游戏百科，20余年资深玩家，讲解专业又不失幽默，圈粉无数。',photo:'photos/wangming.jpg'},
     {name:'董啸啸',art:'笑笑',role:'主播',room:'您好京东直播间',info:'水瓶座·ESTJ',bio:'全品类都能打的多面手，讲解清晰、节奏利落，团队公认的实力派。',photo:'photos/dongxiaoxiao.jpg'},
-    {name:'李浩菁',art:'栗子',role:'主播',room:'您好京东直播间',info:'双子座·ENFP',bio:'天生的高光主播，控场与互动双绝，弹幕再快也接得住，气氛担当。',photo:'photos/lihaojing.jpg'},
+    {name:'李浩菁',en:'Aurora',art:'栗子',role:'主播',room:'您好京东直播间',info:'双子座·ENFP',bio:'天生的高光主播，控场与互动双绝，弹幕再快也接得住，气氛担当。',photo:'photos/lihaojing.jpg'},
     {name:'杨俊',art:'念念',role:'主播',room:'您好京东直播间',info:'巨蟹座·INFP',bio:'温柔又有力量的讲解者，家电宠物品类深耕者，粉丝黏性极高。'},
-    {name:'陈小露',role:'运营',room:'您好京东直播间',bio:'直播间的幕后大脑，策划、排品、复盘一手抓，靠谱指数满分。',photo:'photos/chenxiaolu.jpg'},
-    {name:'周立安',role:'运营',room:'您好京东直播间',bio:'数据敏感度一流的操盘手，每场直播的流量密码都拿捏得恰到好处。',photo:'photos/zhoulian.jpg'},
-    {name:'孙静怡',role:'运营',room:'您好京东直播间',bio:'细致入微的执行者，从选品到脚本层层把关，是团队最放心的伙伴。'},
-    {name:'孙嘉',role:'运营',room:'您好京东直播间',bio:'脑洞与执行力兼备，创意玩法层出不穷，直播间人气上涨的功臣。'},
+    {name:'陈小露',en:'Felix',role:'运营',room:'您好京东直播间',bio:'直播间的幕后大脑，策划、排品、复盘一手抓，靠谱指数满分。',photo:'photos/chenxiaolu.jpg'},
+    {name:'周立安',en:'Zhla',role:'运营',room:'您好京东直播间',bio:'主攻商业洽谈与招商合作，操盘明星井陇618京东专场直播，资源整合力一流。',photo:'photos/zhoulian.jpg'},
+    {name:'孙静怡',en:'Gracie',role:'运营',room:'您好京东直播间',bio:'细致入微的执行者，从选品到脚本层层把关，是团队最放心的伙伴。'},
+    {name:'孙嘉',en:'Mickey',role:'运营',room:'您好京东直播间',bio:'脑洞与执行力兼备，创意玩法层出不穷，直播间人气上涨的功臣。'},
     {name:'王彬',role:'弹幕解答',room:'您好京东直播间',bio:'弹幕海洋的摆渡人，反应神速、答疑精准，直播间的暖心守护者。'},
     {name:'赵龙',role:'弹幕解答',room:'您好京东直播间',bio:'眼疾手快的解答担当，观众的每个问题都不落空，好评收割机。'},
     {name:'王智辰',art:'智胜',role:'主播',room:'京东客服甄选直播间',info:'处女座·ENFP',bio:'表现力拉满的舞台型主播，风格百变，每一帧都是高光。',photo:'photos/wangzhichen.jpg'},
     {name:'刘惠',art:'惠惠',role:'主播',room:'京东客服甄选直播间',info:'摩羯座·INFP',bio:'室内户外都能hold住的全能选手，多品类经验加持，稳得让人安心。',photo:'photos/liuhui.jpg'},
     {name:'熊宏丽',art:'小熊',role:'主播',room:'京东客服甄选直播间',info:'水瓶座·INFP',bio:'状态永远饱满的能量型主播，平播功力扎实，长时直播火力全开。',photo:'photos/xionghongli.jpg'},
-    {name:'赵天燃',art:'赵赵',role:'主播',room:'京东客服甄选直播间',info:'处女座·INFJ',bio:'节奏大师本人，专业沉稳、张弛有度，观众都说看他直播特别安心。',photo:'photos/zhaotianran.jpg'},
+    {name:'赵天燃',en:'Vicky',art:'赵赵',role:'主播',room:'京东客服甄选直播间',info:'处女座·INFJ',bio:'节奏大师本人，专业沉稳、张弛有度，观众都说看他直播特别安心。',photo:'photos/zhaotianran.jpg'},
     {name:'胡佳惠',art:'佳佳',role:'主播',room:'京东客服甄选直播间',info:'处女座',bio:'客服转型的宝藏主播，懂产品更懂用户，讲解总能戳中观众需求。'},
-    {name:'付健',role:'运营',room:'京东客服甄选直播间',bio:'运筹帷幄的操盘手，从排期到复盘全程高能，直播间稳定输出的幕后英雄。',photo:'photos/fujian.jpg'},
-    {name:'张善信',role:'运营',room:'京东客服甄选直播间',bio:'执行力超强的多面手，方案落地快准稳，团队离不开的靠谱担当。',photo:'photos/zhangshanxin.jpg'},
-    {name:'郑君',role:'运营',room:'京东客服甄选直播间',bio:'心思缜密的策划者，每个细节都安排得明明白白，好评收割机。'},
+    {name:'付健',en:'Rhys',role:'运营',room:'京东客服甄选直播间',bio:'运筹帷幄的操盘手，从排期到复盘全程高能，直播间稳定输出的幕后英雄。',photo:'photos/fujian.jpg'},
+    {name:'张善信',role:'运营',room:'京东客服甄选直播间',bio:'货盘筛选的把关人，选品眼光毒辣，为每一场直播的货品质量保驾护航。',photo:'photos/zhangshanxin.jpg'},
+    {name:'郑君',en:'Juno',role:'运营',room:'京东客服甄选直播间',bio:'心思缜密的策划者，每个细节都安排得明明白白，好评收割机。'},
     {name:'李培',role:'运营',room:'京东客服甄选直播间',bio:'数据与创意双修，选品眼光毒辣，场场直播都有新亮点。',photo:'photos/lipei.jpg'},
     {name:'张天一',art:'天天',role:'主播',room:'京东家电自营旗舰店',info:'狮子座·ENTJ',bio:'气场全开的控场担当，家电讲解深入浅出，专业感与亲和力兼备。',photo:'photos/zhangtianyi.jpg'},
-    {name:'张佳欣',art:'多米',role:'主播',room:'京东家电自营旗舰店',info:'处女座',bio:'最会讲故事的主播，把产品讲成生活灵感，观众直呼想下单。',photo:'photos/zhangjiaxin.jpg'},
+    {name:'张佳欣',en:'Melody',art:'多米',role:'主播',room:'京东家电自营旗舰店',info:'处女座',bio:'最会讲故事的主播，把产品讲成生活灵感，观众直呼想下单。',photo:'photos/zhangjiaxin.jpg'},
     {name:'王严慧',art:'慧慧',role:'主播',room:'京东家电自营旗舰店',info:'双子座·ISFP',bio:'亲和力天花板，互动自然不冷场，是粉丝心中的贴心主播。',photo:'photos/wangyanhui.jpg'},
-    {name:'何雨尧',art:'糖糖',role:'主播',room:'京东家电自营旗舰店',info:'巨蟹座',bio:'可盐可甜的宝藏主播，教师转型功底扎实，表达力与感染力俱佳。',photo:'photos/heyuyao.jpg'},
+    {name:'何雨尧',en:'Suger',art:'糖糖',role:'主播',room:'京东家电自营旗舰店',info:'巨蟹座',bio:'可盐可甜的宝藏主播，教师转型功底扎实，表达力与感染力俱佳。',photo:'photos/heyuyao.jpg'},
     {name:'刘紫云',role:'主播',room:'京东家电自营旗舰店',bio:'低调的实力派，镜头前落落大方，每一场直播都全力以赴。'},
     {name:'陈羽婕',art:'花花',role:'主播',room:'京东家电自营旗舰店',info:'巨蟹座',bio:'反应飞快的机灵鬼，突发状况秒化解，直播间永远的活力源泉。',photo:'photos/chenyujie.jpg'},
     {name:'叶锦舟',role:'主播',room:'京东家电自营旗舰店',bio:'镜头感极佳的新锐主播，台风稳、表达佳，未来可期。',photo:'photos/yejinzhou.jpg'},
     {name:'孔浩',role:'运营',room:'京东家电自营旗舰店',bio:'直播间的隐形发动机，统筹协调样样精通，团队公认的定海神针。',photo:'photos/konghao.jpg'},
-    {name:'谭世纪',role:'运营',room:'京东家电自营旗舰店',bio:'思路清晰的策略担当，每次复盘都切中要害，让直播越播越好。'},
+    {name:'谭世纪',role:'运营',room:'京东家电自营旗舰店',bio:'数据分析与AI工具应用双修，兼通网站开发，操盘明星井陇618京东专场直播。'},
     {name:'乔威',role:'运营',room:'京东家电自营旗舰店',bio:'行动力满分的执行者，需求响应快人一步，配合默契度满分。',photo:'photos/qiaowei.jpg'},
-    {name:'刘施焱',role:'运营',room:'京东家电自营旗舰店',bio:'创意无限的点子王，玩法策划花样百出，观众留存直线上升。',photo:'photos/liushiyan.jpg'},
-    {name:'卞江',role:'运营',room:'京东家电自营旗舰店',bio:'沉稳可靠的幕后中坚，大事小事安排得妥妥帖帖，值得托付。',photo:'photos/bianjiang.jpg'},
+    {name:'刘施焱',en:'Turbo',role:'运营',room:'京东家电自营旗舰店',bio:'创意无限的点子王，玩法策划花样百出，观众留存直线上升。',photo:'photos/liushiyan.jpg'},
+    {name:'卞江',en:'Bix',role:'运营',room:'京东家电自营旗舰店',bio:'沉稳可靠的幕后中坚，大事小事安排得妥妥帖帖，值得托付。',photo:'photos/bianjiang.jpg'},
     {name:'司琪',art:'七七',role:'主播',room:'京东家电严选家',info:'天秤座·INFJ',bio:'人见人爱的团宠主播，开朗又走心，粉丝互动氛围一绝。',photo:'photos/siqi.jpg'},
-    {name:'丁佳文',art:'江江',role:'主播',room:'京东家电严选家',info:'狮子座·INTJ',bio:'成长速度惊人的学习型主播，风格多变、复盘深刻，每场都在进化。',photo:'photos/dingjiawen.jpg'},
-    {name:'熊梓杉',role:'运营',room:'京东家电严选家',bio:'踏实细致的幕后功臣，流程执行滴水不漏，直播顺畅的坚实保障。'},
-    {name:'臧玉叶',role:'运营',room:'京东家电严选家',bio:'温柔而坚定的执行者，琐碎事务处理得井井有条，团队的贴心管家。'},
+    {name:'丁佳文',en:'Willow',art:'江江',role:'主播',room:'京东家电严选家',info:'狮子座·INTJ',bio:'成长速度惊人的学习型主播，风格多变、复盘深刻，每场都在进化。',photo:'photos/dingjiawen.jpg'},
+    {name:'熊梓杉',en:'Shine',role:'运营',room:'京东家电严选家',bio:'踏实细致的幕后功臣，流程执行滴水不漏，直播顺畅的坚实保障。'},
+    {name:'臧玉叶',en:'Suzy',role:'运营',room:'京东家电严选家',bio:'温柔而坚定的执行者，琐碎事务处理得井井有条，团队的贴心管家。'},
     {name:'曹秀秀',art:'优米',role:'主播',room:'京东空调',info:'天秤座·ENFJ',bio:'进步飞速的潜力新星，表达流畅有感染力，未来不可限量。',photo:'photos/caoxiuxiu.jpg'},
     {name:'魏婧焰',art:'魏魏',role:'主播',room:'京东空调',info:'摩羯座·INFP',bio:'严谨与灵气兼备，学习力超强，每一场直播都在悄悄惊艳所有人。',photo:'photos/weijingyan.jpg'},
-    {name:'高乐山',art:'小鹿',role:'主播',room:'京东空调',info:'双子座',bio:'开朗与严谨并存的六边形战士，开播即高能，认真起来谁都不怵。',photo:'photos/gaolshan.jpg'},
-    {name:'孙威',role:'运营',room:'京东空调',bio:'空调直播间的幕后英雄，选品与节奏把控一流，战绩背后的功臣。',photo:'photos/sunwei.jpg'},
+    {name:'高乐山',en:'Mia',art:'小鹿',role:'主播',room:'京东空调',info:'双子座',bio:'开朗与严谨并存的六边形战士，开播即高能，认真起来谁都不怵。',photo:'photos/gaolshan.jpg'},
+    {name:'孙威',en:'Seren',role:'运营',room:'京东空调',bio:'空调直播间的幕后英雄，选品与节奏把控一流，战绩背后的功臣。',photo:'photos/sunwei.jpg'},
     {name:'李妍',art:'蛋挞',role:'主播',room:'京东指数采销',bio:'镜头前自带光芒的主播，讲解自然、种草力满分，观众缘极佳。',photo:'photos/liyan.jpg'},
     {name:'王巧儿',art:'企鹅',role:'主播',room:'京东指数采销',info:'双子座·ENFP',bio:'3年沉淀的全能主播，美妆家电信手拈来，专业度观众都点赞。',photo:'photos/wangqiaoer.jpg'},
     {name:'崔雨婷',art:'小婷',role:'主播',room:'京东指数采销',info:'天秤座·ISTP',bio:'真诚是她的必杀技，踏实沟通圈粉无数，口碑型主播代表。',photo:'photos/cuiyuting.jpg'},
     {name:'陈露',art:'天酒',role:'主播',room:'京东指数采销',info:'金牛座·ISFP',bio:'3C家电双修的严谨派，讲解专业细致，粉丝信任度满分。',photo:'photos/chenlu.jpg'},
-    {name:'朱娟',role:'运营',room:'京东指数采销',bio:'细腻靠谱的运营担当，从数据到内容全程护航，稳稳的幸福。'},
+    {name:'朱娟',en:'Willow',role:'运营',room:'京东指数采销',bio:'细腻靠谱的运营担当，参与明星井陇618京东专场直播，从数据到内容全程护航。'},
     {name:'黄惠',role:'运营',room:'京东指数采销',bio:'高效执行的多面手，沟通协调零障碍，团队协作的润滑剂。'},
     {name:'贺寸容',art:'春娇',role:'主播',room:'礼品卡直播间',info:'处女座·ENTP',bio:'感染力爆棚的氛围担当，状态永远满格，一开口就是全场焦点。',photo:'photos/hecunrong.jpg'},
     {name:'张冰爽',art:'依依',role:'主播',room:'礼品卡直播间',info:'双子座·ENFP',bio:'思维敏捷的金句制造机，表达清晰流畅，直播效果场场在线。',photo:'photos/zhangbingshuang.jpg'},
     {name:'王如意',role:'运营',room:'礼品卡直播间',bio:'礼品卡直播间的幕后功臣，策划执行双在线，业绩稳步攀升的推手。',photo:'photos/wangruyi.jpg'},
     {name:'袁欣琦',art:'琦琦',role:'主播',room:'名酒博物馆',info:'双子座',bio:'举手投足皆有戏的文化型主播，把酒文化讲成故事会，越看越上头。',photo:'photos/yuanxinqi.jpg'},
-    {name:'吴旋',role:'运营',room:'名酒博物馆',bio:'稳扎稳打的运营中坚，流程把控严丝合缝，直播零失误的坚实后盾。',photo:'photos/wuxuan.jpg'},
-    {name:'李俊杰',role:'运营',room:'名酒博物馆',bio:'热情高效的行动派，跨团队协作游刃有余，项目推进的强力引擎。',photo:'photos/lijunjie.jpg'},
+    {name:'吴旋',role:'运营',room:'名酒博物馆',bio:'稳扎稳打的运营中坚，参与明星井陇618京东专场直播，直播零失误的坚实后盾。',photo:'photos/wuxuan.jpg'},
+    {name:'李俊杰',en:'Jason',role:'运营',room:'名酒博物馆',bio:'热情高效的行动派，跨团队协作游刃有余，项目推进的强力引擎。',photo:'photos/lijunjie.jpg'},
     {name:'蔡芳',art:'蔡蔡',role:'主播',room:'京东电器直播间',info:'天蝎座',bio:'5年老兵的深厚功力，懂产品更懂人心，用转化率说话的实力派。'},
     {name:'唐敏',art:'柚子',role:'主播',room:'京东电器直播间',info:'天秤座·INTP',bio:'家电赛道深耕者，讲解专业又接地气，粉丝信赖的选购顾问。',photo:'photos/tangmin.jpg'},
     {name:'韩娇',art:'娇娇',role:'运营',room:'京东电器直播间',info:'水瓶座',bio:'抗压能力超群的运营新星，高压大促依然稳如泰山，前途无量。'},
@@ -579,7 +607,7 @@
         const bioShort = s.bio ? (s.bio.length>36 ? s.bio.substring(0,36)+'...' : s.bio) : '';
         const infoText = s.info || '';
         const avatarHtml = s.photo ? `<img src="${s.photo}" style="width:100%;height:100%;object-fit:cover;object-position:center 20%;">` : fc;
-        html += `<div class="member-card"><div class="avatar" style="background:${color}">${avatarHtml}</div><div class="info"><h3>${display}</h3><div class="role">${s.role}${infoText?' · '+infoText:''}</div><div class="bio">${bioShort}</div><div class="bio-full">${s.bio||''}</div></div></div>`;
+        html += `<div class="member-card"><div class="avatar" style="background:${color}">${avatarHtml}</div><div class="info"><h3>${display}${s.en?' <span class="en-name">'+s.en+'</span>':''}</h3><div class="role">${s.role}${infoText?' · '+infoText:''}</div><div class="bio">${bioShort}</div><div class="bio-full">${s.bio||''}</div></div></div>`;
       });
       html += '</div>';
     });
