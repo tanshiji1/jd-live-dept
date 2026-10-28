@@ -222,6 +222,24 @@
     .video-card .vmeta { display: flex; gap: .3rem; }
     .video-card .vmeta span { font-size: .62rem; padding: .08rem .4rem; background: rgba(255,255,255,.78); color: var(--dim); border-radius: 999px; font-family: var(--font-mono); }
 
+
+    /* === 招商合作 === */
+    .partner-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 1.2rem; margin-bottom: 2.5rem; }
+    .partner-card { background: var(--surface); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.6rem; transition: border-color .4s var(--ease), transform .4s var(--ease); box-shadow: var(--shadow); }
+    .partner-card:hover { border-color: var(--border-strong); transform: translateY(-4px); }
+    .partner-card .p-icon { font-family: var(--font-mono); font-size: .8rem; color: var(--brand); margin-bottom: .6rem; letter-spacing: .1em; }
+    .partner-card h3 { font-family: var(--font-display); font-size: .95rem; font-weight: 700; color: var(--text); margin-bottom: .4rem; }
+    .partner-card p { font-size: .78rem; color: var(--dim); line-height: 1.8; }
+    .contact-card { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; background: var(--surface); backdrop-filter: blur(18px); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 2rem 2.4rem; box-shadow: var(--shadow); }
+    .contact-text .label { font-family: var(--font-mono); font-size: .65rem; letter-spacing: .2em; color: var(--brand); margin-bottom: .5rem; }
+    .contact-text h3 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: .4rem; }
+    .contact-text p { font-size: .82rem; color: var(--dim); line-height: 1.9; max-width: 560px; }
+    .contact-info { text-align: center; padding: 1.1rem 1.9rem; background: var(--surface2); border-radius: var(--radius-sm); border: 1px solid var(--border); backdrop-filter: blur(6px); }
+    .contact-info .c-label { font-size: .65rem; color: var(--muted); font-family: var(--font-mono); letter-spacing: .1em; }
+    .contact-info .c-name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--text); margin: .2rem 0 .4rem; }
+    .contact-info .c-phone { display: inline-block; font-family: var(--font-display); font-size: 1.35rem; font-weight: 700; color: var(--brand); text-decoration: none; letter-spacing: .04em; font-variant-numeric: tabular-nums; transition: opacity .3s var(--ease); }
+    .contact-info .c-phone:hover { text-decoration: underline; opacity: .85; }
+
     /* === Footer === */
     footer { padding: 3rem 2rem; text-align: center; border-top: 1px solid var(--border); position: relative; z-index: 10; }
     footer img { width: 28px; height: 28px; border-radius: 50%; margin-bottom: .6rem; opacity: .85; }
@@ -248,6 +266,8 @@
       .data-cell:first-child { grid-column: span 2; grid-row: span 1; }
       .data-cell:first-child .v { font-size: 2.2rem; }
       .data-cell:nth-child(6) { grid-column: span 2; }
+      .contact-card { grid-template-columns: 1fr; text-align: center; }
+      .contact-text p { max-width: none; }
     }
   </style>
 </head>
@@ -276,6 +296,7 @@
     <button class="tab" data-scroll="sec-rooms">直播间</button>
     <button class="tab" data-scroll="sec-roles">岗位</button>
     <button class="tab" data-scroll="sec-stars">人才培育</button>
+    <button class="tab" data-scroll="sec-partners">招商合作</button>
     <button class="tab" data-panel="videos">花絮视频</button>
   </div>
 </nav>
@@ -388,13 +409,41 @@
       </div>
     </div>
   </section>
+<!-- ========== 招商合作 ========== -->
+<section class="sec" id="sec-partners">
+    <div class="sec-inner">
+      <div class="sec-num reveal">07 <span class="dot">·</span> PARTNERSHIP <span class="dot">·</span> 招商合作</div>
+      <h2 class="sec-title reveal">与京东客服直播基地同行，让品牌直播少走弯路。</h2>
+      <p class="sec-desc reveal">OFFICIAL · TRUSTED · FULL-SERVICE LIVE COMMERCE</p>
+      <div class="partner-grid reveal-stagger">
+        <div class="partner-card"><div class="p-icon">01</div><h3>官方身份 · 双重背书</h3><p>京东平台官方认证出镜，客服基因自带信任感，破解直播带货的专业度与信任度难题。</p></div>
+        <div class="partner-card"><div class="p-icon">02</div><h3>全形态直播代运营</h3><p>自建直播间、店铺直播、频道运营、活动场播全形态覆盖，40+运营项目、十余种品类的成熟方法论。</p></div>
+        <div class="partner-card"><div class="p-icon">03</div><h3>真人 + 数字人 7×24</h3><p>真人黄金时段 + 京东数字人闲时段，全天候不间断直播，流量利用率最大化。</p></div>
+        <div class="partner-card"><div class="p-icon">04</div><h3>数据驱动运营</h3><p>黄金眼、商智等数据工具加持，从选品、脚本到复盘的全链路SOP，效果可量化、可追踪。</p></div>
+        <div class="partner-card"><div class="p-icon">05</div><h3>一站式全岗位团队</h3><p>90+全职团队：主播、运营、弹幕解答、设计拍剪、社群跟播全配齐，品牌无需自建团队。</p></div>
+        <div class="partner-card"><div class="p-icon">06</div><h3>三大基地 · 29间标准直播间</h3><p>北京、成都、宿迁三大基地，3000㎡专业场地与设备，随时可开播。</p></div>
+      </div>
+      <div class="contact-card reveal">
+        <div class="contact-text">
+          <div class="label">CONTACT US</div>
+          <h3>欢迎品牌方、商家伙伴洽谈合作</h3>
+          <p>无论是常态化店铺直播、大促活动场播，还是数字人直播合作，我们都能提供匹配的解决方案，期待与您共赢直播增量。</p>
+        </div>
+        <div class="contact-info">
+          <div class="c-label">招商联系人</div>
+          <div class="c-name">周先生</div>
+          <a class="c-phone" href="tel:18068228155">18068228155</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 
-<!-- ========== 花絮视频 ========== -->
+<!-- ========== 花絮视频 ==========
 <div class="panel" id="videos">
   <section class="sec">
     <div class="sec-inner">
-      <div class="sec-num reveal">07 <span class="dot">·</span> SCENE <span class="dot">·</span> 工作花絮</div>
+      <div class="sec-num reveal">08 <span class="dot">·</span> SCENE <span class="dot">·</span> 工作花絮</div>
       <h2 class="sec-title reveal">台前幕后的精彩瞬间。</h2>
       <p class="sec-desc reveal">BEHIND THE SCENES · LIVE COMMERCE 24/7</p>
       <div class="video-grid reveal-stagger">
@@ -702,7 +751,7 @@
   });
 
   // 滚动时高亮当前 section 对应的 tab
-  const scrollTabs = ['sec-rooms', 'sec-roles', 'sec-stars'];
+  const scrollTabs = ['sec-rooms', 'sec-roles', 'sec-stars', 'sec-partners'];
   let secObserver = null;
   function initSectionHighlight() {
     if (secObserver) secObserver.disconnect();
