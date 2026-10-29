@@ -322,7 +322,6 @@
     <button class="tab" data-scroll="sec-roles">岗位</button>
     <button class="tab" data-scroll="sec-stars">人才培育</button>
     <button class="tab" data-scroll="sec-partners">招商合作</button>
-    <button class="tab" data-panel="videos">花絮视频</button>
   </div>
 </nav>
 
@@ -470,23 +469,6 @@
   </section>
 </div>
 
-<!-- ========== 花絮视频 ========== -->
-<div class="panel" id="videos">
-  <section class="sec">
-    <div class="sec-inner">
-      <div class="sec-num reveal">08 <span class="dot">·</span> SCENE <span class="dot">·</span> 工作花絮</div>
-      <h2 class="sec-title reveal">台前幕后的精彩瞬间。</h2>
-      <p class="sec-desc reveal">BEHIND THE SCENES · LIVE COMMERCE 24/7</p>
-      <div class="video-grid reveal-stagger">
-        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%230a0a0f'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23555' font-size='18' font-family='serif'%3E🎬 大促花絮混剪%3C/text%3E%3C/svg%3E"><source src="hero-bg-sm.mp4" type="video/mp4"></video><div class="vinfo"><h3>大促直播花絮混剪</h3><div class="vmeta"><span>混剪</span><span>大促</span><span>2:30</span></div></div></div>
-        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23111118'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23555' font-size='18' font-family='serif'%3E🎙️ 直播高光%3C/text%3E%3C/svg%3E"><source src="hero-bg-sm.mp4" type="video/mp4"></video><div class="vinfo"><h3>您好京东直播间高光</h3><div class="vmeta"><span>直播切片</span><span>高光</span><span>1:15</span></div></div></div>
-        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%230a0a0f'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23555' font-size='18' font-family='serif'%3E🤖 数字人直播%3C/text%3E%3C/svg%3E"><source src="hero-bg-sm.mp4" type="video/mp4"></video><div class="vinfo"><h3>数字人直播演示</h3><div class="vmeta"><span>数字人</span><span>AI</span><span>0:15</span></div></div></div>
-        <div class="video-card"><video controls preload="none" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 360'%3E%3Crect width='640' height='360' fill='%23111118'/%3E%3Ctext x='320' y='190' text-anchor='middle' fill='%23555' font-size='18' font-family='serif'%3E⭐ 人才培训%3C/text%3E%3C/svg%3E"><source src="hero-bg-sm.mp4" type="video/mp4"></video><div class="vinfo"><h3>客服人才转型培训记录</h3><div class="vmeta"><span>人才培育</span><span>培训</span><span>0:15</span></div></div></div>
-      </div>
-    </div>
-  </section>
-</div>
-
 <footer>
   <div class="footer-inner">
     <div class="footer-grid">
@@ -504,7 +486,6 @@
           <a href="#sec-roles" data-nav="overview">岗位团队</a>
           <a href="#sec-stars" data-nav="overview">人才培育</a>
           <a href="#sec-partners" data-nav="overview">招商合作</a>
-          <a href="#videos" data-nav="videos">花絮视频</a>
         </div>
       </div>
       <div class="footer-col">
@@ -688,6 +669,7 @@
   // Hero parallax + 光带
   let scrollY = 0, ticking = false;
   function updateParallax() {
+    updateNavHighlight();
     const heroVideo = document.querySelector('.hero-video');
     if (heroVideo) {
       const ph = Math.min(scrollY / window.innerHeight, 1);
@@ -807,27 +789,28 @@
     });
   });
 
-  // 滚动时高亮当前 section 对应的 tab
-  const scrollTabs = ['sec-rooms', 'sec-roles', 'sec-stars', 'sec-partners'];
-  let secObserver = null;
-  function initSectionHighlight() {
-    if (secObserver) secObserver.disconnect();
-    secObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-          const tab = document.querySelector(`.tab[data-scroll="${id}"]`);
-          if (tab) tab.classList.add('active');
-        }
-      });
-    }, { threshold: 0.3 });
-    scrollTabs.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) secObserver.observe(el);
-    });
+  // 滚动时高亮当前板块对应的 tab（全板块联动）
+  const navSections = [
+    { id: 'hero-section', sel: '.tab[data-panel="overview"]' },
+    { id: 'sec-rooms', sel: '.tab[data-scroll="sec-rooms"]' },
+    { id: 'sec-roles', sel: '.tab[data-scroll="sec-roles"]' },
+    { id: 'sec-stars', sel: '.tab[data-scroll="sec-stars"]' },
+    { id: 'sec-partners', sel: '.tab[data-scroll="sec-partners"]' },
+  ];
+  let curNavTab = '';
+  function updateNavHighlight() {
+    const pos = window.scrollY + window.innerHeight * 0.35;
+    let active = navSections[0];
+    for (const s of navSections) {
+      const el = document.getElementById(s.id);
+      if (el && el.offsetTop <= pos) active = s;
+    }
+    if (active.sel === curNavTab) return;
+    curNavTab = active.sel;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    const tab = document.querySelector('.tab' + active.sel.replace('.tab', ''));
+    if (tab) tab.classList.add('active');
   }
-  initSectionHighlight();
 
   // Init
   // Footer 快速导航
@@ -848,7 +831,7 @@
     renderRoles();
     initTilt();
     initVideoPreview();
-    initSectionHighlight();
+    updateNavHighlight();
     initMagnetic();
     // 兜底：不支持 IntersectionObserver 的环境直接显示全部内容
     if (!('IntersectionObserver' in window)) {
