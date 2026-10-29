@@ -250,6 +250,27 @@
     footer p { font-size: .7rem; color: var(--muted); font-family: var(--font-mono); }
     footer .en { font-size: .6rem; color: var(--dim); letter-spacing: .15em; margin-top: .2rem; opacity: .6; }
 
+    /* === Footer（全站）=== */
+    footer { padding: 3.5rem 2rem 2rem; border-top: 1px solid var(--border); position: relative; z-index: 10; background: linear-gradient(180deg, transparent, rgba(245,241,243,.6)); }
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 2.5rem; margin-bottom: 2.5rem; }
+    .footer-brand img { width: 40px; height: 40px; border-radius: 50%; margin-bottom: .7rem; }
+    .f-title { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--text); }
+    .f-en { font-family: var(--font-mono); font-size: .6rem; color: var(--brand); letter-spacing: .2em; margin: .2rem 0 .8rem; }
+    .f-desc { font-size: .74rem; color: var(--dim); line-height: 1.9; }
+    .f-col-title { font-family: var(--font-mono); font-size: .68rem; color: var(--text); font-weight: 700; letter-spacing: .15em; margin-bottom: .9rem; }
+    .f-links { display: flex; flex-direction: column; gap: .55rem; }
+    .f-links a { font-size: .76rem; color: var(--dim); text-decoration: none; transition: color .3s var(--ease), transform .3s var(--ease); display: inline-block; }
+    .f-links a:hover { color: var(--brand); transform: translateX(3px); }
+    .f-contact-name { font-family: var(--font-display); font-size: .85rem; font-weight: 700; color: var(--text); margin-bottom: .3rem; }
+    .f-phone { font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; color: var(--brand); text-decoration: none; font-variant-numeric: tabular-nums; }
+    .f-phone:hover { text-decoration: underline; }
+    .f-erp { font-family: var(--font-mono); font-size: .6rem; color: var(--muted); margin-top: .3rem; letter-spacing: .06em; }
+    .f-bottom { border-top: 1px solid var(--border); padding-top: 1.4rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+    .f-bottom span { font-size: .68rem; color: var(--muted); font-family: var(--font-mono); }
+    .f-bottom .f-en2 { letter-spacing: .12em; opacity: .7; }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr; gap: 1.8rem; } .f-bottom { flex-direction: column; text-align: center; } }
+
     /* === Tilt / magnetic === */
     .tilt-card { transform-style: preserve-3d; transition: transform .6s var(--ease); will-change: transform; position: relative; overflow: hidden; }
     .tilt-card::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at var(--glare-x,50%) var(--glare-y,50%),rgba(255,255,255,.55),transparent 60%); pointer-events:none; opacity:0; transition:opacity .3s; z-index:5; }
@@ -365,7 +386,7 @@
 <section class="sec" id="sec-rooms">
     <div class="sec-inner">
       <div class="sec-num reveal">04 <span class="dot">·</span> STUDIO <span class="dot">·</span> 直播间矩阵</div>
-      <h2 class="sec-title reveal">10个运营中直播间，覆盖十余种品类。</h2>
+      <h2 class="sec-title reveal">14个运营中直播间，覆盖十余种品类。</h2>
       <p class="sec-desc reveal">BROADCAST STUDIO 24/7</p>
       <div class="room-grid reveal-stagger">
         <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(230,33,42,0.15),rgba(242,184,198,0.1))">京东家电<br>自营旗舰店</div><div class="body"><h3>京东家电自营旗舰店</h3><div class="position">京东家电自营业务的官方直播窗口</div><p class="desc">主营冰箱、洗衣机、电视、厨卫等全品类家电。依托京东家电自营供应链，由品牌厂商与京东采销联合开播，提供正品保障、全国联保与一站式售后。积极承接国家家电以旧换新补贴政策。</p></div></div>
@@ -378,6 +399,10 @@
         <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(230,33,42,0.12),rgba(242,184,198,0.08))">名酒<br>博物馆</div><div class="body"><h3>名酒博物馆</h3><div class="position">京东酒类业务旗下文化型直播项目</div><p class="desc">以"博物馆式"的场景呈现中国酒文化，邀请名酒品牌、品酒师讲解酒类品鉴知识与文化历史，坚持正品溯源、合规经营。</p></div></div>
         <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(255,255,255,0.06),rgba(242,184,198,0.1))">礼品卡<br>直播间</div><div class="body"><h3>礼品卡直播间</h3><div class="position">京东礼品卡业务官方直播间</div><p class="desc">面向个人与企业用户介绍礼品卡的产品形态与使用场景，服务节日馈赠、员工福利、企业采购等需求。</p></div></div>
         <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(242,184,198,0.08),rgba(255,255,255,0.05))">京东垂钓<br>采销</div><div class="body"><h3>京东垂钓采销</h3><div class="position">京东垂钓运动品类采销直播间</div><p class="desc">由京东垂钓品类采销团队运营，联合钓具品牌与专业钓手开展装备测评、垂钓技巧等内容直播，服务广大垂钓运动爱好者。</p></div></div>
+        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(230,33,42,0.14),rgba(242,184,198,0.08))">国家补贴X<br>百亿补贴</div><div class="body"><h3>国家补贴X百亿补贴</h3><div class="position">国家补贴政策核心直播间</div><p class="desc">承接国家补贴与京东百亿补贴双重政策资源，聚焦家电、3C数码等大件商品补贴直降，专业讲解补贴申领流程，曾创618大促单日成交3200万的亮眼战绩。</p></div></div>
+        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(242,184,198,0.15),rgba(230,33,42,0.05))">京东华为手机<br>直播间</div><div class="body"><h3>京东华为手机直播间</h3><div class="position">华为品牌深度合作直播间</div><p class="desc">与华为品牌深度合作的官方直播间，覆盖手机、智能穿戴与全场景生态产品，新品首发、专业讲解与购机指导一站式呈现，深受数码爱好者信赖。</p></div></div>
+        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(230,33,42,0.1),rgba(242,184,198,0.12))">京东手机自营<br>旗舰店</div><div class="body"><h3>京东手机自营旗舰店</h3><div class="position">京东手机自营官方直播窗口</div><p class="desc">京东手机自营业务的官方直播窗口，汇聚主流手机品牌新品与爆款，依托京东自营供应链提供正品保障、一站式购机服务与以旧换新支持。</p></div></div>
+        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(242,184,198,0.18),rgba(230,33,42,0.06))">JD便宜<br>包邮</div><div class="body"><h3>JD便宜包邮</h3><div class="position">高性价比百货好物直播间</div><p class="desc">聚焦高性价比百货好物，覆盖日用百货、食品饮品、个护家清等民生品类，主打"便宜也有好货"，为消费者提供省心购、放心买的选购体验。</p></div></div>
       </div>
     </div>
   </section>
@@ -460,17 +485,43 @@
       </div>
     </div>
   </section>
-  <footer>
-    <div style="display:flex;justify-content:center;gap:4px;margin-bottom:1rem;">
-      <div style="width:3px;background:var(--brand);animation:sig 1.5s infinite;"></div>
-      <div style="width:3px;background:var(--brand);animation:sig2 1.5s infinite;"></div>
-      <div style="width:3px;background:var(--brand);animation:sig3 1.5s infinite;"></div>
-    </div>
-    <img src="joy-logo-sm.jpg" alt="JOY">
-    <p>© 2026 京东客服直播基地 · 北京 · 成都 · 宿迁三大基地</p>
-    <p class="en">JD CUSTOMER SERVICE LIVE · BROADCAST STUDIO 24/7</p>
-  </footer>
 </div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="joy-logo-sm.jpg" alt="JOY">
+        <div class="f-title">京东客服直播基地</div>
+        <div class="f-en">JD CUSTOMER SERVICE LIVE</div>
+        <p class="f-desc">科技驱动 · 客服基因 · 可信直播<br>北京 · 成都 · 宿迁三大直播基地 · 29间标准直播间</p>
+      </div>
+      <div class="footer-col">
+        <div class="f-col-title">快速导航</div>
+        <div class="f-links">
+          <a href="#hero-section" data-nav="overview">团队总览</a>
+          <a href="#sec-rooms" data-nav="overview">直播间矩阵</a>
+          <a href="#sec-roles" data-nav="overview">岗位团队</a>
+          <a href="#sec-stars" data-nav="overview">人才培育</a>
+          <a href="#sec-partners" data-nav="overview">招商合作</a>
+          <a href="#videos" data-nav="videos">花絮视频</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="f-col-title">商务合作</div>
+        <div class="f-contact">
+          <div class="f-contact-name">曹先生</div>
+          <a class="f-phone" href="tel:18136018353">18136018353</a>
+          <div class="f-erp">ERP · caoweikang1</div>
+        </div>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <span>© 2026 京东客服直播基地 · 版权所有</span>
+      <span class="f-en2">JD CUSTOMER SERVICE LIVE · ALL RIGHTS RESERVED</span>
+    </div>
+  </div>
+</footer>
 
 <script>
   const STAFF = [
@@ -779,6 +830,18 @@
   initSectionHighlight();
 
   // Init
+  // Footer 快速导航
+  document.querySelectorAll('footer a[data-nav]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const nav = a.dataset.nav;
+      const tab = document.querySelector('.tab[data-panel="' + nav + '"]');
+      if (tab) tab.click();
+      const target = a.getAttribute('href');
+      setTimeout(() => { const el = document.querySelector(target); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+    });
+  });
+
   // 用 DOMContentLoaded 而非 load：不等外部字体/图片（fonts.googleapis 挂起时 load 可能几十秒不触发，导致页面空白）
   function boot() {
     initRevealObservers();
