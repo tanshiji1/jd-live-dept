@@ -6,8 +6,7 @@
   <title>京东客服直播基地 · JD Live</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
-  <style>
+<style>
     :root {
       --bg:#fbf9fa; --bg2:#f5f1f3;
       --surface:rgba(255,255,255,.62); --surface2:rgba(255,255,255,.38);
@@ -294,6 +293,71 @@
       .contact-card { grid-template-columns: 1fr; text-align: center; }
       .contact-text p { max-width: none; }
     }
+
+    /* === v2: 能力卡 === */
+    .cap-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1.2rem; margin-bottom:2.5rem; }
+    .cap-card { background:var(--surface); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:var(--radius); padding:1.8rem 1.5rem; box-shadow:var(--shadow); transition:border-color .4s var(--ease), transform .4s var(--ease); position:relative; overflow:hidden; }
+    .cap-card:hover { border-color:var(--border-strong); transform:translateY(-5px); }
+    .cap-card .c-num { font-family:var(--font-mono); font-size:.68rem; color:var(--brand); letter-spacing:.18em; margin-bottom:.8rem; }
+    .cap-card h3 { font-family:var(--font-display); font-size:1.05rem; font-weight:700; color:var(--text); margin-bottom:.15rem; }
+    .cap-card .c-en { font-family:var(--font-mono); font-size:.58rem; color:var(--muted); letter-spacing:.14em; margin-bottom:.6rem; display:block; }
+    .cap-card p { font-size:.78rem; color:var(--dim); line-height:1.9; }
+    /* === v2: 优势chips === */
+    .adv-chips { display:flex; flex-wrap:wrap; gap:.6rem; margin-bottom:2.4rem; }
+    .adv-chips span { font-size:.74rem; padding:.45rem 1rem; background:var(--surface); border:1px solid var(--border); border-radius:999px; color:var(--dim); backdrop-filter:blur(8px); }
+    .adv-chips b { color:var(--brand); font-weight:700; }
+    /* === v2: 合作模式卡 === */
+    .mode-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:1.2rem; margin-bottom:2.4rem; }
+    .mode-card { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:1.6rem; backdrop-filter:blur(6px); transition:border-color .4s var(--ease), transform .4s var(--ease); }
+    .mode-card:hover { border-color:var(--border-strong); transform:translateY(-4px); }
+    .mode-card .m-num { font-family:var(--font-mono); font-size:.66rem; color:var(--brand); letter-spacing:.15em; margin-bottom:.6rem; }
+    .mode-card h3 { font-family:var(--font-display); font-size:.98rem; font-weight:700; color:var(--text); margin-bottom:.4rem; }
+    .mode-card p { font-size:.75rem; color:var(--dim); line-height:1.85; }
+    /* === v2: 数据带 === */
+    .stat-strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1rem; margin-bottom:2.4rem; }
+    .stat-strip .ss { background:var(--surface); backdrop-filter:blur(12px); border:1px solid var(--border); border-radius:var(--radius-sm); padding:1.3rem 1rem; text-align:center; box-shadow:var(--shadow); }
+    .stat-strip .ss .v { font-family:var(--font-display); font-size:1.7rem; font-weight:700; color:var(--text); font-variant-numeric:tabular-nums; }
+    .stat-strip .ss .v .red { color:var(--brand); }
+    .stat-strip .ss .k { font-size:.66rem; color:var(--muted); margin-top:.3rem; }
+    /* === v2: 折叠组 === */
+    details.acc { background:var(--surface); backdrop-filter:blur(14px); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:1rem; box-shadow:var(--shadow); overflow:hidden; }
+    details.acc summary { list-style:none; cursor:pointer; padding:1.15rem 1.5rem; display:flex; align-items:center; gap:.6rem; font-family:var(--font-display); font-weight:700; font-size:.94rem; color:var(--text); transition:color .3s var(--ease); user-select:none; }
+    details.acc summary::-webkit-details-marker { display:none; }
+    details.acc summary:hover { color:var(--brand); }
+    details.acc summary .acc-count { font-family:var(--font-mono); font-size:.66rem; color:var(--muted); font-weight:400; }
+    details.acc summary .acc-arrow { margin-left:auto; transition:transform .35s var(--ease); color:var(--brand); font-size:.75rem; }
+    details.acc[open] summary .acc-arrow { transform:rotate(180deg); }
+    details.acc .acc-body { padding:0 1.2rem 1.2rem; }
+    /* === v2: 直播间chip === */
+    .room-chips { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:.9rem; }
+    .room-chip { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:1rem 1.2rem; backdrop-filter:blur(6px); transition:border-color .3s var(--ease), transform .3s var(--ease); }
+    .room-chip:hover { border-color:var(--border-strong); transform:translateY(-3px); }
+    .room-chip h4 { font-family:var(--font-display); font-size:.85rem; font-weight:700; color:var(--text); margin-bottom:.25rem; }
+    .room-chip p { font-size:.7rem; color:var(--dim); line-height:1.7; }
+    /* === v2: 团队全景 === */
+    .team-photo { aspect-ratio:21/8; border:2px dashed var(--border-strong); border-radius:var(--radius); background:var(--surface2); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.5rem; margin-bottom:2.2rem; color:var(--muted); }
+    .team-photo .tp-icon { font-size:2.2rem; opacity:.45; }
+    .team-photo p { font-size:.76rem; letter-spacing:.06em; }
+    .team-photo .tp-tip { font-size:.62rem; opacity:.7; font-family:var(--font-mono); }
+    #team-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:1rem; margin-bottom:2.2rem; }
+    .ts-item { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:1.2rem 1rem; text-align:center; backdrop-filter:blur(10px); box-shadow:var(--shadow); }
+    .ts-item .ts-v { font-family:var(--font-display); font-size:1.6rem; font-weight:700; color:var(--text); }
+    .ts-item .ts-v span { font-size:.7rem; color:var(--brand); margin-left:2px; }
+    .ts-item .ts-k { font-size:.68rem; color:var(--muted); margin-top:.2rem; }
+    /* === v2: 加入我们 === */
+    .join-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1.2rem; margin-bottom:2.2rem; }
+    .join-card { background:var(--surface); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:var(--radius); padding:1.8rem; box-shadow:var(--shadow); transition:border-color .4s var(--ease), transform .4s var(--ease); }
+    .join-card:hover { border-color:var(--border-strong); transform:translateY(-4px); }
+    .join-card .j-tag { display:inline-block; font-family:var(--font-mono); font-size:.6rem; padding:.18rem .65rem; border-radius:999px; background:var(--brand); color:var(--brand-text); font-weight:700; letter-spacing:.08em; margin-bottom:.9rem; }
+    .join-card.j-internal .j-tag { background:var(--accent); color:var(--text); }
+    .join-card h3 { font-family:var(--font-display); font-size:1.02rem; font-weight:700; color:var(--text); margin-bottom:.5rem; }
+    .join-card p { font-size:.79rem; color:var(--dim); line-height:1.9; }
+    .join-card .j-roles { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.9rem; }
+    .join-card .j-roles span { font-size:.68rem; padding:.28rem .75rem; background:var(--surface2); border:1px solid var(--border); border-radius:999px; color:var(--dim); }
+    .hero .hero-tags { display:flex; flex-wrap:wrap; gap:.55rem; justify-content:center; margin-top:1.6rem; }
+    .hero .hero-tags span { font-size:.68rem; padding:.35rem .85rem; background:rgba(255,255,255,.5); border:1px solid var(--border); border-radius:999px; color:var(--dim); backdrop-filter:blur(8px); }
+    .hero .hero-tags span b { color:var(--brand); font-weight:600; }
+    @media (max-width:768px) { .team-photo { aspect-ratio:4/3; } }
   </style>
 </head>
 <body>
@@ -313,144 +377,65 @@
   <div class="grain"></div>
 </div>
 
-
 <nav>
   <div class="logo"><img src="joy-logo-sm.jpg" alt="JOY"><span class="live-dot"></span>京东客服<span class="red">Live</span></div>
   <div class="tabs">
     <button class="tab active" data-panel="overview">总览</button>
-    <button class="tab" data-scroll="sec-rooms">直播间</button>
-    <button class="tab" data-scroll="sec-roles">岗位</button>
-    <button class="tab" data-scroll="sec-stars">人才培育</button>
+    <button class="tab" data-scroll="sec-caps">核心能力</button>
     <button class="tab" data-scroll="sec-partners">招商合作</button>
+    <button class="tab" data-scroll="sec-landscape">商业版图</button>
+    <button class="tab" data-scroll="sec-rooms">直播间</button>
+    <button class="tab" data-scroll="sec-team">团队</button>
+    <button class="tab" data-scroll="sec-talent">人才培育</button>
+    <button class="tab" data-scroll="sec-join">加入我们</button>
   </div>
 </nav>
 
-<!-- ========== 总览 ========== -->
 <div class="panel active" id="overview">
+
+  <!-- Hero -->
   <section class="hero" id="hero-section">
-    <video class="hero-video" autoplay muted loop playsinline><source src="hero-bg-sm.mp4" type="video/mp4"></video>
     <img src="joy-logo-sm.jpg" class="joy-logo" alt="JOY">
     <div class="eyebrow reveal">JD CUSTOMER SERVICE LIVE</div>
     <h1 class="reveal"><span class="hero-char" style="animation-delay:0ms">京</span><span class="hero-char" style="animation-delay:80ms">东</span><span class="hero-char" style="animation-delay:160ms">客</span><span class="hero-char" style="animation-delay:240ms">服</span><span class="hero-char red" style="animation-delay:320ms">直</span><span class="hero-char red" style="animation-delay:400ms">播</span><span class="hero-char" style="animation-delay:560ms">基</span><span class="hero-char" style="animation-delay:640ms">地</span><span class="hero-beam"></span></h1>
     <p class="slogan reveal">科技驱动 · 客服基因 · 可信直播<br>覆盖全品类全形态的矩阵式直播运营团队</p>
-    <div class="scroll" style="display:flex;flex-direction:column;align-items:center;gap:8px;">SCROLL<div style="width:1px;height:40px;background:rgba(255,255,255,0.15);position:relative;overflow:hidden;"><div style="width:100%;height:20px;position:absolute;animation:drop 2s infinite;"></div></div></div>
+    <div class="hero-tags reveal"><span><b>真人直播</b></span><span><b>数字人直播</b></span><span><b>短视频制作</b></span><span><b>数据支持</b></span></div>
+    <div class="scroll" style="display:flex;flex-direction:column;align-items:center;gap:8px;">SCROLL<div style="width:1px;height:40px;background:rgba(33,21,25,.15);position:relative;overflow:hidden;"><div style="width:100%;height:20px;position:absolute;animation:drop 2s infinite;"></div></div></div>
   </section>
 
-  <section class="sec">
+  <!-- 01 核心能力 -->
+  <section class="sec" id="sec-caps">
     <div class="sec-inner">
-      <div class="sec-num reveal">01 <span class="dot">·</span> ABOUT <span class="dot">·</span> 团队总览</div>
-      <h2 class="sec-title reveal">百人团队，各司其职，各显其能。</h2>
-      <p class="sec-desc reveal">京东零售旗下的新型直播团队，依托京东客服体系，深度融合AI技术与专业直播人才。已在全国布局北京、成都、宿迁三大直播基地，自建标准化直播间29个，总场地面积突破3000㎡。</p>
-      <div class="data-grid reveal-stagger">
-        <div class="data-cell"><div class="v" data-count="100">0<span class="red">亿+</span></div><div class="k">预估年度销售规模</div></div>
-        <div class="data-cell"><div class="v" data-count="40">0<span class="red">亿+</span></div><div class="k">26上半年销售规模</div></div>
-        <div class="data-cell"><div class="v" data-count="1">0<span class="red">亿+</span></div><div class="k">单日成交峰值</div></div>
-        <div class="data-cell"><div class="v" data-count="1100">0<span class="red">万+</span></div><div class="k">累计粉丝数</div></div>
-        <div class="data-cell"><div class="v" data-count="200">0<span class="red">万+</span></div><div class="k">单日浏览人次</div></div>
-        <div class="data-cell"><div class="v" data-count="29">0<span class="red">个</span></div><div class="k">标准化直播间</div></div>
-        <div class="data-cell"><div class="v" data-count="90">0<span class="red">+</span></div><div class="k">全职团队</div></div>
-        <div class="data-cell"><div class="v" data-count="40">0<span class="red">+</span></div><div class="k">直播运营项目</div></div>
+      <div class="sec-num reveal">01 <span class="dot">·</span> CAPABILITIES <span class="dot">·</span> 核心能力</div>
+      <h2 class="sec-title reveal">我们能做什么。</h2>
+      <p class="sec-desc reveal">WHAT WE DELIVER · 全链路直播能力，一站配齐</p>
+      <div class="cap-grid reveal-stagger">
+        <div class="cap-card"><div class="c-num">01 / LIVE</div><h3>真人直播</h3><span class="c-en">PROFESSIONAL LIVE COMMERCE</span><p>专业主播阵容全覆盖：品牌自播、大促专场、明星专场，从选品、脚本到转化的全链路把控，带货能力经过百亿级规模验证。</p></div>
+        <div class="cap-card"><div class="c-num">02 / DIGITAL</div><h3>数字人直播</h3><span class="c-en">DIGITAL HUMAN 24/7</span><p>依托京东言犀数字人技术，多形象、多音色7×24小时不间断开播，填补闲时流量，边际成本持续优化。</p></div>
+        <div class="cap-card"><div class="c-num">03 / VIDEO</div><h3>短视频制作</h3><span class="c-en">SHORT VIDEO PRODUCTION</span><p>设计拍剪团队提供直播切片、种草短视频、品牌宣传片等全类型内容生产，在直播间之外持续放大流量。</p></div>
+        <div class="cap-card"><div class="c-num">04 / DATA</div><h3>数据支持</h3><span class="c-en">DATA-DRIVEN INSIGHT</span><p>黄金眼、商智等数据工具构建选品与转化指标体系，用数据驱动每一场直播的货盘与策略。</p></div>
       </div>
     </div>
   </section>
 
-  <section class="sec">
+  <!-- 02 招商合作 -->
+  <section class="sec" id="sec-partners">
     <div class="sec-inner">
-      <div class="sec-num reveal">02 <span class="dot">·</span> BUSINESS <span class="dot">·</span> 业务版图</div>
-      <h2 class="sec-title reveal">全品类全形态，构建直播运营闭环。</h2>
-      <p class="sec-desc reveal">业务覆盖自建、店铺、频道、场播等全类型直播形态，可适配各类大、中、小规模的直播业务需求。</p>
-      <div class="biz-row reveal"><div class="biz-text"><div class="label">LIVE COMMERCE</div><h3>矩阵式直播运营</h3><p>承接京东内外直播运营项目40+，直播涵盖品类十余种，包含美妆护肤、个护家清、食品饮料、母婴用品、日用百货、家具家装、汽车用品、奢侈品、宠物食品、本地生活等。</p><div class="biz-stats"><div class="item"><div class="v red">40+</div><div class="k">运营项目</div></div><div class="item"><div class="v">16个</div><div class="k">运营中直播间</div></div><div class="item"><div class="v">10+</div><div class="k">覆盖品类</div></div></div></div><div class="biz-visual"><img src="biz-2-matrix.jpg" alt="matrix"></div></div>
-      <div class="biz-row reverse reveal"><div class="biz-text"><div class="label">TOP LIVE ROOMS</div><h3>百万粉丝 · 日均百万GMV</h3><p>运营中直播间16个，其中30W粉丝以上10个，50W粉丝以上8个，100W粉丝以上3个。日均转化GMV大于100W直播间8个，日均大于300W直播间5个，大于500W直播间1个。</p><div class="biz-stats"><div class="item"><div class="v red">3个</div><div class="k">百万粉直播间</div></div><div class="item"><div class="v">8个</div><div class="k">日均GMV百万+</div></div><div class="item"><div class="v red">1亿+</div><div class="k">单日成交峰值</div></div></div></div><div class="biz-visual"><img src="biz-1-gmv.jpg" alt="gmv"></div></div>
-      <div class="biz-row reveal"><div class="biz-text"><div class="label">AI + LIVE</div><h3>真人 + 数字人双场景直播</h3><p>依托京东数字人直播技术，搭配黄金眼、商智数据分析工具，构建直播运营指标体系。以数据驱动选品、内容与转化，借助数字人实现7×24小时常态化直播。</p><div class="biz-stats"><div class="item"><div class="v red">7×24h</div><div class="k">数字人直播</div></div><div class="item"><div class="v">全链路</div><div class="k">运营SOP</div></div><div class="item"><div class="v red">100%</div><div class="k">数字化覆盖</div></div></div></div><div class="biz-visual"><img src="biz-4-ai.jpg" alt="ai"></div></div>
-      <div class="biz-row reverse reveal"><div class="biz-text"><div class="label">TRUSTED LIVE</div><h3>客服人才转型 · 官方背书可信</h3><p>京东客服员工自带服务基因，将客户服务经验转化为直播运营能力，破解主播专业度与信任度难题。京东平台官方认证身份出镜，自带平台与品牌双重背书。</p><div class="biz-stats"><div class="item"><div class="v red">90+</div><div class="k">全职团队</div></div><div class="item"><div class="v">3大</div><div class="k">直播基地</div></div><div class="item"><div class="v red">3000㎡+</div><div class="k">总场地面积</div></div></div></div><div class="biz-visual"><img src="biz-3-trust.jpg" alt="trust"></div></div>
-    </div>
-  </section>
-
-  <section class="sec">
-    <div class="sec-inner">
-      <div class="sec-num reveal">03 <span class="dot">·</span> TIMELINE <span class="dot">·</span> 发展历程</div>
-      <h2 class="sec-title reveal">从成立到单日破亿，持续深耕直播赛道。</h2>
-      <p class="sec-desc reveal">REC · LIVE COMMERCE SINCE 2022</p>
-      <div class="timeline">
-        <div class="tl-item reveal"><div class="tl-date">2022.06</div><h3>客服直播代运营业务起步</h3><p>由客服团队自建直播基地，京东客服员工组建直播服务团队，启动直播电商业务。</p></div>
-        <div class="tl-item reveal"><div class="tl-date">2023.03 — 2023.06</div><h3>国补直播间开播 · 618峰值3200万</h3><p>国家补贴X百亿补贴直播间开播，618大促单日GMV峰值突破3200万。</p></div>
-        <div class="tl-item reveal"><div class="tl-date">2024</div><h3>直播间矩阵快速扩展</h3><p>垂钓采销、京东超市茶叶、京东手机自营旗舰店、京东家电自营旗舰店相继开播，双12单场直播订单量突破50万。</p></div>
-        <div class="tl-item reveal"><div class="tl-date">2025</div><h3>单日成交破亿 · 基地落成</h3><p>5月宿迁客服直播家电直播基地落成，11月9日直播间单日成交金额突破1亿。入选江苏2025年数字消费创新场景。</p></div>
-        <div class="tl-item reveal"><div class="tl-date">2026</div><h3>单场破亿 · 粉丝1100万 · 三基地布局</h3><p>5月31日单场直播金额破1亿，7月超3000平新基地落成乔迁，10月累计粉丝数突破1100万，26上半年销售规模突破40亿。</p></div>
+      <div class="sec-num reveal">02 <span class="dot">·</span> PARTNERSHIP <span class="dot">·</span> 招商合作</div>
+      <h2 class="sec-title reveal">与京东客服直播基地同行。</h2>
+      <p class="sec-desc reveal">PARTNERSHIP MODELS · 灵活的合作模式，按需组合</p>
+      <div class="mode-grid reveal-stagger">
+        <div class="mode-card"><div class="m-num">MODE 01</div><h3>直播带货</h3><p>按场次 / ROI合作的带货模式，成熟主播加精选货盘，快速起量、效果可见。</p></div>
+        <div class="mode-card"><div class="m-num">MODE 02</div><h3>直播代运营</h3><p>店铺直播间全托管：主播、运营、场控、设计拍剪整建制输出，品牌零搭建成本。</p></div>
+        <div class="mode-card"><div class="m-num">MODE 03</div><h3>专场策划执行</h3><p>大促专场、明星专场、新品发布的一站式策划与落地执行，自带方法论与复盘体系。</p></div>
+        <div class="mode-card"><div class="m-num">MODE 04</div><h3>数字人直播支持</h3><p>数字人形象定制与7×24开播方案，低成本覆盖全时段流量，真人数字人协同作战。</p></div>
       </div>
-    </div>
-  </section>
-
-<!-- ========== 直播间（首页滚动） ========== -->
-<section class="sec" id="sec-rooms">
-    <div class="sec-inner">
-      <div class="sec-num reveal">04 <span class="dot">·</span> STUDIO <span class="dot">·</span> 直播间矩阵</div>
-      <h2 class="sec-title reveal">14个运营中直播间，覆盖十余种品类。</h2>
-      <p class="sec-desc reveal">BROADCAST STUDIO 24/7</p>
-      <div class="room-grid reveal-stagger">
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(230,33,42,0.15),rgba(242,184,198,0.1))">京东家电<br>自营旗舰店</div><div class="body"><h3>京东家电自营旗舰店</h3><div class="position">京东家电自营业务的官方直播窗口</div><p class="desc">主营冰箱、洗衣机、电视、厨卫等全品类家电。依托京东家电自营供应链，由品牌厂商与京东采销联合开播，提供正品保障、全国联保与一站式售后。积极承接国家家电以旧换新补贴政策。</p></div></div>
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(242,184,198,0.15),rgba(230,33,42,0.05))">您好京东<br>直播间</div><div class="body"><h3>您好京东直播间</h3><div class="position">京东平台级官方直播间</div><p class="desc">展示京东整体品牌形象与优质商品。汇聚3C数码、家电、日用品等多品类精选好物，由专业主播与采销团队联合呈现。在618、年货节等重要消费节点开展主题直播活动。</p></div></div>
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(230,33,42,0.1),rgba(255,255,255,0.05))">京东客服甄选<br>直播间</div><div class="body"><h3>京东客服甄选直播间</h3><div class="position">服务型直播创新项目</div><p class="desc">由京东客服团队打造，依托专业服务能力，在推荐商品的同时为消费者提供在线咨询、选购指导与售后答疑，实现"边看直播、边享服务"的融合体验。</p></div></div>
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(230,33,42,0.2),rgba(0,0,0,0.1))">京东电器<br>直播间</div><div class="body"><h3>京东电器直播间</h3><div class="position">京东五星电器旗下官方直播间</div><p class="desc">京东线下门店与线上直播融合的代表。京东五星电器在全国20个省份运营京东MALL、京东电器城市旗舰店等各类门店超1100家。</p></div></div>
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(242,184,198,0.15),rgba(255,255,255,0.03))">京东指数<br>采销</div><div class="body"><h3>京东指数采销</h3><div class="position">数据能力赋能采销直播</div><p class="desc">以京东指数数据能力赋能采销直播的创新直播间。依托京东指数对市场趋势与消费需求的洞察，实现"数据驱动选品、专业内容带货"。</p></div></div>
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(255,255,255,0.08),rgba(230,33,42,0.05))">京东空调</div><div class="body"><h3>京东空调</h3><div class="position">空调垂类官方直播间</div><p class="desc">专注空调品类，围绕性能讲解、安装服务与选购指导展开，提供送装一体、拆旧焕新等一体化服务。深度参与国家家电以旧换新行动。</p></div></div>
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(242,184,198,0.1),rgba(230,33,42,0.08))">京东家电<br>严选家</div><div class="body"><h3>京东家电严选家</h3><div class="position">京东家电严选频道官方直播间</div><p class="desc">主打"严选品质"家电。聚焦经京东严格筛选的品质家电与趋势新品，为消费者提供省心的一站式选购体验。</p></div></div>
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(230,33,42,0.12),rgba(242,184,198,0.08))">名酒<br>博物馆</div><div class="body"><h3>名酒博物馆</h3><div class="position">京东酒类业务旗下文化型直播项目</div><p class="desc">以"博物馆式"的场景呈现中国酒文化，邀请名酒品牌、品酒师讲解酒类品鉴知识与文化历史，坚持正品溯源、合规经营。</p></div></div>
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(255,255,255,0.06),rgba(242,184,198,0.1))">礼品卡<br>直播间</div><div class="body"><h3>礼品卡直播间</h3><div class="position">京东礼品卡业务官方直播间</div><p class="desc">面向个人与企业用户介绍礼品卡的产品形态与使用场景，服务节日馈赠、员工福利、企业采购等需求。</p></div></div>
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(242,184,198,0.08),rgba(255,255,255,0.05))">京东垂钓<br>采销</div><div class="body"><h3>京东垂钓采销</h3><div class="position">京东垂钓运动品类采销直播间</div><p class="desc">由京东垂钓品类采销团队运营，联合钓具品牌与专业钓手开展装备测评、垂钓技巧等内容直播，服务广大垂钓运动爱好者。</p></div></div>
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(230,33,42,0.14),rgba(242,184,198,0.08))">国家补贴X<br>百亿补贴</div><div class="body"><h3>国家补贴X百亿补贴</h3><div class="position">国家补贴政策核心直播间</div><p class="desc">承接国家补贴与京东百亿补贴双重政策资源，聚焦家电、3C数码等大件商品补贴直降，专业讲解补贴申领流程，曾创618大促单日成交3200万的亮眼战绩。</p></div></div>
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(242,184,198,0.15),rgba(230,33,42,0.05))">京东华为手机<br>直播间</div><div class="body"><h3>京东华为手机直播间</h3><div class="position">华为品牌深度合作直播间</div><p class="desc">与华为品牌深度合作的官方直播间，覆盖手机、智能穿戴与全场景生态产品，新品首发、专业讲解与购机指导一站式呈现，深受数码爱好者信赖。</p></div></div>
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(230,33,42,0.1),rgba(242,184,198,0.12))">京东手机自营<br>旗舰店</div><div class="body"><h3>京东手机自营旗舰店</h3><div class="position">京东手机自营官方直播窗口</div><p class="desc">京东手机自营业务的官方直播窗口，汇聚主流手机品牌新品与爆款，依托京东自营供应链提供正品保障、一站式购机服务与以旧换新支持。</p></div></div>
-        <div class="room-card"><div class="cover" style="background:linear-gradient(135deg,rgba(242,184,198,0.18),rgba(230,33,42,0.06))">JD便宜<br>包邮</div><div class="body"><h3>JD便宜包邮</h3><div class="position">高性价比百货好物直播间</div><p class="desc">聚焦高性价比百货好物，覆盖日用百货、食品饮品、个护家清等民生品类，主打"便宜也有好货"，为消费者提供省心购、放心买的选购体验。</p></div></div>
-      </div>
-    </div>
-  </section>
-
-<!-- ========== 岗位（首页滚动） ========== -->
-<section class="sec" id="sec-roles">
-    <div class="sec-inner">
-      <div class="sec-num reveal">05 <span class="dot">·</span> TEAM <span class="dot">·</span> 岗位介绍</div>
-      <h2 class="sec-title reveal">64人团队，主播、运营、弹幕解答、设计拍剪。</h2>
-      <p class="sec-desc reveal">PROFESSIONAL LIVE TEAM</p>
-      <div id="roles-container"></div>
-    </div>
-  </section>
-
-<!-- ========== 人才培育（首页滚动） ========== -->
-<section class="sec" id="sec-stars">
-    <div class="sec-inner">
-      <div class="sec-num reveal">06 <span class="dot">·</span> TALENT <span class="dot">·</span> 人才培育</div>
-      <h2 class="sec-title reveal">客服人才转型，打造未来将星。</h2>
-      <p class="sec-desc reveal">RISING STARS PROGRAM</p>
-      <div class="reveal" style="display:flex;flex-wrap:wrap;gap:2rem;margin-bottom:3rem;">
-        <div><div style="font-family:var(--font-display);font-size:1.5rem;font-weight:900;color:var(--brand);">90+</div><div style="font-size:0.65rem;color:var(--muted);">全职团队</div></div>
-        <div><div style="font-family:var(--font-display);font-size:1.5rem;font-weight:900;color:var(--title);">46位</div><div style="font-size:0.65rem;color:var(--muted);">在册主播</div></div>
-        <div><div style="font-family:var(--font-display);font-size:1.5rem;font-weight:900;color:var(--brand);">3大</div><div style="font-size:0.65rem;color:var(--muted);">直播基地</div></div>
-        <div><div style="font-family:var(--font-display);font-size:1.5rem;font-weight:900;color:var(--title);">3岗</div><div style="font-size:0.65rem;color:var(--muted);">主播/运营/拍剪</div></div>
-      </div>
-      <h3 class="reveal" style="font-family:var(--font-display);font-size:0.95rem;font-weight:700;color:var(--title);margin-bottom:1.5rem;">客服人才转型故事</h3>
-      <div class="star-grid reveal-stagger">
-        <div class="star-card"><div class="badge">客服转型 · 主播</div><div class="avatar" style="background:rgba(230,33,42,0.2)">转</div><h3>客服 → 全品类主播</h3><span class="s-role">客服专员 → 全品类主播</span><p class="s-bio">从京东客服一线转型直播主播，自带服务基因，擅长国补政策讲解与互动答疑。</p><div class="ach">服务基因转化典范</div></div>
-        <div class="star-card"><div class="badge">客服转型 · 运营</div><div class="avatar" style="background:rgba(242,184,198,0.15)">运</div><h3>客服 → 直播运营</h3><span class="s-role">客服组长 → 直播运营</span><p class="s-bio">从客服管理岗转型直播运营，主导"您好京东直播间"日常运营，年直播场次600场以上。</p><div class="ach">体验运营赋能直播</div></div>
-        <div class="star-card"><div class="badge">客服转型 · 数据</div><div class="avatar" style="background:rgba(230,33,42,0.15)">数</div><h3>客服 → 数据运营</h3><span class="s-role">数据科学 → 直播数据</span><p class="s-bio">运用黄金眼、商智等工具，构建直播运营指标体系，数据驱动选品与转化。</p><div class="ach">数据驱动增长</div></div>
-        <div class="star-card"><div class="badge">客服转型 · 内容</div><div class="avatar" style="background:rgba(242,184,198,0.1)">内</div><h3>客服 → 内容策划</h3><span class="s-role">舆情热点 → 内容策划</span><p class="s-bio">从客服舆情热点团队转型，打造场景化互动答疑直播模式，提升用户粘性。</p><div class="ach">热点驱动内容</div></div>
-      </div>
-
-    </div>
-  </section>
-<!-- ========== 招商合作 ========== -->
-<section class="sec" id="sec-partners">
-    <div class="sec-inner">
-      <div class="sec-num reveal">07 <span class="dot">·</span> PARTNERSHIP <span class="dot">·</span> 招商合作</div>
-      <h2 class="sec-title reveal">与京东客服直播基地同行，让品牌直播少走弯路。</h2>
-      <p class="sec-desc reveal">OFFICIAL · TRUSTED · FULL-SERVICE LIVE COMMERCE</p>
-      <div class="partner-grid reveal-stagger">
-        <div class="partner-card"><div class="p-icon">01</div><h3>官方身份 · 双重背书</h3><p>京东平台官方认证出镜，客服基因自带信任感，破解直播带货的专业度与信任度难题。</p></div>
-        <div class="partner-card"><div class="p-icon">02</div><h3>全形态直播代运营</h3><p>自建直播间、店铺直播、频道运营、活动场播全形态覆盖，40+运营项目、十余种品类的成熟方法论。</p></div>
-        <div class="partner-card"><div class="p-icon">03</div><h3>真人 + 数字人 7×24</h3><p>真人黄金时段 + 京东数字人闲时段，全天候不间断直播，流量利用率最大化。</p></div>
-        <div class="partner-card"><div class="p-icon">04</div><h3>数据驱动运营</h3><p>黄金眼、商智等数据工具加持，从选品、脚本到复盘的全链路SOP，效果可量化、可追踪。</p></div>
-        <div class="partner-card"><div class="p-icon">05</div><h3>一站式全岗位团队</h3><p>90+全职团队：主播、运营、弹幕解答、设计拍剪、社群跟播全配齐，品牌无需自建团队。</p></div>
-        <div class="partner-card"><div class="p-icon">06</div><h3>三大基地 · 29间标准直播间</h3><p>北京、成都、宿迁三大基地，3000㎡专业场地与设备，随时可开播。</p></div>
+      <div class="adv-chips reveal">
+        <span><b>官方身份</b> 双重背书</span>
+        <span><b>一站式</b> 全岗位团队</span>
+        <span><b>7×24</b> 真人+数字人</span>
+        <span><b>数据驱动</b> 全链路运营</span>
+        <span><b>三大基地</b> 专业场地设备</span>
       </div>
       <div class="contact-card reveal">
         <div class="contact-text">
@@ -467,6 +452,145 @@
       </div>
     </div>
   </section>
+
+  <!-- 03 商业版图 -->
+  <section class="sec" id="sec-landscape">
+    <div class="sec-inner">
+      <div class="sec-num reveal">03 <span class="dot">·</span> LANDSCAPE <span class="dot">·</span> 商业版图</div>
+      <h2 class="sec-title reveal">多平台、全形态的业务承接能力。</h2>
+      <p class="sec-desc reveal">FULL-SPECTRUM LIVE COMMERCE</p>
+      <div class="cap-grid reveal-stagger">
+        <div class="cap-card"><div class="c-num">京东APP</div><h3>官方直播间</h3><span class="c-en">OFFICIAL LIVE ROOMS</span><p>承接京东APP站内官方直播间的常态化运营，平台级流量与官方背书。</p></div>
+        <div class="cap-card"><div class="c-num">京东视频</div><h3>内容场运营</h3><span class="c-en">CONTENT LIVE</span><p>深耕"逛"场景下的京东视频内容生态，直播与短视频协同的内容运营。</p></div>
+        <div class="cap-card"><div class="c-num">品牌店铺</div><h3>店铺代播</h3><span class="c-en">STORE LIVE O&M</span><p>为品牌店铺提供直播间代运营，整建制团队输出，按效果交付。</p></div>
+        <div class="cap-card"><div class="c-num">大促与专场</div><h3>专场直播</h3><span class="c-en">CAMPAIGN LIVE</span><p>618、双11大促专场与明星专场（如井陇618京东专场）的策划与执行。</p></div>
+      </div>
+      <div class="stat-strip reveal-stagger">
+        <div class="ss"><div class="v" data-count="100">0<span class="red">亿+</span></div><div class="k">预估年度销售规模</div></div>
+        <div class="ss"><div class="v" data-count="40">0<span class="red">亿+</span></div><div class="k">26上半年销售规模</div></div>
+        <div class="ss"><div class="v" data-count="1">0<span class="red">亿+</span></div><div class="k">单日成交峰值</div></div>
+        <div class="ss"><div class="v" data-count="1100">0<span class="red">万+</span></div><div class="k">累计粉丝数</div></div>
+        <div class="ss"><div class="v" data-count="200">0<span class="red">万+</span></div><div class="k">单日浏览人次</div></div>
+      </div>
+      <p class="reveal" style="font-size:.78rem;color:var(--dim);line-height:2;max-width:640px;">自2022年起步，团队从客服直播代运营发展为横跨北京、成都、宿迁三大基地的矩阵式直播运营组织，持续服务京东全站业务，单日成交峰值突破1亿，入选江苏省数字消费创新场景。</p>
+    </div>
+  </section>
+
+  <!-- 04 直播间矩阵（折叠） -->
+  <section class="sec" id="sec-rooms">
+    <div class="sec-inner">
+      <div class="sec-num reveal">04 <span class="dot">·</span> STUDIO <span class="dot">·</span> 直播间矩阵</div>
+      <h2 class="sec-title reveal">运营中与历史合作直播间。</h2>
+      <p class="sec-desc reveal">BROADCAST STUDIO MATRIX · 点击分组展开</p>
+      <details class="acc reveal">
+        <summary>平台官方直播间 <span class="acc-count">4间</span><span class="acc-arrow">▼</span></summary>
+        <div class="acc-body"><div class="room-chips">
+          <div class="room-chip"><h4>您好京东直播间</h4><p>平台级官方直播间，多品类精选好物与主题直播活动。</p></div>
+          <div class="room-chip"><h4>京东客服甄选直播间</h4><p>服务型直播创新项目，边看直播、边享服务。</p></div>
+          <div class="room-chip"><h4>国家补贴X百亿补贴</h4><p>国家补贴政策核心直播间，曾创618单日成交3200万。</p></div>
+          <div class="room-chip"><h4>JD便宜包邮</h4><p>高性价比百货好物，"便宜也有好货"。</p></div>
+        </div></div>
+      </details>
+      <details class="acc reveal">
+        <summary>家电3C直播间 <span class="acc-count">7间</span><span class="acc-arrow">▼</span></summary>
+        <div class="acc-body"><div class="room-chips">
+          <div class="room-chip"><h4>京东家电自营旗舰店</h4><p>家电自营官方直播窗口，全品类家电与以旧换新。</p></div>
+          <div class="room-chip"><h4>京东电器直播间</h4><p>线上线下融合代表，京东电器门店体系直播窗口。</p></div>
+          <div class="room-chip"><h4>京东空调</h4><p>空调垂类官方直播间，送装一体、拆旧焕新。</p></div>
+          <div class="room-chip"><h4>京东家电严选家</h4><p>严选品质家电与趋势新品，一站式选购。</p></div>
+          <div class="room-chip"><h4>京东华为手机直播间</h4><p>华为品牌深度合作，新品首发与全场景生态。</p></div>
+          <div class="room-chip"><h4>京东手机自营旗舰店</h4><p>手机自营官方直播窗口，正品保障与购机服务。</p></div>
+          <div class="room-chip"><h4>京东指数采销</h4><p>数据能力赋能采销直播，数据驱动选品。</p></div>
+        </div></div>
+      </details>
+      <details class="acc reveal">
+        <summary>品类垂直直播间 <span class="acc-count">3间</span><span class="acc-arrow">▼</span></summary>
+        <div class="acc-body"><div class="room-chips">
+          <div class="room-chip"><h4>名酒博物馆</h4><p>酒类文化型直播，正品溯源、合规经营。</p></div>
+          <div class="room-chip"><h4>礼品卡直播间</h4><p>个人与企业用户的礼品卡使用场景直播。</p></div>
+          <div class="room-chip"><h4>京东垂钓采销</h4><p>垂钓运动品类采销直播，装备测评与技巧分享。</p></div>
+        </div></div>
+      </details>
+      <details class="acc reveal">
+        <summary>历史合作直播间 <span class="acc-count">持续扩充</span><span class="acc-arrow">▼</span></summary>
+        <div class="acc-body"><div class="room-chips">
+          <div class="room-chip"><h4>京东超市茶叶</h4><p>2024年开播的超市茶叶品类直播间，已完成阶段性运营目标。</p></div>
+          <div class="room-chip"><h4>更多历史专场</h4><p>历年大促专场与阶段性合作直播间，欢迎详询商务获取完整合作案例。</p></div>
+        </div></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- 05 团队介绍 -->
+  <section class="sec" id="sec-team">
+    <div class="sec-inner">
+      <div class="sec-num reveal">05 <span class="dot">·</span> TEAM <span class="dot">·</span> 团队介绍</div>
+      <h2 class="sec-title reveal">一支整建制的直播铁军。</h2>
+      <p class="sec-desc reveal">PROFESSIONAL LIVE TEAM</p>
+      <div class="team-photo reveal">
+        <div class="tp-icon">◉</div>
+        <p>京东客服直播基地 · 团队全景</p>
+        <p class="tp-tip">TEAM PHOTO · 待更新</p>
+      </div>
+      <div id="team-stats"></div>
+      <details class="acc reveal">
+        <summary>查看完整团队名册 <span class="acc-count">全员在册</span><span class="acc-arrow">▼</span></summary>
+        <div class="acc-body"><div id="roles-container"></div></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- 06 人才培育 -->
+  <section class="sec" id="sec-talent">
+    <div class="sec-inner">
+      <div class="sec-num reveal">06 <span class="dot">·</span> TALENT <span class="dot">·</span> 人才培育</div>
+      <h2 class="sec-title reveal">持续输出专业主播的培养体系。</h2>
+      <p class="sec-desc reveal">RISING TALENT PIPELINE</p>
+      <p class="reveal" style="font-size:.82rem;color:var(--dim);line-height:2;max-width:660px;margin-bottom:2.2rem;">依托京东客服的服务基因与系统化培养体系，从镜头表达到数据复盘、从选品逻辑到AI工具应用，源源不断地为行业输出专业直播人才。</p>
+      <div class="cap-grid reveal-stagger">
+        <div class="cap-card"><div class="c-num">TRAIN 01</div><h3>镜头表达力</h3><span class="c-en">CAMERA PRESENCE</span><p>系统化的表达训练与实战带教，让每一位主播都能稳定输出高质量的直播内容。</p></div>
+        <div class="cap-card"><div class="c-num">TRAIN 02</div><h3>产品与选品力</h3><span class="c-en">PRODUCT & SELECTION</span><p>基于客服服务经验的产品知识积累，叠加货盘筛选方法论，懂产品更懂用户。</p></div>
+        <div class="cap-card"><div class="c-num">TRAIN 03</div><h3>数据复盘力</h3><span class="c-en">DATA REVIEW</span><p>每场直播都有数据复盘，用指标体系驱动主播与运营的持续进化。</p></div>
+        <div class="cap-card"><div class="c-num">TRAIN 04</div><h3>AI工具应用力</h3><span class="c-en">AI EMPOWERED</span><p>黄金眼、商智与AI工具链的深度应用，让每一位成员都具备人机协同能力。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 加入我们 -->
+  <section class="sec" id="sec-join">
+    <div class="sec-inner">
+      <div class="sec-num reveal">07 <span class="dot">·</span> JOIN US <span class="dot">·</span> 加入我们</div>
+      <h2 class="sec-title reveal">与我们一起，把直播做成事业。</h2>
+      <p class="sec-desc reveal">WE ARE HIRING · 内聘与外聘通道同步开放</p>
+      <div class="join-grid reveal-stagger">
+        <div class="join-card j-internal">
+          <div class="j-tag">内聘 · 京东内部转岗</div>
+          <h3>客服人才转型通道</h3>
+          <p>面向京东客服体系开放主播、运营、设计拍剪等岗位的内部转岗通道，依托成熟的人才培育体系与"新锐之星"战略人才项目，加速你的职业成长。</p>
+          <div class="j-roles"><span>转型主播</span><span>直播运营</span><span>设计拍剪</span><span>数据运营</span></div>
+        </div>
+        <div class="join-card">
+          <div class="j-tag">外聘 · 社会招聘</div>
+          <h3>直播行业人才招募</h3>
+          <p>主播、直播运营、短视频设计拍剪等岗位持续开放，欢迎有直播电商经验的伙伴加入，与京东客服直播基地共同成长。</p>
+          <div class="j-roles"><span>全职主播</span><span>兼职主播</span><span>直播运营</span><span>设计拍剪</span></div>
+        </div>
+      </div>
+      <div class="contact-card reveal">
+        <div class="contact-text">
+          <div class="label">JOIN US</div>
+          <h3>简历投递与岗位咨询</h3>
+          <p>无论内聘转岗还是社会招聘，欢迎随时联系沟通岗位详情与投递方式。</p>
+        </div>
+        <div class="contact-info">
+          <div class="c-label">招聘联系人</div>
+          <div class="c-name">曹先生</div>
+          <a class="c-phone" href="tel:18136018353">18136018353</a>
+          <div class="c-erp">ERP · caoweikang1</div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 
 <footer>
@@ -476,16 +600,19 @@
         <img src="joy-logo-sm.jpg" alt="JOY">
         <div class="f-title">京东客服直播基地</div>
         <div class="f-en">JD CUSTOMER SERVICE LIVE</div>
-        <p class="f-desc">科技驱动 · 客服基因 · 可信直播<br>北京 · 成都 · 宿迁三大直播基地 · 29间标准直播间</p>
+        <p class="f-desc">科技驱动 · 客服基因 · 可信直播<br>北京 · 成都 · 宿迁三大直播基地</p>
       </div>
       <div class="footer-col">
         <div class="f-col-title">快速导航</div>
         <div class="f-links">
           <a href="#hero-section" data-nav="overview">团队总览</a>
-          <a href="#sec-rooms" data-nav="overview">直播间矩阵</a>
-          <a href="#sec-roles" data-nav="overview">岗位团队</a>
-          <a href="#sec-stars" data-nav="overview">人才培育</a>
+          <a href="#sec-caps" data-nav="overview">核心能力</a>
           <a href="#sec-partners" data-nav="overview">招商合作</a>
+          <a href="#sec-landscape" data-nav="overview">商业版图</a>
+          <a href="#sec-rooms" data-nav="overview">直播间矩阵</a>
+          <a href="#sec-team" data-nav="overview">团队介绍</a>
+          <a href="#sec-talent" data-nav="overview">人才培育</a>
+          <a href="#sec-join" data-nav="overview">加入我们</a>
         </div>
       </div>
       <div class="footer-col">
@@ -599,6 +726,19 @@
     {name:'龚菁文',role:'设计&拍剪',room:'宿迁',bio:'稳定输出的视觉工匠，风格多变、交付准时，直播间的可靠后盾。'},
     {name:'夏建强',role:'设计&拍剪',room:'宿迁',bio:'经验丰富的视觉多面手，摄影剪辑一条龙，硬核实力派。'},
   ];
+
+
+
+  // 团队构成统计
+  function renderTeamStats() {
+    const counts = {};
+    STAFF.forEach(s => { if (s.room !== '管理层') counts[s.role] = (counts[s.role]||0)+1; });
+    const el = document.getElementById('team-stats');
+    if (!el) return;
+    const order = ['主播','运营','设计&拍剪','弹幕解答','社群跟播'];
+    el.innerHTML = order.filter(r => counts[r]).map(r =>
+      `<div class="ts-item reveal"><div class="ts-v">${counts[r]}<span>人</span></div><div class="ts-k">${r}</div></div>`).join('');
+  }
 
   function renderRoles() {
     const container = document.getElementById('roles-container');
@@ -721,7 +861,7 @@
   // 3D Tilt
   function initTilt() {
     if (window.innerWidth <= 768) return;
-    document.querySelectorAll('.data-cell, .room-card, .member-card, .star-card, .video-card').forEach(card => {
+    document.querySelectorAll('.cap-card, .mode-card, .room-chip, .member-card, .talent-card, .join-card, .ss').forEach(card => {
       if (card._tiltInit) return; card._tiltInit = true; card.classList.add('tilt-card');
       card.addEventListener('mousemove', (e) => {
         const r = card.getBoundingClientRect();
@@ -747,15 +887,6 @@
     });
   }
 
-  // 视频hover预览
-  function initVideoPreview() {
-    document.querySelectorAll('.video-card').forEach(card => {
-      if (card._vInit) return; card._vInit = true;
-      const video = card.querySelector('video'); let timer;
-      card.addEventListener('mouseenter', () => { timer = setTimeout(() => { if (video) video.play().catch(()=>{}); }, 500); });
-      card.addEventListener('mouseleave', () => { clearTimeout(timer); if (video) { video.pause(); video.currentTime = 0; } });
-    });
-  }
 
   // Tab切换 - 镜头推拉
   document.querySelectorAll('.tab').forEach(tab => {
@@ -792,10 +923,13 @@
   // 滚动时高亮当前板块对应的 tab（全板块联动）
   const navSections = [
     { id: 'hero-section', sel: '.tab[data-panel="overview"]' },
-    { id: 'sec-rooms', sel: '.tab[data-scroll="sec-rooms"]' },
-    { id: 'sec-roles', sel: '.tab[data-scroll="sec-roles"]' },
-    { id: 'sec-stars', sel: '.tab[data-scroll="sec-stars"]' },
+    { id: 'sec-caps', sel: '.tab[data-scroll="sec-caps"]' },
     { id: 'sec-partners', sel: '.tab[data-scroll="sec-partners"]' },
+    { id: 'sec-landscape', sel: '.tab[data-scroll="sec-landscape"]' },
+    { id: 'sec-rooms', sel: '.tab[data-scroll="sec-rooms"]' },
+    { id: 'sec-team', sel: '.tab[data-scroll="sec-team"]' },
+    { id: 'sec-talent', sel: '.tab[data-scroll="sec-talent"]' },
+    { id: 'sec-join', sel: '.tab[data-scroll="sec-join"]' },
   ];
   let curNavTab = '';
   function updateNavHighlight() {
@@ -828,9 +962,9 @@
   // 用 DOMContentLoaded 而非 load：不等外部字体/图片（fonts.googleapis 挂起时 load 可能几十秒不触发，导致页面空白）
   function boot() {
     initRevealObservers();
+    renderTeamStats();
     renderRoles();
     initTilt();
-    initVideoPreview();
     updateNavHighlight();
     initMagnetic();
     // 兜底：不支持 IntersectionObserver 的环境直接显示全部内容
@@ -850,22 +984,7 @@
       if (r.top < window.innerHeight) el.classList.add('in');
     });
   }, 3000);
+
 </script>
-
-
-<!-- 实现说明 (1-18条对应)
-1. 全局氛围: 背景改#050508, noise颗粒opacity0.03, dust粒子20个, 玻璃卡片双层质感, LIVE红点pulse, REC标记, 页脚信号条3根, sec-num红色Playfair斜体
-2. 景深五层: 星点层(orb层替代), 光球层3个blur80px椭圆漂移24s/32s/40s, 光带层3条水平线30%/50%/70%, 前景柔焦层(orb), 鼠标光晕双环(内环即时+外环lerp150ms)
-3. Hero: 拆字动效8字stagger80ms blur入场, 红色下划线光束1.7s后scaleX, 鼠标视差±8px, 镜头光斑(orb层), scroll游标@keyframes drop
-4. 数据仪表: tabular-nums, 计数1.6s, hover扫描线@keyframes scan, hover scale1.06+text-shadow
-5. 3D Tilt: perspective900px rotateX±5 rotateY±7, 光泽追踪::before --glare-x/--glare-y, overflow:hidden
-6. room-card: 信号灯#00FF88微闪, LIVE标签红底白字, hover缩略图左移(过渡)
-7. 时间线: 信号轨道(保留虚线+光晕节点), 节点hover虚线描边
-8. member-card: role色块, hover上滑遮罩.bio-full, 遮罩黑色渐变
-9. 视频卡片: hover 500ms后play预览, 鼠标离开pause+currentTime=0
-10. Tab: View Transitions API(startViewTransition fallback), 进度光束navBeam, tab下划线scaleX, 镜头推拉scale0.96→1
-11. 性能: rAF throttle mousemove, backdrop-filter≤8, 移动端关闭tilt/光晕外环/dust/光带
-12. 交付: STAFF数据100%保留, 无乱码, 单文件CSS+JS内联, img loading=lazy
--->
 </body>
 </html>
