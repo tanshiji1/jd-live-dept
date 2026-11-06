@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>京东客服直播基地 · 内部管理台</title>
+<style>
+  :root {
+    --bg:#fbf9fa; --bg2:#f5f1f3;
+    --surface:rgba(255,255,255,.62); --surface2:rgba(255,255,255,.38);
+    --text:#211519; --dim:#8d8290; --muted:#a89aa0;
+    --brand:#e6212a; --brand-text:#ffffff; --accent:#f2b8c6;
+    --border:rgba(230,33,42,.14); --border-strong:rgba(230,33,42,.28);
+    --radius:22px; --radius-sm:14px;
+    --shadow:0 24px 60px rgba(226,60,74,.14);
+    --ease:cubic-bezier(.16,1,.3,1);
+    --font-display:'Space Grotesk','Segoe UI',system-ui,sans-serif;
+    --font-body:system-ui,-apple-system,'Segoe UI',sans-serif;
+    --font-mono:ui-monospace,'SF Mono',Menlo,monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:var(--font-body); background:var(--bg); color:var(--dim); line-height:1.8; -webkit-font-smoothing:antialiased; }
+  .depth-bg { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .depth-orb { position:absolute; border-radius:50%; filter:blur(90px); }
+  .orb-1 { width:640px; height:640px; background:radial-gradient(circle, rgba(230,33,42,.10), transparent 65%); top:-12%; left:-8%; }
+  .orb-2 { width:720px; height:720px; background:radial-gradient(circle, rgba(242,184,198,.14), transparent 65%); top:32%; right:-12%; }
+  nav { position:fixed; top:0; left:0; right:0; z-index:1000; height:56px; display:flex; align-items:center; padding:0 1.6rem; gap:1rem; background:rgba(251,249,250,.72); backdrop-filter:blur(18px) saturate(160%); border-bottom:1px solid var(--border); overflow-x:auto; scrollbar-width:none; }
+  nav::-webkit-scrollbar { display:none; }
+  nav .logo { font-family:var(--font-display); font-weight:700; font-size:.9rem; white-space:nowrap; margin-right:.6rem; flex-shrink:0; display:flex; align-items:center; gap:.4rem; color:var(--text); }
+  nav .logo .red { color:var(--brand); }
+  nav .tag-internal { font-family:var(--font-mono); font-size:.55rem; color:var(--brand-text); background:var(--brand); border-radius:999px; padding:.1rem .5rem; letter-spacing:.1em; }
+  nav .tabs { display:flex; gap:.3rem; flex-shrink:0; }
+  nav .tab { color:var(--dim); background:none; border:none; padding:.32rem .8rem; font-size:.72rem; cursor:pointer; white-space:nowrap; border-radius:999px; transition:all .3s var(--ease); font-family:var(--font-body); font-weight:500; }
+  nav .tab:hover { color:var(--text); background:var(--surface2); }
+  nav .tab.active { color:var(--brand-text); background:var(--brand); font-weight:700; }
+  main { position:relative; z-index:10; padding:6.5rem 2rem 4rem; }
+  .sec-inner { max-width:1100px; margin:0 auto 5rem; }
+  .sec-num { font-family:var(--font-mono); font-size:.68rem; letter-spacing:.25em; color:var(--brand); margin-bottom:.8rem; }
+  .sec-title { font-family:var(--font-display); font-size:clamp(1.4rem,3.5vw,2.2rem); font-weight:700; color:var(--text); margin-bottom:.4rem; }
+  .sec-desc { font-family:var(--font-mono); font-size:.8rem; color:var(--muted); margin-bottom:2rem; }
+  .card { background:var(--surface); backdrop-filter:blur(16px); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:1.6rem; margin-bottom:1.4rem; }
+  .card h3 { font-family:var(--font-display); font-size:.95rem; font-weight:700; color:var(--text); margin-bottom:1rem; display:flex; align-items:center; gap:.5rem; }
+  .card h3 .hint { font-family:var(--font-mono); font-size:.58rem; color:var(--accent); font-weight:400; letter-spacing:.1em; }
+  table { width:100%; border-collapse:collapse; font-size:.76rem; }
+  th { font-family:var(--font-mono); font-size:.62rem; letter-spacing:.1em; color:var(--muted); text-align:left; padding:.6rem .7rem; border-bottom:1px solid var(--border-strong); white-space:nowrap; }
+  td { padding:.65rem .7rem; border-bottom:1px solid var(--border); color:var(--dim); white-space:nowrap; }
+  tr:hover td { background:var(--surface2); }
+  td.t-main { color:var(--text); font-weight:600; }
+  .pill { display:inline-block; font-size:.6rem; padding:.12rem .55rem; border-radius:999px; font-family:var(--font-mono); }
+  .pill.ok { background:rgba(46,164,79,.12); color:#2e944f; }
+  .pill.run { background:rgba(230,33,42,.1); color:var(--brand); }
+  .pill.wait { background:rgba(185,139,255,.12); color:#8d6fbf; }
+  .pill.done { background:rgba(141,130,144,.14); color:var(--muted); }
+  .num { font-family:var(--font-display); font-variant-numeric:tabular-nums; color:var(--text); }
+  .num.pos { color:#2e944f; } .num.neg { color:var(--brand); }
+  .org-tree { display:flex; flex-direction:column; gap:.8rem; }
+  .org-level { display:flex; flex-wrap:wrap; gap:.7rem; }
+  .org-node { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:.7rem 1.1rem; font-size:.76rem; color:var(--text); backdrop-filter:blur(6px); }
+  .org-node b { color:var(--brand); font-weight:700; margin-right:.4rem; }
+  .org-node .sub { display:block; font-size:.64rem; color:var(--muted); }
+  .org-label { font-family:var(--font-mono); font-size:.6rem; color:var(--muted); letter-spacing:.15em; margin-bottom:.3rem; }
+  .banner { font-family:var(--font-mono); font-size:.62rem; color:var(--muted); background:var(--surface2); border:1px dashed var(--border-strong); border-radius:var(--radius-sm); padding:.7rem 1rem; margin-bottom:2rem; letter-spacing:.05em; }
+  footer { position:relative; z-index:10; text-align:center; padding:2rem; border-top:1px solid var(--border); font-family:var(--font-mono); font-size:.65rem; color:var(--muted); }
+  .reveal { opacity:0; transform:translateY(30px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+  .reveal.in { opacity:1; transform:translateY(0); }
+  @media (max-width:768px) { main { padding:5.5rem 1rem 3rem; } .card { padding:1.1rem; } }
+</style>
+</head>
+<body>
+<div class="depth-bg"><div class="depth-orb orb-1"></div><div class="depth-orb orb-2"></div></div>
+<nav>
+  <div class="logo">京东客服<span class="red">Live</span> <span class="tag-internal">INTERNAL</span></div>
+  <div class="tabs">
+    <button class="tab active" data-target="m1">运营管理</button>
+    <button class="tab" data-target="m2">业务管理</button>
+    <button class="tab" data-target="m3">商务合作</button>
+    <button class="tab" data-target="m4">专场信息</button>
+    <button class="tab" data-target="m5">损益</button>
+    <button class="tab" data-target="m6">组织管理</button>
+  </div>
+</nav>
+<main>
+  <div class="banner">INTERNAL CONSOLE · 内部管理台原型 · 当前为示例数据结构，待接入真实数据源（排期系统 / 台账 / BI）</div>
+
+  <!-- 运营管理 -->
+  <section class="sec-inner" id="m1">
+    <div class="sec-num reveal">M1 · OPERATIONS</div>
+    <h2 class="sec-title reveal">运营管理</h2>
+    <p class="sec-desc reveal">直播排期 · 运营指标 · 复盘跟踪</p>
+    <div class="card reveal">
+      <h3>直播排期表 <span class="hint">示例数据</span></h3>
+      <table><thead><tr><th>直播间</th><th>日期</th><th>场次</th><th>主播</th><th>运营</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td class="t-main">您好京东直播间</td><td>11-06</td><td>10:00-22:00</td><td>小马哥 / 笑笑</td><td>陈小露</td><td><span class="pill run">直播中</span></td></tr>
+        <tr><td class="t-main">京东家电自营旗舰店</td><td>11-06</td><td>14:00-20:00</td><td>天天</td><td>孔浩</td><td><span class="pill run">直播中</span></td></tr>
+        <tr><td class="t-main">京东华为手机直播间</td><td>11-07</td><td>19:00-23:00</td><td>双双</td><td>宋雯</td><td><span class="pill ok">已排期</span></td></tr>
+        <tr><td class="t-main">国家补贴X百亿补贴</td><td>11-08</td><td>大促专场</td><td>待定</td><td>刘力维</td><td><span class="pill wait">筹备中</span></td></tr>
+      </tbody></table>
+    </div>
+    <div class="card reveal">
+      <h3>运营指标看板 <span class="hint">待接入 BI / 黄金眼</span></h3>
+      <table><thead><tr><th>直播间</th><th>GMV（昨日）</th><th>转化率</th><th>涨粉</th><th>环比</th></tr></thead>
+      <tbody>
+        <tr><td class="t-main">京东电器直播间</td><td class="num">¥3,200,000</td><td class="num">3.8%</td><td class="num">+12,400</td><td class="num pos">+18%</td></tr>
+        <tr><td class="t-main">京东空调</td><td class="num">¥1,450,000</td><td class="num">2.9%</td><td class="num">+6,800</td><td class="num pos">+6%</td></tr>
+        <tr><td class="t-main">名酒博物馆</td><td class="num">¥860,000</td><td class="num">4.2%</td><td class="num">+3,200</td><td class="num neg">-3%</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <!-- 业务管理 -->
+  <section class="sec-inner" id="m2">
+    <div class="sec-num reveal">M2 · PROJECTS</div>
+    <h2 class="sec-title reveal">业务管理</h2>
+    <p class="sec-desc reveal">运营项目台账 · 进度跟踪</p>
+    <div class="card reveal">
+      <h3>运营项目列表 <span class="hint">示例数据</span></h3>
+      <table><thead><tr><th>项目</th><th>类型</th><th>负责人</th><th>进度</th><th>状态</th><th>备注</th></tr></thead>
+      <tbody>
+        <tr><td class="t-main">品牌店铺代播 · 示例项目A</td><td>代运营</td><td>周立安</td><td>80%</td><td><span class="pill run">进行中</span></td><td>双11冲刺期</td></tr>
+        <tr><td class="t-main">明星专场 · 井陇618专场</td><td>专场策划</td><td>谭世纪</td><td>100%</td><td><span class="pill done">已完结</span></td><td>复盘归档</td></tr>
+        <tr><td class="t-main">数字人开播方案 · 示例品牌B</td><td>数字人</td><td>张善信</td><td>40%</td><td><span class="pill wait">筹备中</span></td><td>形象定制中</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <!-- 商务合作 -->
+  <section class="sec-inner" id="m3">
+    <div class="sec-num reveal">M3 · PARTNERSHIP</div>
+    <h2 class="sec-title reveal">商务合作信息</h2>
+    <p class="sec-desc reveal">合作方台账 · 商机跟踪</p>
+    <div class="card reveal">
+      <h3>合作台账 <span class="hint">示例数据</span></h3>
+      <table><thead><tr><th>合作方</th><th>合作模式</th><th>联系人</th><th>阶段</th><th>预计签约</th></tr></thead>
+      <tbody>
+        <tr><td class="t-main">示例品牌A（家电）</td><td>店铺代运营</td><td>待补充</td><td><span class="pill run">方案沟通</span></td><td>2026-11</td></tr>
+        <tr><td class="t-main">示例品牌B（美妆）</td><td>专场策划</td><td>待补充</td><td><span class="pill wait">需求确认</span></td><td>2026-12</td></tr>
+        <tr><td class="t-main">示例品牌C（3C）</td><td>数字人直播</td><td>待补充</td><td><span class="pill ok">已签约</span></td><td>已生效</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <!-- 专场信息 -->
+  <section class="sec-inner" id="m4">
+    <div class="sec-num reveal">M4 · CAMPAIGN</div>
+    <h2 class="sec-title reveal">专场信息</h2>
+    <p class="sec-desc reveal">大促专场 · 明星专场日历</p>
+    <div class="card reveal">
+      <h3>专场日历 <span class="hint">示例数据</span></h3>
+      <table><thead><tr><th>日期</th><th>专场</th><th>平台/直播间</th><th>负责人</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td>2026-11-09</td><td class="t-main">双11家电信任日专场</td><td>京东家电自营旗舰店</td><td>谭世纪</td><td><span class="pill ok">已就绪</span></td></tr>
+        <tr><td>2026-11-11</td><td class="t-main">双11巅峰之夜专场</td><td>您好京东直播间</td><td>周立安</td><td><span class="pill wait">筹备中</span></td></tr>
+        <tr><td>2026-12-01</td><td class="t-main">年末好物节专场</td><td>国家补贴X百亿补贴</td><td>刘力维</td><td><span class="pill wait">排期中</span></td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <!-- 损益 -->
+  <section class="sec-inner" id="m5">
+    <div class="sec-num reveal">M5 · P&L</div>
+    <h2 class="sec-title reveal">损益</h2>
+    <p class="sec-desc reveal">收入 · 成本 · 毛利（月度示例结构）</p>
+    <div class="card reveal">
+      <h3>月度损益表 <span class="hint">示例数据 · 待接财务口径</span></h3>
+      <table><thead><tr><th>月份</th><th>直播收入</th><th>分成收入</th><th>人力成本</th><th>场地/设备</th><th>毛利</th><th>毛利率</th></tr></thead>
+      <tbody>
+        <tr><td class="t-main">2026-07</td><td class="num">¥8,200万</td><td class="num">¥1,100万</td><td class="num">-¥180万</td><td class="num">-¥95万</td><td class="num pos">¥9,025万</td><td class="num pos">97.3%</td></tr>
+        <tr><td class="t-main">2026-08</td><td class="num">¥7,600万</td><td class="num">¥980万</td><td class="num">-¥180万</td><td class="num">-¥92万</td><td class="num pos">¥8,308万</td><td class="num pos">97.2%</td></tr>
+        <tr><td class="t-main">2026-09</td><td class="num">¥9,100万</td><td class="num">¥1,250万</td><td class="num">-¥185万</td><td class="num">-¥96万</td><td class="num pos">¥10,069万</td><td class="num pos">97.1%</td></tr>
+      </tbody></table>
+    </div>
+  </section>
+
+  <!-- 组织管理 -->
+  <section class="sec-inner" id="m6">
+    <div class="sec-num reveal">M6 · ORGANIZATION</div>
+    <h2 class="sec-title reveal">组织管理</h2>
+    <p class="sec-desc reveal">组织架构 · 岗位编制</p>
+    <div class="card reveal">
+      <h3>组织架构</h3>
+      <div class="org-tree">
+        <div><div class="org-label">L1 · 管理层</div><div class="org-level">
+          <div class="org-node"><b>王蒙</b>经理<span class="sub">客服团队C3负责人 · 京东客服直播间负责人</span></div>
+        </div></div>
+        <div><div class="org-label">L2 · 主管</div><div class="org-level">
+          <div class="org-node"><b>曹伟康</b>主管<span class="sub">新锐之星出身 · 直播基地管理</span></div>
+          <div class="org-node"><b>李应坤</b>主管<span class="sub">成都直播基地</span></div>
+        </div></div>
+        <div><div class="org-label">L3 · 一线团队（92人）</div><div class="org-level">
+          <div class="org-node"><b>主播组</b>46人<span class="sub">14个运营中直播间</span></div>
+          <div class="org-node"><b>运营组</b>36人<span class="sub">排期 / 数据 / 招商 / 货盘</span></div>
+          <div class="org-node"><b>设计拍剪</b>8人<span class="sub">成都 / 宿迁</span></div>
+          <div class="org-node"><b>弹幕解答 · 社群跟播</b>3人</div>
+        </div></div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>© 2026 京东客服直播基地 · 内部管理台 · INTERNAL USE ONLY</footer>
+<script>
+  // Tab 锚点滚动 + 高亮
+  const sections = ['m1','m2','m3','m4','m5','m6'];
+  document.querySelectorAll('nav .tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const el = document.getElementById(tab.dataset.target);
+      if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  });
+  window.addEventListener('scroll', () => {
+    let cur = sections[0];
+    sections.forEach(id => { const el = document.getElementById(id); if (el && el.offsetTop <= scrollY + innerHeight*.35) cur = id; });
+    document.querySelectorAll('nav .tab').forEach(t => t.classList.toggle('active', t.dataset.target === cur));
+  }, { passive:true });
+  // 渐入
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold:.08 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
