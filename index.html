@@ -34,9 +34,14 @@
     /* === mesh 光球（fixed，不随滚动）=== */
     .depth-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
     .depth-orb { position: absolute; border-radius: 50%; filter: blur(90px); will-change: transform; transition: transform .8s ease-out; }
-    .orb-1 { width: 640px; height: 640px; background: radial-gradient(circle, rgba(230,33,42,.10), transparent 65%); top: -12%; left: -8%; animation: orbDrift1 24s ease-in-out infinite; }
-    .orb-2 { width: 720px; height: 720px; background: radial-gradient(circle, rgba(242,184,198,.14), transparent 65%); top: 32%; right: -12%; animation: orbDrift2 32s ease-in-out infinite; }
-    .orb-3 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(230,33,42,.07), transparent 65%); bottom: 8%; left: 28%; animation: orbDrift3 40s ease-in-out infinite; }
+    .orb-wrap { position: absolute; }
+    .orb-wrap.ow1 { top: -12%; left: -8%; }
+    .orb-wrap.ow2 { top: 32%; right: -12%; }
+    .orb-wrap.ow3 { bottom: 8%; left: 28%; }
+    .orb-wrap .depth-orb { position: relative; top: 0; left: 0; right: 0; bottom: 0; }
+    .orb-1 { width: 640px; height: 640px; background: radial-gradient(circle, rgba(230,33,42,.10), transparent 65%); animation: orbDrift1 24s ease-in-out infinite; }
+    .orb-2 { width: 720px; height: 720px; background: radial-gradient(circle, rgba(242,184,198,.14), transparent 65%); animation: orbDrift2 32s ease-in-out infinite; }
+    .orb-3 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(230,33,42,.07), transparent 65%); animation: orbDrift3 40s ease-in-out infinite; }
     @keyframes orbDrift1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(70px,-50px) scale(1.12)} 66%{transform:translate(-40px,60px) scale(.94)} }
     @keyframes orbDrift2 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(-80px,70px) scale(.9)} 66%{transform:translate(50px,-60px) scale(1.08)} }
     @keyframes orbDrift3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(60px,-80px) scale(1.06)} }
@@ -357,6 +362,9 @@
     .hero .hero-tags { display:flex; flex-wrap:wrap; gap:.55rem; justify-content:center; margin-top:1.6rem; }
     .hero .hero-tags span { font-size:.68rem; padding:.35rem .85rem; background:rgba(255,255,255,.5); border:1px solid var(--border); border-radius:999px; color:var(--dim); backdrop-filter:blur(8px); }
     .hero .hero-tags span b { color:var(--brand); font-weight:600; }
+    .scroll-progress { position:fixed; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--brand),var(--accent)); transform-origin:left; transform:scaleX(0); z-index:1002; pointer-events:none; }
+    .st-char { display:inline-block; will-change:transform,opacity; }
+    #bgCanvas { position:fixed; inset:0; z-index:1; pointer-events:none; }
     @media (max-width:768px) { .team-photo { aspect-ratio:4/3; } }
   </style>
 </head>
@@ -369,13 +377,13 @@
 <div class="cursor-glow" id="cursorGlow"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="nav-beam" id="navBeam"></div>
-<div id="dustContainer" style="position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden;"></div>
 <div class="depth-bg">
-  <div class="depth-orb orb-1"></div>
-  <div class="depth-orb orb-2"></div>
-  <div class="depth-orb orb-3"></div>
+  <div class="orb-wrap ow1"><div class="depth-orb orb-1"></div></div>
+  <div class="orb-wrap ow2"><div class="depth-orb orb-2"></div></div>
+  <div class="orb-wrap ow3"><div class="depth-orb orb-3"></div></div>
   <div class="grain"></div>
 </div>
+<canvas id="bgCanvas"></canvas>
 
 <nav>
   <div class="logo"><img src="joy-logo-sm.jpg" alt="JOY"><span class="live-dot"></span>京东客服<span class="red">Live</span></div>
@@ -854,9 +862,45 @@
   }
   ringLerp();
 
-  // Dust粒子
-  const dc = document.getElementById('dustContainer');
-  if (dc) { for (let i = 0; i < 20; i++) { const d = document.createElement('div'); d.className = 'dust'; d.style.left = Math.random()*100+'%'; d.style.top = Math.random()*100+'%'; d.style.animationDelay = Math.random()*8+'s'; d.style.animationDuration = (6+Math.random()*4)+'s'; dc.appendChild(d); } }
+  // Canvas 粒子背景（原生实现，替代p5）
+  (function () {
+    const canvas = document.getElementById('bgCanvas');
+    if (!canvas || window.innerWidth <= 768) return;
+    const ctx = canvas.getContext('2d');
+    let W, H, parts = [];
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    const COLORS = [[230,33,42,.10],[242,184,198,.18],[230,33,42,.06],[242,184,198,.12]];
+    for (let i = 0; i < 46; i++) {
+      parts.push({ x: Math.random()*W, y: Math.random()*H, r: 1+Math.random()*2.2,
+        vx: (Math.random()-.5)*.18, vy: -.06-Math.random()*.22, c: COLORS[i % COLORS.length] });
+    }
+    let running = true;
+    document.addEventListener('visibilitychange', () => { running = !document.hidden; });
+    (function tick() {
+      requestAnimationFrame(tick);
+      if (!running) return;
+      ctx.clearRect(0, 0, W, H);
+      for (const p of parts) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.y < -10) { p.y = H + 10; p.x = Math.random()*W; }
+        if (p.x < -10) p.x = W + 10; if (p.x > W + 10) p.x = -10;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283);
+        ctx.fillStyle = 'rgba(' + p.c[0] + ',' + p.c[1] + ',' + p.c[2] + ',' + p.c[3] + ')';
+        ctx.fill();
+      }
+      // 近距连线
+      for (let i = 0; i < parts.length; i++) for (let j = i+1; j < parts.length; j++) {
+        const a = parts[i], b = parts[j], dx = a.x-b.x, dy = a.y-b.y, d2 = dx*dx+dy*dy;
+        if (d2 < 8100) {
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = 'rgba(230,33,42,' + (0.05 * (1 - d2/8100)) + ')';
+          ctx.lineWidth = .6; ctx.stroke();
+        }
+      }
+    })();
+  })();
 
   // 3D Tilt
   function initTilt() {
@@ -966,7 +1010,7 @@
     renderRoles();
     initTilt();
     updateNavHighlight();
-    initMagnetic();
+    if (!window.gsap) initMagnetic();
     // 兜底：不支持 IntersectionObserver 的环境直接显示全部内容
     if (!('IntersectionObserver' in window)) {
       document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => el.classList.add('in'));
@@ -985,6 +1029,72 @@
     });
   }, 3000);
 
+</script>
+<script src="gsap.min.js"></script>
+<script src="ScrollTrigger.min.js"></script>
+<script>
+  // ===== GSAP 动效层（库未加载时自动降级为原生动效）=====
+  if (window.gsap) {
+    gsap.registerPlugin(ScrollTrigger);
+
+    // 1. 顶部滚动进度条
+    const sp = document.createElement('div');
+    sp.className = 'scroll-progress';
+    document.body.appendChild(sp);
+    gsap.to(sp, { scaleX: 1, ease: 'none',
+      scrollTrigger: { trigger: document.documentElement, start: 'top top', end: 'bottom bottom', scrub: .3 } });
+
+    // 2. 板块标题逐字入场（替换原reveal）
+    document.querySelectorAll('.sec-title').forEach(el => {
+      const chars = [];
+      const walk = (node) => {
+        node.childNodes.forEach(n => {
+          if (n.nodeType === 3) {
+            const frag = document.createDocumentFragment();
+            n.textContent.split('').forEach(c => {
+              if (c.trim() === '') { frag.appendChild(document.createTextNode(c)); return; }
+              const s = document.createElement('span'); s.className = 'st-char'; s.textContent = c;
+              frag.appendChild(s); chars.push(s);
+            });
+            node.replaceChild(frag, n);
+          } else if (n.nodeType === 1) walk(n);
+        });
+      };
+      walk(el);
+      el.classList.remove('reveal');
+      gsap.from(chars, { opacity: 0, y: 24, filter: 'blur(5px)', stagger: .03, duration: .7, ease: 'power3.out',
+        scrollTrigger: { trigger: el, start: 'top 88%' } });
+    });
+
+    // 3. 光球滚动视差
+    gsap.to('.orb-wrap.ow1', { y: 200, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 1.2 } });
+    gsap.to('.orb-wrap.ow2', { y: -160, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 1.2 } });
+    gsap.to('.orb-wrap.ow3', { y: 150, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 1.2 } });
+
+    // 4. 数据带横向微漂
+    gsap.to('.stat-strip', { xPercent: -2.5, ease: 'none',
+      scrollTrigger: { trigger: '.stat-strip', start: 'top bottom', end: 'bottom top', scrub: 1 } });
+
+    // 5. 磁吸 hover（quickTo，比手写更顺滑）
+    document.querySelectorAll('nav .tab, .live-tag, .adv-chips span, .hero-tags span').forEach(el => {
+      const xTo = gsap.quickTo(el, 'x', { duration: .4, ease: 'power3' });
+      const yTo = gsap.quickTo(el, 'y', { duration: .4, ease: 'power3' });
+      el.addEventListener('mousemove', e => {
+        const r = el.getBoundingClientRect();
+        xTo((e.clientX - r.left - r.width/2) * .35);
+        yTo((e.clientY - r.top - r.height/2) * .45);
+      });
+      el.addEventListener('mouseleave', () => { xTo(0); yTo(0); });
+    });
+
+    // 6. 折叠组展开时的卡片瀑布入场
+    document.querySelectorAll('details.acc').forEach(d => {
+      d.addEventListener('toggle', () => {
+        if (d.open) gsap.fromTo(d.querySelectorAll('.room-chip, .group-title, .member-card'),
+          { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .45, stagger: .045, ease: 'power2.out', overwrite: 'auto', clearProps: 'all' });
+      });
+    });
+  }
 </script>
 </body>
 </html>
