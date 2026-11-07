@@ -363,6 +363,7 @@
     .hero .hero-tags span { font-size:.68rem; padding:.35rem .85rem; background:rgba(255,255,255,.5); border:1px solid var(--border); border-radius:999px; color:var(--dim); backdrop-filter:blur(8px); }
     .hero .hero-tags span b { color:var(--brand); font-weight:600; }
     .scroll-progress { position:fixed; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--brand),var(--accent)); transform-origin:left; transform:scaleX(0); z-index:1002; pointer-events:none; }
+    #hero3d { position:absolute; inset:0; z-index:1; pointer-events:none; }
     .st-char { display:inline-block; will-change:transform,opacity; }
     #bgCanvas { position:fixed; inset:0; z-index:1; pointer-events:none; }
     @media (max-width:768px) { .team-photo { aspect-ratio:4/3; } }
@@ -403,6 +404,7 @@
 
   <!-- Hero -->
   <section class="hero" id="hero-section">
+    <canvas id="hero3d"></canvas>
     <img src="joy-logo-sm.jpg" class="joy-logo" alt="JOY">
     <div class="eyebrow reveal">JD CUSTOMER SERVICE LIVE</div>
     <h1 class="reveal"><span class="hero-char" style="animation-delay:0ms">京</span><span class="hero-char" style="animation-delay:80ms">东</span><span class="hero-char" style="animation-delay:160ms">客</span><span class="hero-char" style="animation-delay:240ms">服</span><span class="hero-char red" style="animation-delay:320ms">直</span><span class="hero-char red" style="animation-delay:400ms">播</span><span class="hero-char" style="animation-delay:560ms">基</span><span class="hero-char" style="animation-delay:640ms">地</span><span class="hero-beam"></span></h1>
@@ -1095,6 +1097,90 @@
       });
     });
   }
+</script>
+<script src="three.min.js"></script>
+<script>
+  // ===== Hero 3D 场景（Three.js，仅首屏；移动端/无WebGL自动降级）=====
+  (function () {
+    const canvas = document.getElementById('hero3d');
+    if (!canvas || !window.THREE) return;
+    if (window.innerWidth <= 768) return;
+    try {
+      if (!document.createElement('canvas').getContext('webgl')) return;
+    } catch (e) { return; }
+
+    const hero = document.getElementById('hero-section');
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
+    camera.position.set(0, 0, 9);
+
+    // 灯光：暖白主光 + 红/粉补光
+    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    const dir = new THREE.DirectionalLight(0xffffff, 0.7); dir.position.set(4, 6, 8); scene.add(dir);
+    const redL = new THREE.PointLight(0xe6212a, 0.9, 30); redL.position.set(-5, -2, 4); scene.add(redL);
+    const pinkL = new THREE.PointLight(0xf2b8c6, 0.9, 30); pinkL.position.set(5, 3, 5); scene.add(pinkL);
+
+    const mat = (c, o) => new THREE.MeshPhongMaterial({ color: c, shininess: 80, flatShading: true, transparent: true, opacity: o });
+    const wire = (c, o) => new THREE.MeshBasicMaterial({ color: c, wireframe: true, transparent: true, opacity: o });
+
+    const meshes = [];
+    const addMesh = (geo, m, x, y, z, s, rs) => {
+      const mesh = new THREE.Mesh(geo, m); mesh.position.set(x, y, z); mesh.scale.setScalar(s);
+      mesh.userData = { rs: rs, ph: Math.random() * 6.28, baseY: y };
+      scene.add(mesh); meshes.push(mesh); return mesh;
+    };
+
+    // 主体：环面纽结（实心+线框叠层）
+    const knot = addMesh(new THREE.TorusKnotGeometry(1.1, 0.34, 140, 18), mat(0xe6212a, 0.92), 3.1, 0.6, 0, 1.35, { x: 0.0022, y: 0.0035 });
+    const knotWire = addMesh(new THREE.TorusKnotGeometry(1.1, 0.34, 90, 12), wire(0xf2b8c6, 0.22), 3.1, 0.6, -0.4, 1.55, { x: 0.0016, y: 0.0026 });
+    // 二十面体（左）
+    addMesh(new THREE.IcosahedronGeometry(0.95, 0), mat(0xf2b8c6, 0.9), -3.6, 1.2, -1, 1.1, { x: 0.003, y: 0.002 });
+    // 八面体（左下）
+    addMesh(new THREE.OctahedronGeometry(0.75, 0), mat(0xe6212a, 0.75), -2.6, -2.1, 0.5, 0.9, { x: -0.002, y: 0.0032 });
+    // 小四面体点（右上）
+    addMesh(new THREE.TetrahedronGeometry(0.5, 0), mat(0x211519, 0.55), 2.4, 2.6, -1.5, 0.8, { x: 0.004, y: -0.003 });
+    addMesh(new THREE.TetrahedronGeometry(0.32, 0), mat(0xf2b8c6, 0.65), 5.2, -2.2, -0.8, 0.6, { x: -0.003, y: 0.004 });
+
+    // 鼠标视差目标
+    let tx = 0, ty = 0, mx = 0, my = 0;
+    window.addEventListener('mousemove', (e) => {
+      tx = (e.clientX / window.innerWidth - 0.5) * 2;
+      ty = (e.clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+
+    const resize = () => {
+      const w = hero.clientWidth, h = hero.clientHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h; camera.updateProjectionMatrix();
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    // 可见性控制：hero 出视口 / 标签页隐藏时暂停渲染
+    let visible = true;
+    new IntersectionObserver((es) => { visible = es[0].isIntersecting; }, { threshold: 0.02 }).observe(hero);
+    document.addEventListener('visibilitychange', () => { visible = !document.hidden && visible; });
+
+    let t = 0;
+    (function loop() {
+      requestAnimationFrame(loop);
+      if (!visible) return;
+      t += 0.008;
+      mx += (tx - mx) * 0.045; my += (ty - my) * 0.045;
+      camera.position.x = mx * 0.9;
+      camera.position.y = -my * 0.6;
+      camera.lookAt(0.4, 0, 0);
+      for (const m of meshes) {
+        m.rotation.x += m.userData.rs.x;
+        m.rotation.y += m.userData.rs.y;
+        m.position.y = m.userData.baseY + Math.sin(t + m.userData.ph) * 0.16;
+      }
+      knotWire.rotation.copy(knot.rotation);
+      renderer.render(scene, camera);
+    })();
+  })();
 </script>
 </body>
 </html>
