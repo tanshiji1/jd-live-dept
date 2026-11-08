@@ -364,12 +364,25 @@
     .hero .hero-tags span b { color:var(--brand); font-weight:600; }
     .scroll-progress { position:fixed; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--brand),var(--accent)); transform-origin:left; transform:scaleX(0); z-index:1002; pointer-events:none; }
     #hero3d { position:absolute; inset:0; z-index:1; pointer-events:none; }
+    #preloader { position:fixed; inset:0; z-index:2000; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.1rem; }
+    #preloader img { width:54px; height:54px; border-radius:50%; box-shadow:0 0 40px rgba(230,33,42,.18); }
+    #preloader .pl-text { font-family:var(--font-mono); font-size:.58rem; letter-spacing:.5em; color:var(--muted); }
+    #preloader .pl-bar { width:170px; height:2px; background:rgba(230,33,42,.12); overflow:hidden; border-radius:2px; }
+    #preloader .pl-bar i { display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--brand),var(--accent)); }
+    body.gsap-ready .hero-char { animation:none !important; opacity:0; }
+    body.gsap-ready .hero-beam { animation:none !important; transform:scaleX(0); }
     .st-char { display:inline-block; will-change:transform,opacity; }
     #bgCanvas { position:fixed; inset:0; z-index:1; pointer-events:none; }
     @media (max-width:768px) { .team-photo { aspect-ratio:4/3; } }
   </style>
 </head>
 <body>
+
+<div id="preloader">
+  <img src="joy-logo-sm.jpg" alt="JOY">
+  <div class="pl-text">JD CUSTOMER SERVICE LIVE</div>
+  <div class="pl-bar"><i></i></div>
+</div>
 
 <!-- 景深背景 -->
 <div class="light-band band-1"></div>
@@ -1096,6 +1109,39 @@
           { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: .45, stagger: .045, ease: 'power2.out', overwrite: 'auto', clearProps: 'all' });
       });
     });
+
+    // 7. 首屏电影级开场
+    document.body.classList.add('gsap-ready');
+    document.querySelectorAll('.hero .reveal').forEach(el => el.classList.remove('reveal'));
+    window.__heroIntro = { camZ: 17.5, coreScale: 0 };
+    const introTl = gsap.timeline();
+    introTl
+      // 预加载：进度条
+      .to('#preloader .pl-bar i', { width: '100%', duration: .9, ease: 'power2.inOut' })
+      // 预加载页上滑揭幕
+      .to('#preloader', { yPercent: -100, duration: .85, ease: 'power4.inOut' }, '+=0.12')
+      .set('#preloader', { display: 'none' })
+      // 3D：相机推镜 + 能量核弹性生长
+      .to(window.__heroIntro, { camZ: 9.5, duration: 1.9, ease: 'power2.out' }, '-=0.6')
+      .to(window.__heroIntro, { coreScale: 1, duration: 1.5, ease: 'back.out(1.25)' }, '<')
+      // 导航滑入
+      .from('nav', { y: -56, opacity: 0, duration: .7, ease: 'power3.out' }, '-=1.7')
+      // JOY logo 弹出
+      .from('.hero .joy-logo', { scale: 0, opacity: 0, duration: .8, ease: 'back.out(1.7)' }, '-=1.45')
+      // eyebrow 字距展开
+      .fromTo('.hero .eyebrow', { opacity: 0, letterSpacing: '1.1em' }, { opacity: 1, letterSpacing: '0.4em', duration: 1, ease: 'power3.out' }, '-=1.15')
+      // 大标题逐字瀑布
+      .fromTo('.hero-char', { opacity: 0, y: 90, filter: 'blur(14px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1, stagger: .05, ease: 'power4.out' }, '-=0.7')
+      // 光束绘制
+      .to('.hero-beam', { scaleX: 1, duration: .55, ease: 'power3.inOut' }, '-=0.3')
+      // slogan / 能力标签 / 滚动提示
+      .from('.hero .slogan', { opacity: 0, y: 30, duration: .8, ease: 'power3.out' }, '-=0.4')
+      .from('.hero .hero-tags span', { opacity: 0, y: 22, stagger: .07, duration: .5, ease: 'power2.out' }, '-=0.5')
+      .from('.hero .scroll', { opacity: 0, duration: .6 }, '-=0.3');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) introTl.progress(1);
+  } else {
+    const pl = document.getElementById('preloader');
+    if (pl) pl.style.display = 'none';
   }
 </script>
 <script src="three.min.js"></script>
@@ -1116,6 +1162,10 @@
 
     const group = new THREE.Group();
     scene.add(group);
+    const intro = window.__heroIntro || { camZ: 9.5, coreScale: 1 };
+    const coreGroup = new THREE.Group();
+    coreGroup.position.set(2.9, 0.3, 0);
+    group.add(coreGroup);
 
     /* ---------- GLSL：simplex 噪声 ---------- */
     const SNOISE = [
@@ -1185,25 +1235,23 @@
       ].join('\n')
     });
     const core = new THREE.Mesh(new THREE.IcosahedronGeometry(2.05, 5), coreMat);
-    core.position.set(2.9, 0.3, 0);
-    group.add(core);
+    coreGroup.add(core);
 
     /* ---------- 2. 内核线框（反向旋转）---------- */
     const inner = new THREE.Mesh(
       new THREE.IcosahedronGeometry(1.15, 1),
       new THREE.MeshBasicMaterial({ color: 0xf2b8c6, wireframe: true, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending })
     );
-    inner.position.copy(core.position);
-    group.add(inner);
+    coreGroup.add(inner);
 
     /* ---------- 3. 倾斜光环 + 轨道卫星 ---------- */
     const mkRing = (r, color, op) => new THREE.Mesh(
       new THREE.TorusGeometry(r, 0.016, 8, 160),
       new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: op, blending: THREE.AdditiveBlending })
     );
-    const ring1 = mkRing(3.1, 0xe6212a, 0.55); ring1.position.copy(core.position); ring1.rotation.x = 1.15; ring1.rotation.y = 0.3;
-    const ring2 = mkRing(3.65, 0xf2b8c6, 0.4); ring2.position.copy(core.position); ring2.rotation.x = -0.9;  ring2.rotation.z = 0.5;
-    group.add(ring1); group.add(ring2);
+    const ring1 = mkRing(3.1, 0xe6212a, 0.55); ring1.rotation.x = 1.15; ring1.rotation.y = 0.3;
+    const ring2 = mkRing(3.65, 0xf2b8c6, 0.4); ring2.rotation.x = -0.9;  ring2.rotation.z = 0.5;
+    coreGroup.add(ring1); coreGroup.add(ring2);
 
     const orbiters = [];
     for (let i = 0; i < 4; i++) {
@@ -1212,7 +1260,7 @@
         new THREE.MeshBasicMaterial({ color: i % 2 ? 0xf2b8c6 : 0xe6212a, transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending })
       );
       sat.userData = { ring: i % 2 ? ring2 : ring1, ang: Math.random() * 6.28, spd: 0.5 + Math.random() * 0.5, tilt: i % 2 ? -0.9 : 1.15, yrot: i % 2 ? 0.5 : 0.3 };
-      group.add(sat); orbiters.push(sat);
+      coreGroup.add(sat); orbiters.push(sat);
     }
 
     /* ---------- 4. 星云粒子（1200颗，着色器闪烁）---------- */
@@ -1296,6 +1344,8 @@
       camera.position.x = mx * 1.1;
       camera.position.y = -my * 0.7;
       camera.lookAt(0.6, 0, 0);
+      camera.position.z = intro.camZ;
+      coreGroup.scale.setScalar(Math.max(intro.coreScale, 0.0001));
 
       coreUniforms.uTime.value = t;
       coreUniforms.uAmp.value = 0.3 + energy;   // 鼠标速度激发能量核波动
@@ -1312,9 +1362,9 @@
         const r = s.userData.ring.geometry.parameters.radius;
         const a = s.userData.ang;
         s.position.set(
-          core.position.x + Math.cos(a) * r,
-          core.position.y + Math.sin(a) * r * Math.cos(s.userData.tilt),
-          core.position.z + Math.sin(a) * r * Math.sin(s.userData.tilt)
+          Math.cos(a) * r,
+          Math.sin(a) * r * Math.cos(s.userData.tilt),
+          Math.sin(a) * r * Math.sin(s.userData.tilt)
         );
         s.rotation.x += 0.03; s.rotation.y += 0.02;
       }
