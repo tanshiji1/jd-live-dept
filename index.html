@@ -1113,7 +1113,7 @@
     // 7. 首屏电影级开场
     document.body.classList.add('gsap-ready');
     document.querySelectorAll('.hero .reveal').forEach(el => el.classList.remove('reveal'));
-    window.__heroIntro = { camZ: 17.5, coreScale: 0 };
+    window.__heroIntro = { camZ: 23, coreScale: 0 };
     const introTl = gsap.timeline();
     introTl
       // 预加载：进度条
@@ -1131,14 +1131,13 @@
       // eyebrow 字距展开
       .fromTo('.hero .eyebrow', { opacity: 0, letterSpacing: '1.1em' }, { opacity: 1, letterSpacing: '0.4em', duration: 1, ease: 'power3.out' }, '-=1.15')
       // 大标题逐字瀑布
-      .fromTo('.hero-char', { opacity: 0, y: 90, filter: 'blur(14px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1, stagger: .05, ease: 'power4.out' }, '-=0.7')
+      .fromTo('.hero-char', { opacity: 0, y: 150, filter: 'blur(22px)', scale: 1.35 }, { opacity: 1, y: 0, filter: 'blur(0px)', scale: 1, duration: 1.15, stagger: .065, ease: 'power4.out' }, '-=0.7')
       // 光束绘制
       .to('.hero-beam', { scaleX: 1, duration: .55, ease: 'power3.inOut' }, '-=0.3')
       // slogan / 能力标签 / 滚动提示
       .from('.hero .slogan', { opacity: 0, y: 30, duration: .8, ease: 'power3.out' }, '-=0.4')
       .from('.hero .hero-tags span', { opacity: 0, y: 22, stagger: .07, duration: .5, ease: 'power2.out' }, '-=0.5')
       .from('.hero .scroll', { opacity: 0, duration: .6 }, '-=0.3');
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) introTl.progress(1);
   } else {
     const pl = document.getElementById('preloader');
     if (pl) pl.style.display = 'none';
